@@ -1,6 +1,6 @@
 # Tapatan
 
-Optimierung des bestehenden Tapatan Spiels
+Programmcode für den Arduino Mega des Tapatan-Spiels
 
 ## Inhaltsverzeichnis
 
@@ -27,6 +27,6 @@ Erkläre, wie das Projekt genutzt wird. Beispiel:
 
 ## Kontakt
 
-Dein Name – [@deinBenutzername](https://twitter.com/deinBenutzername) – email@example.com
+Trinationaler Studiengang Mechatronik (trinat.humboldt@outlook.com)
 
-Projekt-Link: https://github.com/username/repository-name
+Projekt-Link: https://github.com/jfawer/Tapatan.git
