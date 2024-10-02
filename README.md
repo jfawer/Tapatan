@@ -7,7 +7,6 @@ Optimierung des bestehenden Tapatan Spiels
 - [Über das Projekt](#über-das-projekt)
 - [Verwendung](#verwendung)
 - [Mitwirken](#mitwirken)
-- [Lizenz](#lizenz)
 - [Kontakt](#kontakt)
 
 ## Über das Projekt
