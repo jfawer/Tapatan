@@ -1,19 +1,21 @@
 #include <Arduino.h>
-#define onboardLED 13
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include "Functions.h"
 
-int number = 0;
-
+// Set the LCD address to 0x27 for a 20 chars and 4 line display
+LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 void setup() {
-  pinMode(onboardLED, OUTPUT);
-  Serial.begin(9600);
+  // Initialize the LCD
+  lcd.begin(20, 4);
+  // Turn on the backlight
+  lcd.backlight();
+  
+  // Draw the Tic-Tac-Toe board
+  drawBoard(lcd);
 }
 
 void loop() {
-  digitalWrite(onboardLED, HIGH);
-  delay(1000);
-  digitalWrite(onboardLED, LOW);
-  delay(1000);
-  number++;
-  Serial.println("Durchlauf: " + String(number));
+  // Hier kannst du Code hinzufügen, um das Display zu aktualisieren
 }
