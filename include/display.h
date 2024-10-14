@@ -1,5 +1,7 @@
-#ifndef INITIALISIERUNG_H
-#define INITIALISIERUNG_H
+// Funktionen zur Anzeige von Texten auf dem LCD-Display und zur Eingabe von Spielvariablen
+
+#ifndef DISPLAY_H
+#define DISPLAY_H
 
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>

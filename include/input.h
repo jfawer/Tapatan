@@ -1,5 +1,7 @@
-#ifndef AUSLESEN_H
-#define AUSLESEN_H
+// Funktionen zum Auslesen der Sensorwerte
+
+#ifndef INPUT_H
+#define INPUT_H
 
 #include <Arduino.h>
 
@@ -22,19 +24,19 @@ void readSensors(int Board[3][3], const int numPotentiometers, const int potPins
 }
 
 // Funktion zum Übertragen der Arraywerte eines Arrays in ein anderes Array
-void copyArray(int Board[3][3], int Boardspeicher[3][3]) {
+void copyArray(int Board[3][3], int BoardSpeicher[3][3]) {
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
-      Boardspeicher[i][j] = Board[i][j];
+      BoardSpeicher[i][j] = Board[i][j];
     }
   }
 }
 
 // Funktion zum Überprüfen, ob sich die Arraywerte geändert haben
-bool hasChanged(int Board[3][3], int Boardspeicher[3][3]) {
+bool hasChanged(int Board[3][3], int BoardSpeicher[3][3]) {
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
-      if (Board[i][j] != Boardspeicher[i][j]) {
+      if (Board[i][j] != BoardSpeicher[i][j]) {
         return true;
       }
     }

@@ -1,9 +1,11 @@
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
+// Funktionen für die Spiellogik
+
+#ifndef GAME_LOGIC_H
+#define GAME_LOGIC_H
 
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
-#include "Auslesen.h"
+#include "input.h"
 
 const int PlayerVsPlayer = 1;                                           // Konstante für den Spielmodus Spieler gegen Spieler
 const int PlayerVsComputer = 2;                                         // Konstante für den Spielmodus Spieler gegen Computer

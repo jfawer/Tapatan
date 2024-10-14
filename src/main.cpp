@@ -8,19 +8,23 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-#include "Startinterface.h"
-#include "Functions.h"
-#include "Auslesen.h"
+// Einbinden der Header-Dateien
+#include "display.h"
+#include "game_logic.h"
+#include "input.h"
+#include "motor_control.h"
+#include "magnet_control.h"
 
 
 LiquidCrystal_I2C lcd(0x27, 20, 4);                                     // Setze die Adresse des LCD-Displays
 
+// Pins für die Potentiometer
 const int numPotentiometers = 9;
 const int potPins[numPotentiometers] = {A0, A1, A2, A3, A4, A5, A6, A7, A8};
 
 
 int Board [3][3] = {{0,0,0},{0,0,0},{0,0,0}};                           //Array für das Spielfeld (0 = Leeres Feld, 1 = X, 2 = O)
-int Boardspeicher [3][3] = {{0,0,0},{0,0,0},{0,0,0}};                   //Array für das Spielfeld (0 = Leeres Feld, 1 = X, 2 = O)
+int BoardSpeicher [3][3] = {{0,0,0},{0,0,0},{0,0,0}};                   //Array für das Spielfeld (0 = Leeres Feld, 1 = X, 2 = O)
 
 int game = 1;                                                           // Variable für das Spiel 1 = Tic Tac Toe, 2 = Tapatan
 int mode = 2;                                                           // Variable für den Spielmodus 1 = Spieler gegen Computer, 2 = Spieler gegen Spieler
@@ -44,13 +48,13 @@ void loop() {
   readSensors(Board, numPotentiometers, potPins);                       // Auslesen der Sensorwerte
   drawGameBoard(lcd, Board, game, mode, turn);                          // Zeige das Spielfeld auf dem LCD an
 
-  if (hasChanged(Board, Boardspeicher)) {
+  if (hasChanged(Board, BoardSpeicher)) {
     // Spieler wechseln
     turn = (turn == 1) ? 2 : 1;
   } else {
     // Nichts tun
   }
-  copyArray(Board, Boardspeicher);                                      // Übertragen der Arraywerte eines Arrays in ein anderes Array
+  copyArray(Board, BoardSpeicher);                                      // Übertragen der Arraywerte eines Arrays in ein anderes Array
   delay(500);
 
 
