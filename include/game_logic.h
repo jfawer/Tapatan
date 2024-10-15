@@ -6,142 +6,108 @@
 #include <Arduino.h>
 #include <LiquidCrystal_I2C.h>
 #include "input.h"
+#include "display.h"
 
-const int PlayerVsPlayer = 1;                                           // Konstante für den Spielmodus Spieler gegen Spieler
-const int PlayerVsComputer = 2;                                         // Konstante für den Spielmodus Spieler gegen Computer
+const int PlayerVsComputer = 1;                                         // Konstante für den Spielmodus Spieler gegen Computer
+const int PlayerVsPlayer = 2;                                           // Konstante für den Spielmodus Spieler gegen Spieler
+const int Player1 = 1;                                                  // Konstante für Spieler 1
+const int Player2 = 2;                                                  // Konstante für Spieler 2
 
+// Funktion zum wechseln des Spielers
+void switchPlayer(int &turn) {
+  turn = (turn == 1) ? 2 : 1;
+}
 
-// Funktion zum Zeichnen Spielfelds
-void drawGameBoard(LiquidCrystal_I2C &lcd, int Board[3][3], int game, int mode, int turn) {
-
-  lcd.clear();                                                         // LCD löschen
-
-  // Zeige den Spieltyp auf dem LCD an
-  lcd.setCursor(0, 0);
-  lcd.print(game == 1 ? "Tic Tac Toe:" : "Tapatan:");
-
-  // Zeige den Spieler, der am Zug ist
-  lcd.setCursor(0, 2);
-  lcd.print("Am Zug:");
-  
-  lcd.setCursor(0, 3);
-  if (mode == 1) {
-    lcd.print(turn == 1 ? "Spieler" : "Computer");
-  } else {
-    lcd.print(turn == 1 ? "Spieler 1" : "Spieler 2");
-  }
-  
-  // Zeichne das Spielfeld auf dem LCD
-  for (int row = 0; row < 3; row++) {
-    for (int col = 0; col < 3; col++) {
-      lcd.setCursor(col + 13, row + 1);
-      
-      // Entscheide, welches Symbol angezeigt werden soll
-      char symbol = (Board[row][col] == 0) ? '0' : (Board[row][col] == 1) ? '1' : '2';
-      lcd.print(symbol);
+// Funktion zur Überprüfung, ob jemand gewonnen hat
+bool checkWin(int Board[3][3]) {
+  // Überprüfen, ob eine Reihe gewonnen hat
+  for (int i = 0; i < 3; i++) {
+    if (Board[i][0] == Board[i][1] && Board[i][1] == Board[i][2] && Board[i][0] != 0) {
+      return true;
     }
+  }
+
+  // Überprüfen, ob eine Spalte gewonnen hat
+  for (int i = 0; i < 3; i++) {
+    if (Board[0][i] == Board[1][i] && Board[1][i] == Board[2][i] && Board[0][i] != 0) {
+      return true;
+    }
+  }
+
+  // Überprüfen, ob eine Diagonale gewonnen hat
+  if (Board[0][0] == Board[1][1] && Board[1][1] == Board[2][2] && Board[0][0] != 0) {
+    return true;
+  }
+
+  if (Board[0][2] == Board[1][1] && Board[1][1] == Board[2][0] && Board[0][2] != 0) {
+    return true;
+  }
+
+  return false;
+}
+
+// Funktion zur Überprüfung, ob es ein Unentschieden gibt
+bool checkDraw(int Board[3][3]) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      if (Board[i][j] == 0) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
+// Funktion für die Handhabung eines illegalen Zuges
+void handleIllegalMove(LiquidCrystal_I2C lcd, int Board[3][3], int BoardSpeicher[3][3], int game, int mode, int turn ,const int numPotentiometers, const int potPins[]) {
+  displayGameBoard(lcd, BoardSpeicher, game, mode, turn);
+  displayIllegalMove(lcd);
+
+  while (!isBoardEqual(Board, BoardSpeicher)) {                 // Warten, bis das Spielfeld zurückgesetzt wurde
+    readSensors(Board, numPotentiometers, potPins);
+    delay(100);
   }
 }
 
 // Funktion für das Spiel Tic Tac Toe Spieler gegen Spieler
-void TicTacToePlayerVsPlayer(LiquidCrystal_I2C lcd, int Board[3][3], int game, int mode, int &turn) {
-  static int turnNumber = 1; // Zähler für die Anzahl der Züge
+void TicTacToePlayerVsPlayer(LiquidCrystal_I2C &lcd, int Board[3][3], int BoardSpeicher[3][3], int game, int mode, int &turn, int row, int col, const int numPotentiometers, const int potPins[]) {
+  while (true) {                                                                                            // Endlosschleife für das Spiel
+    readSensors(Board, numPotentiometers, potPins);                                                         // Auslesen der Sensorwerte
+    displayGameBoard(lcd, Board, game, mode, turn);                                                         // Spielfeld anzeigen
 
-  if (turnNumber <= 4) {
-    // Spieler ist am Zug
-    
-    // Spieler wechseln
-    turn = (turn == 1) ? 2 : 1;
-    drawGameBoard(lcd, Board, game, mode, turn);
+    if ((turn == Player1) || (turn == Player2)) {                                                           // Überprüfen, ob ein Spieler am Zug ist          
+      if (hasChanged(Board, BoardSpeicher)) {                                                               // Überprüfen, ob sich das Spielfeld geändert hat
+        getChangedField(Board, BoardSpeicher, row, col);                                                    // Erkennen, welche Feld geändert wurde
+        if (!isValidMove(Board, BoardSpeicher, row, col, turn)) {                                           // Überprüfen, ob der Zug ungültig ist
+          handleIllegalMove(lcd, Board, BoardSpeicher, game, mode, turn, numPotentiometers, potPins);       // Unerlaubten Zug behandeln
+        } else {
+          copyArray(Board, BoardSpeicher);                                                                  // Aktuelles Spielfeld in den Speicher kopieren
 
-    // Zähler erhöhen
-    turnNumber++;
-  } else {
+          if (checkWin(Board)) {                                                                            // Überprüfen, ob jemand gewonnen hat   
+            displayWinner(lcd, turn);                                                                       // Gewinner anzeigen     
+            break;
+          }
+
+          if (checkDraw(Board)) {                                                                           // Überprüfen, ob es ein Unentschieden gibt
+            displayDraw(lcd);                                                                               // Unentschieden anzeigen 
+            break;
+          }
+          switchPlayer(turn);                                                                               // Spieler wechseln
+        }
+      }                                           
+    }
+    delay(300);
   }
 }
 
 // Funktion für das Spiel Tic Tac Toe
-void playTicTacToe(LiquidCrystal_I2C lcd, int Board[3][3], int game, int mode, int &turn, int difficulty) {
+void playTicTacToe(LiquidCrystal_I2C &lcd, int Board[3][3], int BoardSpeicher[3][3], int game, int mode, int &turn, int difficulty, int row, int col,const int numPotentiometers,const int potPins[]) {
   // Spiellogik für Tic Tac Toe
   if (mode == PlayerVsComputer) {                                         
     // Spieler gegen Computer
   } else if (mode == PlayerVsPlayer) {                                                     
-    TicTacToePlayerVsPlayer(lcd, Board, game, mode, turn);      // Spieler gegen Spieler
+    TicTacToePlayerVsPlayer(lcd, Board, BoardSpeicher, game, mode, turn, row, col, numPotentiometers, potPins); // Spieler gegen Spieler
   }
 }
-
-
-
-
-  /*
-  if (turn == 1) {                                           // Der Spieler ist am Zug                   
-    boolean playerInput = false;
-
-    while (!playerInput) {                                   // Eine Schleife, bis der Spieler einen gültigen Zug gemacht hat
-      for (int i=0; i<=2 ; i++)                              
-        for (int j=0; j<=2; j++)
-          if (digitalRead(buttons[i][j]) == HIGH)            
-          {
-            if (Board [i][j] == 0)                       // Überprüfen, ob das Feld leer ist
-            {
-              Board[i][j] = 1;                           // Das Feld auf dem Spielfeld hinzufügen und den Zug wechseln
-              turn = 2;
-              playerInput = true;
-            }
-          }
-    }
-
-    drawGameBoard ();                                         // Das Spielfeld anzeigen                  
-    Serial.println("");
-
-  } else {                                                   // Der Computer ist am Zug                
-    if (mode == 0) {                                         // Schwierigkeitsgrad 2 - Der Computer macht perfekte Züge
-      delay(300);                                            
-      aITurn ();                                             // Perfekter Zug des Computers
-
-    } else if (mode == 1) {                                  // Schwierigkeitsgrad 1 - Der Computer macht zufällige Züge
-      delay(500);                                            
-      randomTurn();                                          // Zufälliger Zug des Computers
-
-    } else {                                                 // Spielmodus 2 - Spieler gegen Spieler
-      boolean playerInput = false;
-
-      while (!playerInput) {                                 // Eine Schleife, bis der Spieler einen gültigen Zug gemacht hat
-        for (int i=0; i<=2 ; i++) {                          
-          for (int j=0; j<=2; j++) {
-            if (digitalRead(buttons[i][j]) == HIGH) {        
-              if (Board [i][j] == 0) {                   // Überprüfen, ob das Feld leer ist
-                Board[i][j] = 2;                         // Das Feld auf dem Spielfeld hinzufügen und den Zug wechseln
-                turn = 1;
-                playerInput = true;
-              }
-            }
-          }
-        }
-      }
-    }
-    displayBoard ();                                         // Das Spielfeld anzeigen                  
-    Serial.println("");
-  }
-  */
-
-  /*
-  updateDisplay ();                                          // Das Spielfeld aktualisieren
-  int winner = evaluate (Board);                         // Überprüfen, ob ein Spieler gewonnen hat
-  if (winner == 10 || winner == -10)                         // Wenn der Schleifenwert 10 oder -10 ist, hat ein Spieler gewonnen
-  {
-    flashWin () ;                                            // Gewinnanimation
-    resetBoard ();                                           // Das Spielfeld zurücksetzen              
-    startGameAni ();                                         // Startanimation              
-    updateDisplay ();                                        // Das Spielfeld aktualisieren      
-  }
-  if (!checkMovesLeft(Board))                            // Überprüfen, ob das Spielfeld voll ist und es ein Unentschieden gibt
-  {
-    flashDraw();                                             // Unentschiedenanimation        
-    resetBoard ();                                           // Das Spielfeld zurücksetzen    
-    startGameAni ();                                         // Startanimation    
-    updateDisplay ();                                        // Das Spielfeld aktualisieren  
-  }
-  */
 
 #endif

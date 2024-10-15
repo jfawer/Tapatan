@@ -44,4 +44,42 @@ bool hasChanged(int Board[3][3], int BoardSpeicher[3][3]) {
   return false;
 }
 
+// Funktion zum Erkennen, welches Feld geändert wurde
+void getChangedField(int Board[3][3], int BoardSpeicher[3][3], int &row, int &col) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      if (Board[i][j] != BoardSpeicher[i][j]) {
+        row = i;
+        col = j;
+        return;
+      }
+    }
+  }
+}
+
+// Funktion zum Überprüfen, ob der Zug gültig ist
+bool isValidMove(int Board[3][3], int BoardSpeicher[3][3], int row, int col, int turn) {
+  int SpielerNummer = turn;
+  int oldValue = BoardSpeicher[row][col];
+  int newValue = Board[row][col];
+
+  if (oldValue == 0 && newValue == SpielerNummer) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+// Funktion zum Überprüfen ob das akteulle Spielfeld mit dem Spielfeld aus dem Speicher übereinstimmt
+bool isBoardEqual(int Board[3][3], int BoardSpeicher[3][3]) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      if (Board[i][j] != BoardSpeicher[i][j]) {
+        return false;
+      }
+    }
+  }
+  return true;
+}
+
 #endif
