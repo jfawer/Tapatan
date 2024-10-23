@@ -24,45 +24,6 @@ void switchPlayer(int &currentPlayer) {
   currentPlayer = (currentPlayer == 1) ? 2 : 1; 
 }
 
-// Funktion zur Überprüfung, ob jemand gewonnen hat
-bool checkWin(int Board[3][3]) {
-  // Überprüfen, ob eine Reihe gewonnen hat
-  for (int i = 0; i < 3; i++) {
-    if (Board[i][0] == Board[i][1] && Board[i][1] == Board[i][2] && Board[i][0] != 0) {
-      return true;
-    }
-  }
-
-  // Überprüfen, ob eine Spalte gewonnen hat
-  for (int i = 0; i < 3; i++) {
-    if (Board[0][i] == Board[1][i] && Board[1][i] == Board[2][i] && Board[0][i] != 0) {
-      return true;
-    }
-  }
-
-  // Überprüfen, ob eine Diagonale gewonnen hat
-  if (Board[0][0] == Board[1][1] && Board[1][1] == Board[2][2] && Board[0][0] != 0) {
-    return true;
-  }
-
-  if (Board[0][2] == Board[1][1] && Board[1][1] == Board[2][0] && Board[0][2] != 0) {
-    return true;
-  }
-  return false;
-}
-
-// Funktion zur Überprüfung, ob es ein Unentschieden gibt
-bool checkDraw(int Board[3][3]) {
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-      if (Board[i][j] == 0) {
-        return false;
-      }
-    }
-  }
-  return true;
-}
-
 // Funktion zum Überprüfen, ob sich die Arraywerte / das Spielfeld geändert haben
 bool hasChanged(int Board[3][3], int BoardMemory[3][3]) {
   for (int i = 0; i < 3; i++) {
@@ -136,8 +97,6 @@ void waitForReset (int Board[3][3], const int numPotentiometers, const int potPi
   }
 }
 
-
-/* Funktionen für die Zuglogik des Computers */
 
 // Funktion zum Überprüfen, ob noch Felder frei sind
 bool checkFieldsLeft(int Board[3][3]) {

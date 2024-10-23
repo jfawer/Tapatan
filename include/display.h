@@ -56,9 +56,9 @@ void displayGameBoard(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Boa
 // Funktion zur Anzeige zum Zurücklegen einer unerlaubten Bewegung
 void displayIllegalMove(LiquidCrystal_I2C &lcd) {
   lcd.setCursor(0, 2);                
-  lcd.print("Lege gemaess");                                                                                      // Text auf dem LCD anzeigen
+  lcd.print("Zug gem. Bild");                                                                                      // Text auf dem LCD anzeigen
   lcd.setCursor(0, 3);  
-  lcd.print("Anzeige auf");
+  lcd.print("zuruecklegen");                                                                                      // Text auf dem LCD anzeigen
 }
 
 // Funktion zur Anzeige des Gewinners
