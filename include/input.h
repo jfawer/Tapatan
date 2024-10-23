@@ -24,14 +24,4 @@ void readSensors(int Board[3][3], const int numPotentiometers, const int potPins
   }
 }
 
-// Funktion zum Kopieren eines Arrays in ein anderes Array
-void copyArray(int Board[3][3], int BoardMemory[3][3]) {  
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-      BoardMemory[i][j] = Board[i][j];
-    }
-  }
-}
-
-
 #endif

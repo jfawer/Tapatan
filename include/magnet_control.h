@@ -7,4 +7,5 @@
 
 // Funktion zum Steuern des Magneten
 
+
 #endif

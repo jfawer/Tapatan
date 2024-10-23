@@ -29,7 +29,7 @@ void TicTacToePlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
         if (isValidMove(Board, BoardMemory, currentPlayer)) {                                                     // Überprüfen, ob der Zug ungültig ist
           turnOver = true;                                                                                        // Zug beenden
         } else {
-          displayGameBoard(lcd, gameSettings, BoardMemory, currentPlayer);                                              // Spielfeld anzeigen
+          displayGameBoard(lcd, gameSettings, BoardMemory, currentPlayer);                                        // Spielfeld anzeigen
           displayIllegalMove(lcd);
           waitUntilMoveIsUndone(Board, BoardMemory, numPotentiometers, potPins);                                  // Warten auf das Zurücksetzen des Spielfelds
         }
@@ -37,15 +37,16 @@ void TicTacToePlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
     }
 
     if (turnOver) {                                                                                               // Überprüfen, ob der Zug beendet wurde
-      copyArray(Board, BoardMemory);
-                                                                                                                  // Aktuelles Spielfeld in den Speicher kopieren
-      if (checkWin(Board)) {                                                                                      // Überprüfen, ob jemand gewonnen hat   
-        displayWinner(lcd, gameSettings, currentPlayer);                                                                        // Gewinner anzeigen     
-        break;
-      }
+      copyBoard(Board, BoardMemory);                                                                              // Aktuelles Spielfeld in den Speicher kopieren
 
-      if (checkDraw(Board)) {                                                                                     // Überprüfen, ob es ein Unentschieden gibt
-        displayDraw(lcd);                                                                                         // Unentschieden anzeigen 
+      if (evaluate(Board) == 10) {                                                                                // Überprüfen, ob Spieler 1 gewonnen hat
+        displayWinner(lcd, gameSettings, Player1);                                                                // Gewinner anzeigen
+        break;
+      } else if (evaluate(Board) == -10) {                                                                        // Überprüfen, ob Spieler 2 / Computer gewonnen hat
+        displayWinner(lcd, gameSettings, Player2);                                                                // Gewinner anzeigen
+        break;
+      } else if (!checkFieldsLeft(Board)) {                                                                       // Überprüfen, ob es ein Unentschieden gibt
+        displayDraw(lcd);                                                                                         // Unentschieden anzeigen
         break;
       }
       switchPlayer(currentPlayer);                                                                                // Spieler wechseln
@@ -76,31 +77,36 @@ void TicTacToePlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings
     } else if (currentPlayer == Player2) {
       // Computerzug
       int BoardDisplay[3][3];
-      copyArray(Board, BoardDisplay);
-      ComputerTurn(BoardDisplay, firstMove);                                                                      // Computerzug
-      // Serielle Ausgabe des Spielfelds
-      for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-          Serial.print(BoardDisplay[i][j]);
-          Serial.print(" ");
-        }
-        Serial.println("");
-      }
-      displayGameBoard(lcd, gameSettings, BoardDisplay, currentPlayer);                                            // Spielfeld anzeigen
-      waitUntilMoveIsUndone(Board, BoardDisplay, numPotentiometers, potPins);                                      // Warten, bis der Computerzug gemacht wurde
-      turnOver = true;                                                                                             // Zug beenden
+      copyBoard(Board, BoardDisplay);
+      makeBestMove(BoardDisplay, 9);                                                                              // Besten Zug für den Computer bestimmen
+      displayGameBoard(lcd, gameSettings, BoardDisplay, currentPlayer);                                           // Spielfeld anzeigen
+      waitUntilMoveIsUndone(Board, BoardDisplay, numPotentiometers, potPins);                                     // Warten, bis der Computerzug gemacht wurde
+      turnOver = true;                                                                                            // Zug beenden
     }
 
-    if (turnOver) {                                                                                               // Überprüfen, ob der Zug beendet wurde
-      copyArray(Board, BoardMemory);
-                                                                                                                  // Aktuelles Spielfeld in den Speicher kopieren
-      if (checkWin(Board)) {                                                                                      // Überprüfen, ob jemand gewonnen hat   
-        displayWinner(lcd, gameSettings, currentPlayer);                                                                        // Gewinner anzeigen     
-        break;
+    if (turnOver) {   
+      readSensors(Board, numPotentiometers, potPins);                                                             // Sensorwerte auslesen
+      // Ausgabe des Spielfelds in der Konsole
+      for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+          Serial.print(Board[i][j]);
+          Serial.print(" ");
+        }
+        Serial.println();
       }
 
-      if (checkDraw(Board)) {                                                                                     // Überprüfen, ob es ein Unentschieden gibt
-        displayDraw(lcd);                                                                                         // Unentschieden anzeigen 
+      copyBoard(Board, BoardMemory);                                                                              // Aktuelles Spielfeld in den Speicher kopieren
+      Serial.print("Evaluate: ");
+      Serial.println(evaluate(Board));
+
+      if (evaluate(Board) == 10) {                                                                                // Überprüfen, ob Spieler 1 gewonnen hat
+        displayWinner(lcd, gameSettings, Player1);                                                                // Gewinner anzeigen
+        break;
+      } else if (evaluate(Board) == -10) {                                                                        // Überprüfen, ob Spieler 2 gewonnen hat
+        displayWinner(lcd, gameSettings, Player2);                                                                // Gewinner anzeigen
+        break;
+      } else if (!checkFieldsLeft(Board)) {                                                                       // Überprüfen, ob es ein Unentschieden gibt
+        displayDraw(lcd);                                                                                         // Unentschieden anzeigen
         break;
       }
       switchPlayer(currentPlayer);                                                                                // Spieler wechseln

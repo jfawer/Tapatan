@@ -18,4 +18,10 @@ struct BoardField {
     int col;                                                                      // Spalte des Feldes
 };
 
+// Struktur für den Spielzug
+struct Move {
+    int row;
+    int col;
+};
+
 #endif

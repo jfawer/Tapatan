@@ -62,14 +62,14 @@ void displayIllegalMove(LiquidCrystal_I2C &lcd) {
 }
 
 // Funktion zur Anzeige des Gewinners
-void displayWinner(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int currentPlayer) {
+void displayWinner(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Player) {
   lcd.setCursor(0, 2);
   lcd.print("Gewonnen: ");                                                                                        // Text auf dem LCD anzeigen
   lcd.setCursor(0, 3);
   if (gameSettings.mode == 1) {
-    lcd.print(currentPlayer == 1 ? "Spieler" : "Computer");
+    lcd.print(Player == 1 ? "Spieler" : "Computer");
   } else {
-    lcd.print(currentPlayer == 1 ? "Spieler 1" : "Spieler 2");
+    lcd.print(Player == 1 ? "Spieler 1" : "Spieler 2");
   }
 }
 

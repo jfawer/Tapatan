@@ -51,7 +51,7 @@ void setup() {
 // Loop Funktion
 void loop() {
   readSensors(Board, numPotentiometers, potPins);                                                         // Sensorwerte auslesen
-  copyArray(Board, BoardMemory);                                                                          // Aktuelles Spielfeld in den Speicher kopieren
+  copyBoard(Board, BoardMemory);                                                                          // Aktuelles Spielfeld in den Speicher kopieren
   bool firstMove = true;                                                                                   // Variable für den ersten Zug
   currentPlayer = random(1, 3);                                                                            // Zufällige Auswahl des Startspielers
 

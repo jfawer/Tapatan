@@ -8,6 +8,16 @@
 
 // Einbinden der Header-Dateien
 #include "struct.h"
+#include <limits.h>
+
+// Funktion zum Kopieren eines Arrays in ein anderes Array
+void copyBoard(int Board[3][3], int BoardMemory[3][3]) {  
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      BoardMemory[i][j] = Board[i][j];
+    }
+  }
+}
 
 // Funktion zum Wechseln des aktuellen Spielers (Von 1 zu 2 und umgekehrt)
 void switchPlayer(int &currentPlayer) {
@@ -127,7 +137,7 @@ void waitForReset (int Board[3][3], const int numPotentiometers, const int potPi
 }
 
 
-
+/* Funktionen für die Zuglogik des Computers */
 
 // Funktion zum Überprüfen, ob noch Felder frei sind
 bool checkFieldsLeft(int Board[3][3]) {
@@ -145,122 +155,113 @@ bool checkFieldsLeft(int Board[3][3]) {
 int evaluate(int Board[3][3]) {
     // Überprüfen, ob eine Reihe oder Spalte gewonnen hat
     for (int i = 0; i < 3; i++) {
-        if (Board[i][0] == Board[i][1] && Board[i][1] == Board[i][2]) {
+        if (Board[i][0] == Board[i][1] && Board[i][1] == Board[i][2] && Board[i][0] != 0) {
             return (Board[i][0] == 1) ? 10 : (Board[i][0] == 2) ? -10 : 0;
         }
-        if (Board[0][i] == Board[1][i] && Board[1][i] == Board[2][i]) {
+        if (Board[0][i] == Board[1][i] && Board[1][i] == Board[2][i] && Board[0][i] != 0) {
             return (Board[0][i] == 1) ? 10 : (Board[0][i] == 2) ? -10 : 0;
         }
     }
 
     // Überprüfen, ob eine Diagonale gewonnen hat
-    if (Board[0][0] == Board[1][1] && Board[1][1] == Board[2][2]) {
+    if (Board[0][0] == Board[1][1] && Board[1][1] == Board[2][2] && Board[0][0] != 0) {
         return (Board[0][0] == 1) ? 10 : (Board[0][0] == 2) ? -10 : 0;
     }
-    if (Board[0][2] == Board[1][1] && Board[1][1] == Board[2][0]) {
+    if (Board[0][2] == Board[1][1] && Board[1][1] == Board[2][0] && Board[0][2] != 0) {
         return (Board[0][2] == 1) ? 10 : (Board[0][2] == 2) ? -10 : 0;
     }
 
     return 0;
 }
 
-// Funktion zur Ausführung des Minimax Algorithmus
-int minmax(int Board[3][3], int depth, bool isMax) {                            
-  int score = evaluate(Board);
-
-  if (score == 10 || score == -10) {                                            // Überprüfen, ob das Spiel beendet ist
-    return score;
-  }
-
-  if (!checkFieldsLeft(Board)) {                                                // Überprüfen, ob es noch Züge gibt
-    return 0;                                                                   // Unentschieden
-  }
-
-  if (isMax) {                                                                  // Maximierender Spieler
-    int best = -1000;
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++) {
-        if (Board[i][j] == 0) {
-          Board[i][j] = 1;                                                      // Zug ausführen
-          best = max(best, minmax(Board, depth + 1, !isMax));                   // Rekursiver Aufruf
-          Board[i][j] = 0;                                                      // Zug zurücknehmen
-        }
-      }
+// Funktion zur Überprüfung, ob das Spiel vorbei ist
+bool isGameOver(int Board[3][3]) {
+    // Überprüfen, ob jemand gewonnen hat
+    if (evaluate(Board) != 0) {
+        return true;
     }
-    return best;
-  } else {                                                                      // Minimierender Spieler
-    int best = 1000;
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++) {
-        if (Board[i][j] == 0) {
-          Board[i][j] = 2;                                                      // Zug ausführen
-          best = min(best, minmax(Board, depth + 1, !isMax));                   // Rekursiver Aufruf
-          Board[i][j] = 0;                                                      // Zug zurücknehmen
-        }
-      }
-    }
-    return best;
-  }
+    // Überprüfen, ob noch Felder frei sind
+    return !checkFieldsLeft(Board);
 }
 
-// Funktion für den Computerzug
-void ComputerTurn(int Board[3][3], bool &firstMove) {
-    int bestRow = 0;
-    int bestCol = 0;
+// Funktion zur Generierung aller möglichen nächsten Zustände
+void getChildren(int Board[3][3], int children[9][3][3], Move moves[9], int &numChildren, bool maximizingPlayer) {
+    numChildren = 0;
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if (Board[i][j] == 0) {
+                // Kopiere das aktuelle Board
+                copyBoard(Board, children[numChildren]);
+                // Setze den Zug
+                children[numChildren][i][j] = maximizingPlayer ? 1 : 2;
+                // Speichere den Zug
+                moves[numChildren].row = i;
+                moves[numChildren].col = j;
+                numChildren++;
+            }
+        }
+    }
+}
 
-    if (firstMove) {
-        bool played = false;  // Überprüfen, ob die KI eine unbesetzte Ecke gefunden hat
-        int temp = random(4);  // Zufällige Auswahl einer der vier Ecken
-        if (temp == 0) {
-            if (Board[0][0] == 0) {  // Überprüfen, ob die Ecke frei ist
-                bestRow = 0;
-                bestCol = 0;
-                played = true;
+// Minimax-Algorithmus mit Alpha-Beta-Pruning
+int minimax(int Board[3][3], int depth, int alpha, int beta, bool maximizingPlayer, Move &bestMove) {
+    if (depth == 0 || isGameOver(Board)) {
+        return evaluate(Board);
+    }
+
+    if (maximizingPlayer) {
+        int maxEval = INT_MIN;
+        Move currentMove;
+        int children[9][3][3];
+        Move moves[9];
+        int numChildren;
+        getChildren(Board, children, moves, numChildren, true);
+        for (int i = 0; i < numChildren; i++) {
+            int eval = minimax(children[i], depth - 1, alpha, beta, false, currentMove);
+            if (eval > maxEval) {
+                maxEval = eval;
+                bestMove = moves[i]; // Speichere die tatsächliche Position
             }
-        } else if (temp == 1) {
-            if (Board[0][2] == 0) {  // Überprüfen, ob die Ecke frei ist
-                bestRow = 0;
-                bestCol = 2;
-                played = true;
-            }
-        } else if (temp == 2) {
-            if (Board[2][0] == 0) {  // Überprüfen, ob die Ecke frei ist
-                bestRow = 2;
-                bestCol = 0;
-                played = true;
-            }
-        } else {
-            if (Board[2][2] == 0) {  // Überprüfen, ob die Ecke frei ist
-                bestRow = 2;
-                bestCol = 2;
-                played = true;
+            alpha = max(alpha, eval);
+            if (beta <= alpha) {
+                break;
             }
         }
-        if (!played) {  // Wenn keine Ecke frei ist, wähle das mittlere Feld
-            bestRow = 1;
-            bestCol = 1;
-        }
-        firstMove = false;  // Setze firstMove auf false, da der erste Zug abgeschlossen ist
+        return maxEval;
     } else {
-        int bestVal = 1000;  // Initialisiere bestVal mit einem hohen Wert
-        for (int i = 0; i < 3; i++) {  // Durchlaufe jede Zeile
-            for (int j = 0; j < 3; j++) {  // Durchlaufe jede Spalte
-                if (Board[i][j] == 0) {  // Wenn das Feld frei ist
-                    Board[i][j] = 2;  // Führe den Zug aus
-                    int moveVal = minmax(Board, 0, true);  // Berechne den Wert des Zuges
-                    Board[i][j] = 0;  // Nimm den Zug zurück
-
-                    // Aktualisiere die besten Koordinaten und den besten Wert
-                    if (moveVal < bestVal) {
-                        bestRow = i;
-                        bestCol = j;
-                        bestVal = moveVal;
-                    }
-                }
+        int minEval = INT_MAX;
+        Move currentMove;
+        int children[9][3][3];
+        Move moves[9];
+        int numChildren;
+        getChildren(Board, children, moves, numChildren, false);
+        for (int i = 0; i < numChildren; i++) {
+            int eval = minimax(children[i], depth - 1, alpha, beta, true, currentMove);
+            if (eval < minEval) {
+                minEval = eval;
+                bestMove = moves[i]; // Speichere die tatsächliche Position
+            }
+            beta = min(beta, eval);
+            if (beta <= alpha) {
+                break;
             }
         }
+        return minEval;
     }
-    Board[bestRow][bestCol] = 2;  // Führe den besten Zug aus
 }
+
+// Funktion zur Bestimmung des besten Zuges für den Computer
+Move getBestMove(int Board[3][3], int depth) {
+    Move bestMove;
+    minimax(Board, depth, INT_MIN, INT_MAX, false, bestMove); // Spieler 2 (minimizingPlayer) am Zug
+    return bestMove;
+}
+
+// Funktion zur Bestimmung des besten Zuges für den Computer und Einfügen in das Board
+void makeBestMove(int Board[3][3], int depth) {
+    Move bestMove = getBestMove(Board, depth);
+    Board[bestMove.row][bestMove.col] = 2; // Setze den Zug für Spieler 2
+}
+
 
 #endif
