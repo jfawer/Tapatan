@@ -10,6 +10,13 @@
 #include "struct.h"
 #include <limits.h>
 
+// Funktion zum resetten der Spieleinstellungen / GameSettings
+void resetGameSettings(GameSettings &gameSettings) {
+  gameSettings.game = 0;
+  gameSettings.mode = 0;
+  gameSettings.difficulty = 0;
+}
+
 // Funktion zum Kopieren eines Arrays in ein anderes Array
 void copyBoard(int Board[3][3], int BoardMemory[3][3]) {  
   for (int i = 0; i < 3; i++) {
@@ -58,7 +65,7 @@ bool isValidMove(int Board[3][3], int BoardMemory[3][3], int currentPlayer) {
         return false; // Kein gültiger Zug, wenn kein Feld geändert wurde
     }
 
-    int oldValue = BoardMemory[row][col];
+    int oldValue = BoardMemory[row][col];   
     int newValue = Board[row][col];
 
     if (oldValue == 0 && newValue == currentPlayer) {   // Gültiger Zug, wenn das Feld leer war und der Spieler das Feld geändert hat
@@ -81,18 +88,18 @@ bool isBoardEqual(int Board_A[3][3], int Board_B[3][3]) {
 }
 
 // Funktion zum Warten, bis der illegale Zug zurückgenommen wurde
-void waitUntilMoveIsUndone(int Board[3][3], int BoardMemory[3][3], const int numPotentiometers, const int potPins[]) {
+void waitUntilMoveIsUndone(int Board[3][3], int BoardMemory[3][3], const int potPins[]) {
   while (!isBoardEqual(Board, BoardMemory)) {
-    readSensors(Board, numPotentiometers, potPins);
+    updateBoard(Board, potPins);
     delay(100);
   }
 }
 
 // Funktion zum Warten, bis das Spielfeld komplett zurückgesetzt wurde
-void waitForReset (int Board[3][3], const int numPotentiometers, const int potPins[]) {
+void waitForReset (int Board[3][3], const int potPins[]) {
   int ResetBoard[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
   while (!isBoardEqual(Board, ResetBoard)) {
-    readSensors(Board, numPotentiometers, potPins);
+    updateBoard(Board, potPins);
     delay(100);
   }
 }
@@ -129,7 +136,6 @@ int evaluate(int Board[3][3]) {
     if (Board[0][2] == Board[1][1] && Board[1][1] == Board[2][0] && Board[0][2] != 0) {
         return (Board[0][2] == 1) ? 10 : (Board[0][2] == 2) ? -10 : 0;
     }
-
     return 0;
 }
 
@@ -144,7 +150,7 @@ bool isGameOver(int Board[3][3]) {
 }
 
 // Funktion zur Generierung aller möglichen nächsten Zustände
-void getChildren(int Board[3][3], int children[9][3][3], Move moves[9], int &numChildren, bool maximizingPlayer) {
+void getChildren(int Board[3][3], int children[9][3][3], BoardField moves[9], int &numChildren, bool maximizingPlayer) {
     numChildren = 0;
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
@@ -163,16 +169,16 @@ void getChildren(int Board[3][3], int children[9][3][3], Move moves[9], int &num
 }
 
 // Minimax-Algorithmus mit Alpha-Beta-Pruning
-int minimax(int Board[3][3], int depth, int alpha, int beta, bool maximizingPlayer, Move &bestMove) {
+int minimax(int Board[3][3], int depth, int alpha, int beta, bool maximizingPlayer, BoardField &bestMove) {
     if (depth == 0 || isGameOver(Board)) {
         return evaluate(Board);
     }
 
     if (maximizingPlayer) {
         int maxEval = INT_MIN;
-        Move currentMove;
+        BoardField currentMove;
         int children[9][3][3];
-        Move moves[9];
+        BoardField moves[9];
         int numChildren;
         getChildren(Board, children, moves, numChildren, true);
         for (int i = 0; i < numChildren; i++) {
@@ -189,9 +195,9 @@ int minimax(int Board[3][3], int depth, int alpha, int beta, bool maximizingPlay
         return maxEval;
     } else {
         int minEval = INT_MAX;
-        Move currentMove;
+        BoardField currentMove;
         int children[9][3][3];
-        Move moves[9];
+        BoardField moves[9];
         int numChildren;
         getChildren(Board, children, moves, numChildren, false);
         for (int i = 0; i < numChildren; i++) {
@@ -210,15 +216,15 @@ int minimax(int Board[3][3], int depth, int alpha, int beta, bool maximizingPlay
 }
 
 // Funktion zur Bestimmung des besten Zuges für den Computer
-Move getBestMove(int Board[3][3], int depth) {
-    Move bestMove;
+BoardField getBestMove(int Board[3][3], int depth) {
+    BoardField bestMove;
     minimax(Board, depth, INT_MIN, INT_MAX, false, bestMove); // Spieler 2 (minimizingPlayer) am Zug
     return bestMove;
 }
 
 // Funktion zur Bestimmung des besten Zuges für den Computer und Einfügen in das Board
 void makeBestMove(int Board[3][3], int depth) {
-    Move bestMove = getBestMove(Board, depth);
+    BoardField bestMove = getBestMove(Board, depth);
     Board[bestMove.row][bestMove.col] = 2; // Setze den Zug für Spieler 2
 }
 
