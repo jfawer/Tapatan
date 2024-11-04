@@ -8,36 +8,18 @@
 #include <LiquidCrystal_I2C.h>
 
 // Einbinden der Header-Dateien
-#include "struct.h"
 #include "input.h"
+#include "struct.h"
 
-// Funktion für die Anzeige des Startbildschirms
-void displayStart(LiquidCrystal_I2C lcd) {
-  lcd.clear();                                                                                                    // LCD löschen
-  lcd.setCursor(6, 1);
-  lcd.print("Herzlich");                                                                                          // Text auf dem LCD anzeigen
-  lcd.setCursor(5, 2);
-  lcd.print("Willkommen");                                                                                        // Text auf dem LCD anzeigen
-}
-
-// Funktion für die Anzeige zum Zurücksetzen des Spielfelds
-void displayReset(LiquidCrystal_I2C lcd) {
-  lcd.clear();                                                                                                    // LCD löschen
-  lcd.setCursor(4, 1);
-  lcd.print("Zur");                                                                                               
-  lcd.write(byte(0));                                                                                             // Umlaut Ü anzeigen
-  lcd.print("cksetzen");                                                                                               
-  lcd.setCursor(3, 2);
-  lcd.print("des Spielfelds");
-}
+// ====================================================================================================
+// Funktionen für die Anzeige des Tic Tac Toe Spielfelds
+// ====================================================================================================
 
 // Funktion für die Anzeige des Boards
 void displayBoard(LiquidCrystal_I2C &lcd, int Board[3][3]) {
   for (int row = 0; row < 3; row++) {                                                                             // Zeichne das Spielfeld
     for (int col = 0; col < 3; col++) {
       lcd.setCursor(col + 15, row + 1);
-      
-      
       char symbol = (Board[row][col] == 0) ? '_' : (Board[row][col] == 1) ? 'X' : 'O';                            // Entscheide, welches Symbol angezeigt werden soll
       lcd.print(symbol);
     }
@@ -64,6 +46,11 @@ void displayGameScreen(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Bo
   displayPlayer(lcd, gameSettings, currentPlayer);                                                                // Zeige den Spieler, der am Zug ist
   displayBoard(lcd, Board);                                                                                       // Spielfeld anzeigen
 }
+
+
+// ====================================================================================================
+// Funktionen für die Anzeige der Spielinformationen
+// ====================================================================================================
 
 // Funktion zur Anzeige zum Zurücklegen einer unerlaubten Bewegung
 void displayIllegalMove(LiquidCrystal_I2C &lcd) {
@@ -95,8 +82,38 @@ void displayDraw(LiquidCrystal_I2C &lcd) {
   lcd.print("         ");
 }
 
-// Funktion zur Anzeige der Auswahl
-void displaySelection(LiquidCrystal_I2C &lcd, int bereich) {                                                                                   
+
+// ====================================================================================================
+// Funktionen für die Benutzeroberfläche
+// ====================================================================================================
+
+// Funktion für die Anzeige des Startbildschirms
+void displayStart(LiquidCrystal_I2C lcd) {
+  lcd.clear();                                                                                                    // LCD löschen
+  lcd.setCursor(6, 1);
+  lcd.print("Herzlich");                                                                                          // Text auf dem LCD anzeigen
+  lcd.setCursor(5, 2);
+  lcd.print("Willkommen");                                                                                        // Text auf dem LCD anzeigen
+}
+
+// Funktion für die Anzeige zum Zurücksetzen des Spielfelds
+void displayReset(LiquidCrystal_I2C lcd) {
+  lcd.clear();                                                                                                    // LCD löschen
+  lcd.setCursor(4, 1);
+  lcd.print("Zur");                                                                                               
+  lcd.write(byte(0));                                                                                             // Umlaut Ü anzeigen
+  lcd.print("cksetzen");                                                                                               
+  lcd.setCursor(3, 2);
+  lcd.print("des Spielfelds");
+}
+
+
+// ====================================================================================================
+// Funktionen für die Spielauswahl
+// ====================================================================================================
+
+// Funktion zur Anzeige des Auswahlsymbols
+void displaySelectionSymbol(LiquidCrystal_I2C &lcd, int bereich) {                                                                                   
   for (int i = 1; i <= 3; i++) {                                                                                 // Auswahl anzeigen
     if (i == bereich) {                                                                                          // Überprüfen, ob der Bereich ausgewählt ist
       lcd.setCursor(0, i);
@@ -131,7 +148,7 @@ void choseGame(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int gamePotPi
 
   int bereich = getPotRangeValue(gamePotPin, 2);
   if (!fallendeFlanke(gameButtonPin)) {
-    displaySelection(lcd, bereich);
+    displaySelectionSymbol(lcd, bereich);
   } else {
     gameSettings.game = bereich;
     gameSelectionDisplayed = false;
@@ -161,7 +178,7 @@ void choseMode(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int modePotPi
 
   int bereich = getPotRangeValue(modePotPin, 2);
   if (!fallendeFlanke(modeButtonPin)) {
-    displaySelection(lcd, bereich);
+    displaySelectionSymbol(lcd, bereich);
   } else {
     gameSettings.mode = bereich;
     modeSelectionDisplayed = false;
@@ -191,7 +208,7 @@ void choseDifficulty(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int dif
 
   int bereich = getPotRangeValue(difficultyPotPin, 3);
   if (!fallendeFlanke(difficultyButtonPin)) {
-    displaySelection(lcd, bereich);
+    displaySelectionSymbol(lcd, bereich);
   } else {
     gameSettings.difficulty = bereich;
     difficultySelectionDisplayed = false;

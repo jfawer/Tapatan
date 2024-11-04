@@ -66,8 +66,7 @@ void loop() {
 
   // Überprüfen, ob das Spielfeld in der Ausgangsposition ist
   updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
-  if (isBoardEqual(Board, ResetBoard)) {                                                                  
-    
+  if (isBoardEqual(Board, ResetBoard) && gameSettings.game == 0) {                                        // Überprüfen, ob das Spielfeld in der Ausgangsposition ist und kein Spiel ausgewählt wurde
     // Spiel auswählen
     choseGameSettings(lcd, gameSettings, gamePotPin, gameButtonPin);                                      // Spielmodus, Schwierigkeitsgrad und Spiel auswählen
     currentPlayer = random(1, 3);                                                                         // Zufällige Auswahl des Startspielers
@@ -75,20 +74,17 @@ void loop() {
 
     // Spiel starten
     switch (gameSettings.game) {                                                                          // Auswahl des Spiels
-    case TicTacToe:
-      playTicTacToe(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);                       // Spiel Tic Tac Toe starten
-      delay(5000);
-      break;
-    case Tapatan:
-      // playTapatan();                                                                                   // Spiel Tapatan starten
-      break;
-    default:
-      Serial.println("Spiel nicht verfügbar");                                                            // Fehlermeldung, wenn das Spiel nicht verfügbar ist
-      break;
+      case TicTacToe:
+        playTicTacToe(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);                     // Spiel Tic Tac Toe starten
+        delay(5000);
+        break;
+      case Tapatan:
+        // playTapatan();                                                                                 // Spiel Tapatan starten
+        break;
     }
   } else {
-    displayReset(lcd);                                                                                    // Zurücksetzen des Spielfelds anzeigen
-    waitForReset(Board, potPins);                                                                         // Warten auf das Zurücksetzen des Spielfelds
+    displayReset(lcd);                                                                                    // Anzeige zum Zurücksetzen des Spielfelds
+    awaitBoardReset(Board, potPins);                                                                         // Warten auf das Zurücksetzen des Spielfelds
     resetGameSettings(gameSettings);                                                                      // Spieleinstellungen zurücksetzen
     copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
   }
