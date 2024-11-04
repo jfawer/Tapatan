@@ -10,13 +10,6 @@
 #include "struct.h"
 #include <limits.h>
 
-// Funktion zum resetten der Spieleinstellungen / GameSettings
-void resetGameSettings(GameSettings &gameSettings) {
-  gameSettings.game = 0;
-  gameSettings.mode = 0;
-  gameSettings.difficulty = 0;
-}
-
 // Funktion zum Kopieren eines Arrays in ein anderes Array
 void copyBoard(int Board[3][3], int BoardMemory[3][3]) {  
   for (int i = 0; i < 3; i++) {
@@ -26,13 +19,20 @@ void copyBoard(int Board[3][3], int BoardMemory[3][3]) {
   }
 }
 
+// Funktion zum resetten der Spieleinstellungen / GameSettings
+void resetGameSettings(GameSettings &gameSettings) {
+  gameSettings.game = 0;
+  gameSettings.mode = 0;
+  gameSettings.difficulty = 0;
+}
+
 // Funktion zum Wechseln des aktuellen Spielers (Von 1 zu 2 und umgekehrt)
 void switchPlayer(int &currentPlayer) {
   currentPlayer = (currentPlayer == 1) ? 2 : 1; 
 }
 
-// Funktion zum Überprüfen, ob sich die Arraywerte / das Spielfeld geändert haben
-bool hasChanged(int Board[3][3], int BoardMemory[3][3]) {
+// Funktion zur Erkennund, ob sich das Spielfeld geändert hat
+bool hasBoardChanged(int Board[3][3], int BoardMemory[3][3]) {
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
       if (Board[i][j] != BoardMemory[i][j]) {
@@ -46,13 +46,13 @@ bool hasChanged(int Board[3][3], int BoardMemory[3][3]) {
 // Funktion zum Erkennen, welches Feld geändert wurde (Gibt Reihe und Spalte zurück)
 BoardField getChangedField(int Board[3][3], int BoardMemory[3][3]) {
     for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++) {
-          if (Board[i][j] != BoardMemory[i][j]) {
-              return {i, j}; // Rückgabe des geänderten Feldes
-          }
-      }
+        for (int j = 0; j < 3; j++) {
+            if (Board[i][j] != BoardMemory[i][j]) {
+                return {i, j}; // Rückgabe des geänderten Feldes
+            }
+        }
     }
-  return {-1, -1}; // Rückgabe von (-1, -1), wenn kein Feld geändert wurde
+    return {-1, -1}; // Rückgabe von (-1, -1), wenn kein Feld geändert wurde
 }
 
 // Funktion zum Überprüfen, ob der Zug des Spielers gültig ist
@@ -61,8 +61,8 @@ bool isValidMove(int Board[3][3], int BoardMemory[3][3], int currentPlayer) {
     int row = changedField.row;
     int col = changedField.col;
 
-    if (row == -1 || col == -1) {
-        return false; // Kein gültiger Zug, wenn kein Feld geändert wurde
+    if (row == -1 && col == -1) {
+        return false; // Kein Feld wurde geändert
     }
 
     int oldValue = BoardMemory[row][col];   
@@ -170,49 +170,49 @@ void getChildren(int Board[3][3], int children[9][3][3], BoardField moves[9], in
 
 // Minimax-Algorithmus mit Alpha-Beta-Pruning
 int minimax(int Board[3][3], int depth, int alpha, int beta, bool maximizingPlayer, BoardField &bestMove) {
-    if (depth == 0 || isGameOver(Board)) {
-        return evaluate(Board);
-    }
+  if (depth == 0 || isGameOver(Board)) {
+      return evaluate(Board);
+  }
 
-    if (maximizingPlayer) {
-        int maxEval = INT_MIN;
-        BoardField currentMove;
-        int children[9][3][3];
-        BoardField moves[9];
-        int numChildren;
-        getChildren(Board, children, moves, numChildren, true);
-        for (int i = 0; i < numChildren; i++) {
-            int eval = minimax(children[i], depth - 1, alpha, beta, false, currentMove);
-            if (eval > maxEval) {
-                maxEval = eval;
-                bestMove = moves[i]; // Speichere die tatsächliche Position
-            }
-            alpha = max(alpha, eval);
-            if (beta <= alpha) {
-                break;
-            }
-        }
-        return maxEval;
-    } else {
-        int minEval = INT_MAX;
-        BoardField currentMove;
-        int children[9][3][3];
-        BoardField moves[9];
-        int numChildren;
-        getChildren(Board, children, moves, numChildren, false);
-        for (int i = 0; i < numChildren; i++) {
-            int eval = minimax(children[i], depth - 1, alpha, beta, true, currentMove);
-            if (eval < minEval) {
-                minEval = eval;
-                bestMove = moves[i]; // Speichere die tatsächliche Position
-            }
-            beta = min(beta, eval);
-            if (beta <= alpha) {
-                break;
-            }
-        }
-        return minEval;
-    }
+  if (maximizingPlayer) {
+      int maxEval = INT_MIN;
+      BoardField currentMove;
+      int children[9][3][3];
+      BoardField moves[9];
+      int numChildren;
+      getChildren(Board, children, moves, numChildren, true);
+      for (int i = 0; i < numChildren; i++) {
+          int eval = minimax(children[i], depth - 1, alpha, beta, false, currentMove);
+          if (eval > maxEval) {
+              maxEval = eval;
+              bestMove = moves[i]; // Speichere die tatsächliche Position
+          }
+          alpha = max(alpha, eval);
+          if (beta <= alpha) {
+              break;
+          }
+      }
+      return maxEval;
+  } else {
+      int minEval = INT_MAX;
+      BoardField currentMove;
+      int children[9][3][3];
+      BoardField moves[9];
+      int numChildren;
+      getChildren(Board, children, moves, numChildren, false);
+      for (int i = 0; i < numChildren; i++) {
+          int eval = minimax(children[i], depth - 1, alpha, beta, true, currentMove);
+          if (eval < minEval) {
+              minEval = eval;
+              bestMove = moves[i]; // Speichere die tatsächliche Position
+          }
+          beta = min(beta, eval);
+          if (beta <= alpha) {
+              break;
+          }
+      }
+      return minEval;
+  }
 }
 
 // Funktion zur Bestimmung des besten Zuges für den Computer
@@ -222,11 +222,61 @@ BoardField getBestMove(int Board[3][3], int depth) {
     return bestMove;
 }
 
+BoardField getRandomMove(int Board[3][3]) {
+    BoardField randomMove;
+    randomMove.row = random(0, 3);
+    randomMove.col = random(0, 3);
+
+    while (Board[randomMove.row][randomMove.col] != 0) {
+        randomMove.row = random(0, 3);
+        randomMove.col = random(0, 3);
+    }
+    return randomMove;
+}
+
 // Funktion zur Bestimmung des besten Zuges für den Computer und Einfügen in das Board
-void makeBestMove(int Board[3][3], int depth) {
-    BoardField bestMove = getBestMove(Board, depth);
+void makeBestMove(int Board[3][3]) {
+    BoardField bestMove = getBestMove(Board, 9);
     Board[bestMove.row][bestMove.col] = 2; // Setze den Zug für Spieler 2
 }
 
+// Funktion zur Bestimmung eines zufälligen Zuges für den Computer und Einfügen in das Board
+void makeRandomMove(int Board[3][3]) {
+    BoardField randomMove = getRandomMove(Board);
+    Board[randomMove.row][randomMove.col] = 2; // Setze den Zug für Spieler 2
+}
+
+// Funktion zur Überprüfung, ob das Spiel vorbei ist und Anzeigen des Gewinners
+bool checkGameEnd(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3][3], int currentPlayer) {
+  if (evaluate(Board) == 10) {  // Überprüfen, ob Spieler 1 gewonnen hat
+    displayWinner(lcd, gameSettings, 1);  // Gewinner anzeigen
+    return true;  // Spiel beenden
+  } else if (evaluate(Board) == -10) {  // Überprüfen, ob Spieler 2 / Computer gewonnen hat
+    displayWinner(lcd, gameSettings, 2);  // Gewinner anzeigen
+    return true;  // Spiel beenden
+  } else if (!checkFieldsLeft(Board)) {  // Überprüfen, ob es ein Unentschieden gibt
+    displayDraw(lcd);  // Unentschieden anzeigen
+    return true;  // Spiel beenden
+  } else {
+    return false;  // Spiel nicht beenden
+  }
+}
+
+bool playerMove(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[]) {
+  bool turnOver = false;
+    
+  if (hasBoardChanged(Board, BoardMemory)) {
+    if (isValidMove(Board, BoardMemory, currentPlayer)) {
+      displayBoard(lcd, Board);
+      turnOver = true;
+    } else {
+      displayBoard(lcd, BoardMemory);
+      displayIllegalMove(lcd);
+      waitUntilMoveIsUndone(Board, BoardMemory, potPins);
+      displayPlayer(lcd, gameSettings, currentPlayer);
+    }
+  }
+  return turnOver;
+}
 
 #endif

@@ -90,5 +90,6 @@ void loop() {
     displayReset(lcd);                                                                                    // Zurücksetzen des Spielfelds anzeigen
     waitForReset(Board, potPins);                                                                         // Warten auf das Zurücksetzen des Spielfelds
     resetGameSettings(gameSettings);                                                                      // Spieleinstellungen zurücksetzen
+    copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
   }
 }
