@@ -32,9 +32,9 @@ void displayPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int curren
   lcd.print("Am Zug:      ");                                                                                     // Zeige den Spieler, der am Zug ist
   lcd.setCursor(0, 3);                                                                                    
   if (gameSettings.mode == 1) {                                                                                   // Überprüfen, ob der Spieler gegen den Computer spielt
-    lcd.print(currentPlayer == 1 ? "Spieler    " : "Computer   ");
+    lcd.print(currentPlayer == 1 ? "Spieler      " : "Computer     ");
   } else {
-    lcd.print(currentPlayer == 1 ? "Spieler 1  " : "Spieler 2  ");
+    lcd.print(currentPlayer == 1 ? "Spieler 1 (X)" : "Spieler 2 (O)");
   }
 }
 
@@ -55,11 +55,11 @@ void displayGameScreen(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Bo
 // Funktion zur Anzeige zum Zurücklegen einer unerlaubten Bewegung
 void displayIllegalMove(LiquidCrystal_I2C &lcd) {
   lcd.setCursor(0, 2);                
-  lcd.print("Zug gem. Bild");                                                                                     
+  lcd.print("Spielfigur");                                                                                     
   lcd.setCursor(0, 3);  
   lcd.print("zur");
   lcd.write(byte(0));                                                                                             // Umlaut Ü anzeigen
-  lcd.print("cklegen");                                                                                           
+  lcd.print("cklegen  ");                                                                                           
 }
 
 // Funktion zur Anzeige des Gewinners

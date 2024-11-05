@@ -6,23 +6,10 @@
 #include <LiquidCrystal_I2C.h>
 
 // Einbinden der Header-Dateien
+#include "struct.h"
 #include "input.h"
 #include "game_logic.h"
 #include "display.h"
-
-// Konstanten für die Spielmodi
-const int PlayerVsComputer = 1;                                                                                   // Konstante für den Spielmodus Spieler gegen Computer
-const int PlayerVsPlayer = 2;                                                                                     // Konstante für den Spielmodus Spieler gegen Spieler
-
-// Konstanten für die Spieler
-const int Player1 = 1;                                                                                            // Konstante für Spieler 1
-const int Player2 = 2;                                                                                            // Konstante für Spieler 2
-const int Computer = 2;                                                                                           // Konstante für den Computer
-
-// Konstanten für die Schwierigkeitsgrade
-const int Einfach = 1;                                                                                            // Konstante für den Schwierigkeitsgrad Einfach
-const int Mittel = 2;                                                                                             // Konstante für den Schwierigkeitsgrad Mittel
-const int Schwer = 3;                                                                                             // Konstante für den Schwierigkeitsgrad Schwer
 
 // Funktion für den Spielmodus Tic Tac Toe Spieler gegen Spieler
 void TicTacToePlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board [3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[]) {
