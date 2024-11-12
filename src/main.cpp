@@ -14,6 +14,7 @@
 #include "display.h"
 #include "input.h"
 #include "tictactoe.h"
+#include "tapatan.h"
 
 // Variablen für das LCD-Display
 LiquidCrystal_I2C lcd(0x27, 20, 4);                                                                       // Setze die Adresse des LCD-Displays
@@ -79,12 +80,13 @@ void loop() {
         delay(5000);
         break;
       case Tapatan:
-        // playTapatan();                                                                                 // Spiel Tapatan starten
+        playTapatan(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);                       // Spiel Tapatan starten
+        delay(5000);
         break;
     }
   } else {
     displayReset(lcd);                                                                                    // Anzeige zum Zurücksetzen des Spielfelds
-    awaitBoardReset(Board, potPins);                                                                         // Warten auf das Zurücksetzen des Spielfelds
+    awaitBoardReset(Board, potPins);                                                                      // Warten auf das Zurücksetzen des Spielfelds
     resetGameSettings(gameSettings);                                                                      // Spieleinstellungen zurücksetzen
     copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
   }
