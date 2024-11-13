@@ -79,7 +79,11 @@ void TapatanPlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
                 int BoardDisplay[3][3];
                 copyBoard(Board, BoardDisplay);
                 
-                makeBestMove(BoardDisplay); // Besten Zug für den Computer bestimmen
+                if (gameSettings.difficulty == Mittel && turnCount >= 3) {
+                    makeBestMove(BoardDisplay);                                                                               // Besten Zug für den Computer bestimmen
+                } else {
+                    makeRandomMove(BoardDisplay);                                                                             // Zufälligen Zug für den Computer bestimmen
+                }
 
                 delay(400);
                 displayGameScreen(lcd, gameSettings, BoardDisplay, currentPlayer); // Spielfeld anzeigen
