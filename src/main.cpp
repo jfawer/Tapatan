@@ -26,8 +26,10 @@ byte umlautA[8] = { B01010, B00000, B01110, B00001, B01111, B10001, B01111, B000
 const int potPins[] = {A0, A1, A2, A3, A4, A5, A6, A7, A8};                                               
 
 // Pins für die Spielauswahl
-const int gamePotPin = A9;                                                                                // Pin für den Potentiometer zur Auswahl des Spiels
-const int gameButtonPin = 2;                                                                              // Pin für den Knopf zur Bestätigung des Spiels
+const int gamePotPin = A9;
+const int rotarySwitchPin1 = 3;         //23                                                                // Pin für den Potentiometer zur Auswahl des Spielmodus
+const int rotarySwitchPin2 = 4;         //25                                                                // Pin für den Potentiometer zur Auswahl des Spiels
+const int gameButtonPin = 2;          //24                                                                // Pin für den Knopf zur Bestätigung des Spiels
 const int emptyAnalogPin = A10;                                                                           // Pin für den Seed der Zufallsfunktion
 
 // Spieleinstellungen
@@ -45,10 +47,12 @@ int Board [3][3];                                                               
 int BoardMemory [3][3];                                                                                   // Array für das den Spielfeldspeicher (0 = Leeres Feld, 1 = X, 2 = O)
 int ResetBoard[3][3] = {{0,0,0},{0,0,0},{0,0,0}};                                                         // Array für das Zurücksetzen des Spielfelds
 int currentPlayer;                                                                                        // Variable für den Spieler der am Zug ist 1 = Spieler 1, 2 = Spieler 2 / Computer
+int lastRotarySwitchState;                                                                                // Variable für den letzten Zustand des Rotary-Switch
+int rotarySwitchValue;                                                                                    // Variable für den Wert des Rotary-Switch
 
 // Setup Funktion
 void setup() {
-  pinMode(gameButtonPin, INPUT_PULLUP);                                                                   // Pin für den Bestätigungsknopf als Eingang
+  setupRotarySwitch();                                                                                    // Rotary-Switch initialisieren
   randomSeed(analogRead(emptyAnalogPin));                                                                 // Seed für die Zufallsfunktion
   Serial.begin(9600);                                                                                     // Serielle Kommunikation starten
 
@@ -64,7 +68,8 @@ void setup() {
 
 // Loop Funktion
 void loop() {
-
+  
+  readRotarySwitch();                                                                                    // Rotary-Switch auslesen
   // Überprüfen, ob das Spielfeld in der Ausgangsposition ist
   updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
   if (isBoardEqual(Board, ResetBoard) && gameSettings.game == 0) {                                        // Überprüfen, ob das Spielfeld in der Ausgangsposition ist und kein Spiel ausgewählt wurde

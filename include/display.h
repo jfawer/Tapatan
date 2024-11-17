@@ -146,7 +146,8 @@ void choseGame(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int gamePotPi
     gameSelectionDisplayed = true; // Anzeige nur einmal
   }
 
-  int bereich = getPotRangeValue(gamePotPin, 2);
+  //int bereich = getPotRangeValue(gamePotPin, 2);
+  int bereich = getRotarySwitchRangeValue(2);
   if (!fallendeFlanke(gameButtonPin)) {
     displaySelectionSymbol(lcd, bereich);
   } else {
@@ -176,7 +177,8 @@ void choseMode(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int modePotPi
     modeSelectionDisplayed = true; // Anzeige nur einmal
   }
 
-  int bereich = getPotRangeValue(modePotPin, 2);
+  //int bereich = getPotRangeValue(modePotPin, 2);
+  int bereich = getRotarySwitchRangeValue(2);
   if (!fallendeFlanke(modeButtonPin)) {
     displaySelectionSymbol(lcd, bereich);
   } else {
@@ -206,7 +208,8 @@ void choseDifficulty(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int dif
     difficultySelectionDisplayed = true; // Anzeige nur einmal
   }
 
-  int bereich = getPotRangeValue(difficultyPotPin, 3);
+  //int bereich = getPotRangeValue(difficultyPotPin, 3);
+  int bereich = getRotarySwitchRangeValue(3);
   if (!fallendeFlanke(difficultyButtonPin)) {
     displaySelectionSymbol(lcd, bereich);
   } else {
