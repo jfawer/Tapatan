@@ -17,8 +17,8 @@ const int motor2DirPin = 6;
 const int motor2EnablePin = 7;
 
 //Pins für die Endschalter
-const int endstopXPin = 22;
-const int endstopYPin = 23;
+const int endstopXPin = 8;
+const int endstopYPin = 9;
 
 // Maximale und Minimale Positionen in mm
 const int maxXPosition = 400;
