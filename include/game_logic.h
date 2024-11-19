@@ -462,35 +462,52 @@ int Tapatanminimax(int Board[3][3], int depth, int alpha, int beta, bool maximiz
 
 // Funktion zur Bestimmung eines zufälligen Zuges für den Computer und Einfügen in das Board
 void TapatanMakeRandomMove(int Board[3][3]) {
-  int possibleMoves[8][2];
+  int possibleMoves[8][2];  // Array für mögliche Züge
+  int possibleMoveCount = 0; // Zähler für die Anzahl der möglichen Züge
+
+  // Zufällige Auswahl eines Startpunkts (z. B. eines Feldes)
+  int row, col;
   bool validMove = false;
 
   do {
     // Zufällige Auswahl eines Spielsteins
-    int row = random(0, 3);
-    int col = random(0, 3);
+    row = random(0, 3);
+    col = random(0, 3);
     
     // Überprüfen, ob das Feld ein gültiges Feld ist
     if (isValidPick(Board, {row, col})) {
       // Suche nach einem leeren benachbarten Feld (oberhalb, unterhalb, links, rechts, diagonal)
       int directions[8][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
       
+      // Durchsuche alle 8 Richtungen
       for (int d = 0; d < 8; d++) {
         int newRow = row + directions[d][0];
         int newCol = col + directions[d][1];
         // Überprüfen, ob das Feld innerhalb des Spielfelds liegt und leer ist
         if (newRow >= 0 && newRow < 3 && newCol >= 0 && newCol < 3 && Board[newRow][newCol] == 0) {
-          // Füge es in ein Array ein
-          possibleMoves[d][0] = newRow;
+          // Füge es in das Array der möglichen Züge ein
+          possibleMoves[possibleMoveCount][0] = newRow;
+          possibleMoves[possibleMoveCount][1] = newCol;
+          possibleMoveCount++;  // Erhöhe die Anzahl der möglichen Züge
         }
       }
+      
+      // Wenn es mindestens einen möglichen Zug gibt, setze validMove auf true
+      if (possibleMoveCount > 0) {
+        validMove = true;
+      }
     }
-  } while (!validMove);
+  } while (!validMove);  // Wiederhole, bis ein gültiger Zug gefunden wurde
+  
   // Auswahl eines zufälligen gültigen Zugs
-  int randomMove = random(0, 8);
+  int randomMove = random(0, possibleMoveCount);  // Zufällige Auswahl unter den möglichen Zügen
   int newRow = row + possibleMoves[randomMove][0];
   int newCol = col + possibleMoves[randomMove][1];
+
+  // Führe den Zug aus (zum Beispiel, indem du das Board aktualisierst)
+  Board[newRow][newCol] = 2;  // Beispiel: Setze den Wert auf 1 für den Computer
 }
+
 
 
 // Funktion zur Bestimmung des besten Zuges für den Computer und Einfügen in das Board
