@@ -11,6 +11,8 @@
 #include "input.h"
 #include "struct.h"
 
+extern volatile int rotarySwitchValue;
+
 // ====================================================================================================
 // Funktionen für die Anzeige des Tic Tac Toe Spielfelds
 // ====================================================================================================
@@ -67,7 +69,7 @@ void displayWinner(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int curren
   lcd.setCursor(0, 2);
   lcd.print("Gewonnen: ");                                                                                       
   lcd.setCursor(0, 3);
-  if (gameSettings.mode == 1) {                                                                                  // Überprüfen, ob der Spieler gegen den Computer spielt
+  if (gameSettings.mode == 1) {                                                                                   // Überprüfen, ob der Spieler gegen den Computer spielt
     lcd.print(currentPlayer == 1 ? "Spieler" : "Computer");
   } else {
     lcd.print(currentPlayer == 1 ? "Spieler 1" : "Spieler 2");
@@ -77,7 +79,7 @@ void displayWinner(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int curren
 // Funktion zur Anzeige eines Unentschieden
 void displayDraw(LiquidCrystal_I2C &lcd) {
   lcd.setCursor(0, 2);
-  lcd.print("Unentschieden!");                                                                                   // Text auf dem LCD anzeigen 
+  lcd.print("Unentschieden!");                                                                                    // Text auf dem LCD anzeigen 
   lcd.setCursor(0, 3);
   lcd.print("         ");
 }
@@ -112,10 +114,11 @@ void displayReset(LiquidCrystal_I2C lcd) {
 // Funktionen für die Spielauswahl
 // ====================================================================================================
 
+
 // Funktion zur Anzeige des Auswahlsymbols
 void displaySelectionSymbol(LiquidCrystal_I2C &lcd, int bereich) {                                                                                   
-  for (int i = 1; i <= 3; i++) {                                                                                 // Auswahl anzeigen
-    if (i == bereich) {                                                                                          // Überprüfen, ob der Bereich ausgewählt ist
+  for (int i = 1; i <= 3; i++) {                                                                                  // Auswahl anzeigen
+    if (i == bereich) {                                                                                           // Überprüfen, ob der Bereich ausgewählt ist
       lcd.setCursor(0, i);
       lcd.print("*");                                                                                             
     } else {
@@ -127,34 +130,34 @@ void displaySelectionSymbol(LiquidCrystal_I2C &lcd, int bereich) {
 
 // Funktion zur Anzeige der Spielauswahl
 void displayGameSelection(LiquidCrystal_I2C &lcd) {
-  lcd.clear();                                                                                                   // LCD löschen
+  lcd.clear();                                                                                                    // LCD löschen
   lcd.setCursor(0, 0);
   lcd.print("Spiel ausw");
-  lcd.write(byte(2));                                                                                            // Umlaut Ä anzeigen
+  lcd.write(byte(2));                                                                                             // Umlaut Ä anzeigen
   lcd.print("hlen:");                                                                                
   lcd.setCursor(2, 1);
-  lcd.print("Tic Tac Toe");                                                                                      // Text auf dem LCD anzeigen
+  lcd.print("Tic Tac Toe");                                                                                       // Text auf dem LCD anzeigen
   lcd.setCursor(2, 2);
-  lcd.print("Tapatan");                                                                                          // Text auf dem LCD anzeigen
+  lcd.print("Tapatan");                                                                                           // Text auf dem LCD anzeigen
 }
 
 // Funktion zur Auswahl des Spiels
-void choseGame(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int gamePotPin, int gameButtonPin) {
-  static bool gameSelectionDisplayed = false; // Einmalige Anzeige
-  if (!gameSelectionDisplayed) {
-    displayGameSelection(lcd); // Spiel auswählen
-    gameSelectionDisplayed = true; // Anzeige nur einmal
+void choseGame(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int gameButtonPin) {
+  static bool gameSelectionDisplayed = false;                                                                     // Statische Variable für die einmalige Anzeige der Spielauswahl
+  if (!gameSelectionDisplayed) {                                                                                  // Überprüfen, ob die Spielauswahl angezeigt wurde
+    displayGameSelection(lcd);                    
+    gameSelectionDisplayed = true; 
   }
 
-  //int bereich = getPotRangeValue(gamePotPin, 2);
-  int bereich = getRotarySwitchRangeValue(2);
-  if (!fallendeFlanke(gameButtonPin)) {
+  int bereich = getRotarySwitchRangeValue(2, rotarySwitchValue);                                                  // Bereich berechnen
+  if (!fallendeFlanke(gameButtonPin)) {                                                                           // Überprüfen, ob der Knopf gedrückt wurde
     displaySelectionSymbol(lcd, bereich);
   } else {
-    gameSettings.game = bereich;
+    gameSettings.game = bereich;                                                                                  // Spiel auswählen
     gameSelectionDisplayed = false;
   }
 }
+
 
 // Funktion zur Anzeige der Modusauswahl
 void displayModeSelection(LiquidCrystal_I2C &lcd) {
@@ -170,19 +173,18 @@ void displayModeSelection(LiquidCrystal_I2C &lcd) {
 }
 
 // Funktion zur Auswahl des Modus
-void choseMode(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int modePotPin, int modeButtonPin) {
-  static bool modeSelectionDisplayed = false; // Einmalige Anzeige
-  if (!modeSelectionDisplayed) {
-    displayModeSelection(lcd); // Modus auswählen
-    modeSelectionDisplayed = true; // Anzeige nur einmal
+void choseMode(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int gameButtonPin) {
+  static bool modeSelectionDisplayed = false;                                                                     // Statistische Variable für die einmalige Anzeige  
+  if (!modeSelectionDisplayed) {                                                                                  // Überprüfen, ob die Modusauswahl angezeigt wurde
+    displayModeSelection(lcd);
+    modeSelectionDisplayed = true;
   }
 
-  //int bereich = getPotRangeValue(modePotPin, 2);
-  int bereich = getRotarySwitchRangeValue(2);
-  if (!fallendeFlanke(modeButtonPin)) {
+  int bereich = getRotarySwitchRangeValue(2, rotarySwitchValue);                                                  // Bereich berechnen
+  if (!fallendeFlanke(gameButtonPin)) {                                                                           // Überprüfen, ob der Knopf gedrückt wurde
     displaySelectionSymbol(lcd, bereich);
   } else {
-    gameSettings.mode = bereich;
+    gameSettings.mode = bereich;                                                                                  // Modus auswählen
     modeSelectionDisplayed = false;
   }
 }
@@ -201,38 +203,40 @@ void displayDifficultySelection(LiquidCrystal_I2C &lcd) {
 }
 
 // Funktion zur Auswahl des Schwierigkeitsgrades
-void choseDifficulty(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int difficultyPotPin, int difficultyButtonPin) {
-  static bool difficultySelectionDisplayed = false; // Einmalige Anzeige
-  if (!difficultySelectionDisplayed) {
-    displayDifficultySelection(lcd); // Schwierigkeitsgrad auswählen
-    difficultySelectionDisplayed = true; // Anzeige nur einmal
+void choseDifficulty(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int gameButtonPin) {
+  static bool difficultySelectionDisplayed = false;                                                               // Statische Variable für die einmalige Anzeige
+  if (!difficultySelectionDisplayed) {                                                                            // Überprüfen, ob die Schwierigkeitsauswahl angezeigt wurde
+    displayDifficultySelection(lcd);
+    difficultySelectionDisplayed = true;
   }
 
-  //int bereich = getPotRangeValue(difficultyPotPin, 3);
-  int bereich = getRotarySwitchRangeValue(3);
-  if (!fallendeFlanke(difficultyButtonPin)) {
+  int bereich = getRotarySwitchRangeValue(3, rotarySwitchValue);                                                  // Bereich berechnen
+  if (!fallendeFlanke(gameButtonPin)) {                                                                           // Überprüfen, ob der Knopf gedrückt wurde
     displaySelectionSymbol(lcd, bereich);
   } else {
-    gameSettings.difficulty = bereich;
+    gameSettings.difficulty = bereich;                                                                            // Schwierigkeitsgrad auswählen
     difficultySelectionDisplayed = false;
   }
 }
 
 // Funktion zur Auswahl der Spielvariablen
-void choseGameSettings(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int gamePotPin, int gameButtonPin) {
-  lcd.clear();                                                                                                  // LCD löschen
+void choseGameSettings(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int gameButtonPin, bool &setupvariable) {
+  setupvariable = true;                                                                                           // Encoder aktivieren
+  lcd.clear();                                                                                                    // LCD löschen
   const int PlayerVsComputer = 1;
-  while (gameSettings.game == 0) {
-    choseGame(lcd, gameSettings, gamePotPin, gameButtonPin);                                                    // Spiel auswählen
-  }
+  while (gameSettings.game == 0) {                                                                                
+    choseGame(lcd, gameSettings, gameButtonPin);                                                                  // Spiel auswählen      
   delay(500);
-  while (gameSettings.mode == 0) {  
-    choseMode(lcd, gameSettings, gamePotPin, gameButtonPin);                                                    // Modus auswählen
+  }
+  while (gameSettings.mode == 0) {                                                                                
+    choseMode(lcd, gameSettings, gameButtonPin);                                                                  // Modus auswählen
   }
   delay(500);
   while (gameSettings.mode == PlayerVsComputer && gameSettings.difficulty == 0) {
-    choseDifficulty(lcd, gameSettings, gamePotPin, gameButtonPin);                                              // Schwierigkeitsgrad auswählen
+    choseDifficulty(lcd, gameSettings, gameButtonPin);                                                            // Schwierigkeitsgrad auswählen
   }
+  setupvariable = false;                                                                                          // Encoder deaktivieren
 }
+
 
 #endif

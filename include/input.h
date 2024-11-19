@@ -38,68 +38,36 @@ bool fallendeFlanke(int buttonPin) {
   }
 }
 
-/*
-// Funktion für das Auslesen des Potentiometers und die Zuordnung zu einem Bereich
-int getPotRangeValue(int potPin, int numRange) {
-  int potValue = analogRead(potPin);                                                            // Wert des Potentiometers
-  int rangeSize = 1024 / numRange;                                                              // Grösse der Bereiche
-  
-  for (int i = 0; i < numRange; i++) {                                                          // Bereiche durchgehen
-    if (potValue >= i * rangeSize && potValue < (i + 1) * rangeSize) {                          // Überprüfen, ob der Wert im Bereich liegt
-      return i + 1; 
-    } else if (potValue >= (numRange - 1) * rangeSize) {                                        // Überprüfen, ob der Wert im letzten Bereich liegt
-      return numRange; 
-    }
-  }
-  return 0;
-}
-*/
-
-// Funktion um den Rotary-Switch zu initialisieren
-void setupRotarySwitch() {
-  pinMode(gameButtonPin, INPUT_PULLUP);                                                          // Pin für den Bestätigungsknopf als Eingang
-  pinMode(rotarySwitchPin1, INPUT_PULLUP);                                                       // Pin für den Rotary-Switch als Eingang
-  pinMode(rotarySwitchPin2, INPUT_PULLUP);                                                       // Pin für den Rotary-Switch als Eingang
-  rotarySwitchValue = 0;                                                                         // Initialisierung des Rotary-Switch Wertes
-  lastRotarySwitchState = digitalRead(rotarySwitchPin1);                                         // Speichert den letzten Wert des ersten Pins des Rotary-Switch
-}
-
-// Funktion für das Auslesen des Rotary-Switch
-void readRotarySwitch() {
-  int state = digitalRead(rotarySwitchPin1);                                                        // Wert des ersten Pins des Rotary-Switch
-
-  if (fallendeFlanke(gameButtonPin)) {                                                              // Überprüfen, ob eine fallende Flanke erkannt wurde
-    rotarySwitchValue = 0;                                                                         // Setzt den Wert des Rotary-Switch zurück
-    return;
-  }
-
-  if (state != lastRotarySwitchState) {
-    if (digitalRead(rotarySwitchPin2) != state) {
-      if (rotarySwitchValue == 40) {
-        rotarySwitchValue = 1;
-      } else {
-        rotarySwitchValue++;
+// Funktion zum Auslesen des Rotary-Encoders
+void getRotaryValue(int rotarySwitchPin1, int rotarySwitchPin2, volatile int &rotarySwitchValue) {
+  if (digitalRead(rotarySwitchPin1) == LOW) {                                                   // Überprüfen, ob der Pin auf LOW ist
+    if (digitalRead(rotarySwitchPin2) == LOW) {                                                 // Richtung des Encoders auslesen
+      // Rechtsdrehung
+      rotarySwitchValue++;                                                                      // Wert erhöhen
+      if (rotarySwitchValue > 40) {
+          rotarySwitchValue = 0;
       }
     } else {
-      if (rotarySwitchValue == 0) {
-        rotarySwitchValue = 39;
-      } else {
-        rotarySwitchValue--;
+      // Linksdrehung
+      rotarySwitchValue--;                                                                      // Wert verringern
+      if (rotarySwitchValue < 0) {
+          rotarySwitchValue = 40;
       }
     }
-    lastRotarySwitchState = state;                                                                  // Updates den letzten Zustand des Rotary-Switch
   }
 }
 
-// Funktion für das Zuordnen der rotarySwitchValue zu einem Bereich
-int getRotarySwitchRangeValue(int numRange) {
-  int rangeSize = 40 / numRange;                                                                   // Grösse der Bereiche
-  int midRangeSize = rangeSize/2;
+// Funktion zur Berechnung des Bereichs des Rotary-Encoders
+int getRotarySwitchRangeValue(int numRange, int rotarySwitchValue) {
 
-  if(rotarySwitchValue <= midRangeSize || rotarySwitchValue >= (40-midRangeSize)){
+  int rangeSize = 40 / numRange;                                                                // Grösse der Bereiche
+  int midRangeSize = rangeSize/2;                                                               // Grösse des mittleren Bereichs
+
+  if(rotarySwitchValue <= midRangeSize || rotarySwitchValue >= (40-midRangeSize)){              // Überprüfen, ob der Wert im ersten oder letzten Bereich liegt
     return 1;
   }
-  for (int i = 0; i < numRange-1; i++) { 
+
+  for (int i = 0; i < numRange-1; i++) {                                                        // Überprüfen, in welchem Bereich der Wert liegt
     if(rotarySwitchValue >= (i * rangeSize) + midRangeSize && rotarySwitchValue <= ((i + 1) * rangeSize) + midRangeSize){
       return i + 2;
     }

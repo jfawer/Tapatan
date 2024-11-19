@@ -16,6 +16,9 @@
 #include "tictactoe.h"
 #include "tapatan.h"
 
+// Globale Variablen
+volatile int rotarySwitchValue = 0;                                                                       // Aktueller Wert des Encoders
+
 // Variablen für das LCD-Display
 LiquidCrystal_I2C lcd(0x27, 20, 4);                                                                       // Setze die Adresse des LCD-Displays
 byte umlautU[8] = { B01010, B00000, B10001, B10001, B10001, B10011, B01101, B00000 };                     // Umlaut ü
@@ -26,10 +29,9 @@ byte umlautA[8] = { B01010, B00000, B01110, B00001, B01111, B10001, B01111, B000
 const int potPins[] = {A0, A1, A2, A3, A4, A5, A6, A7, A8};                                               
 
 // Pins für die Spielauswahl
-const int gamePotPin = A9;
-const int rotarySwitchPin1 = 3;         //23                                                                // Pin für den Potentiometer zur Auswahl des Spielmodus
-const int rotarySwitchPin2 = 4;         //25                                                                // Pin für den Potentiometer zur Auswahl des Spiels
-const int gameButtonPin = 2;          //24                                                                // Pin für den Knopf zur Bestätigung des Spiels
+const int rotarySwitchPin1 = 3;                                                                           // Pin für den Rotary-Encoder (CLK)
+const int rotarySwitchPin2 = 2;                                                                           // Pin für den Rotary-Encoder (DT)
+const int gameButtonPin = 4;                                                                              // Pin für den Bestätigungsknopf (SW)
 const int emptyAnalogPin = A10;                                                                           // Pin für den Seed der Zufallsfunktion
 
 // Spieleinstellungen
@@ -47,12 +49,25 @@ int Board [3][3];                                                               
 int BoardMemory [3][3];                                                                                   // Array für das den Spielfeldspeicher (0 = Leeres Feld, 1 = X, 2 = O)
 int ResetBoard[3][3] = {{0,0,0},{0,0,0},{0,0,0}};                                                         // Array für das Zurücksetzen des Spielfelds
 int currentPlayer;                                                                                        // Variable für den Spieler der am Zug ist 1 = Spieler 1, 2 = Spieler 2 / Computer
-int lastRotarySwitchState;                                                                                // Variable für den letzten Zustand des Rotary-Switch
-int rotarySwitchValue;                                                                                    // Variable für den Wert des Rotary-Switch
+bool setupvariable;                                                                                       // Variable für das Aktivieren des Encoders
+
+// Interrupt Service Routine (ISR)
+void handleEncoder() {
+  if (setupvariable) {                                                                                    // Überprüfen, ob die Setupvariable gesetzt ist
+    getRotaryValue(rotarySwitchPin1, rotarySwitchPin2, rotarySwitchValue);                                // Encoderwert auslesen
+    Serial.println("Lese Encoder");
+  }
+}
 
 // Setup Funktion
 void setup() {
-  setupRotarySwitch();                                                                                    // Rotary-Switch initialisieren
+  pinMode(rotarySwitchPin1, INPUT_PULLUP);                                                                // Pin für den Rotary-Encoder (CLK) als Eingang
+  pinMode(rotarySwitchPin2, INPUT_PULLUP);                                                                // Pin für den Rotary-Encoder (DT) als Eingang
+  pinMode(gameButtonPin, INPUT_PULLUP);                                                                   // Pin für den Bestätigungsknopf (SW) als Eingang
+  setupvariable = false;                                                                                  // Setupvariable auf false setzen
+
+  attachInterrupt(digitalPinToInterrupt(rotarySwitchPin1), handleEncoder, CHANGE);                        // Interrupt für den Rotary-Encoder einrichten
+
   randomSeed(analogRead(emptyAnalogPin));                                                                 // Seed für die Zufallsfunktion
   Serial.begin(9600);                                                                                     // Serielle Kommunikation starten
 
@@ -68,13 +83,10 @@ void setup() {
 
 // Loop Funktion
 void loop() {
-  
-  readRotarySwitch();                                                                                    // Rotary-Switch auslesen
-  // Überprüfen, ob das Spielfeld in der Ausgangsposition ist
   updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
   if (isBoardEqual(Board, ResetBoard) && gameSettings.game == 0) {                                        // Überprüfen, ob das Spielfeld in der Ausgangsposition ist und kein Spiel ausgewählt wurde
     // Spiel auswählen
-    choseGameSettings(lcd, gameSettings, gamePotPin, gameButtonPin);                                      // Spielmodus, Schwierigkeitsgrad und Spiel auswählen
+    choseGameSettings(lcd, gameSettings, gameButtonPin, setupvariable);                                   // Spieleinstellungen auswählen
     currentPlayer = random(1, 3);                                                                         // Zufällige Auswahl des Startspielers
     delay(500);
 
