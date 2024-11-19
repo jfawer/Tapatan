@@ -120,7 +120,19 @@ void TapatanPlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
                 int BoardDisplay[3][3];
                 copyBoard(Board, BoardDisplay);
 
-                TapatanMakeBestMove(BoardDisplay);                                                                              // Besten Zug für den Computer bestimmen
+                switch (gameSettings.difficulty) {                                                                              // Schwierigkeitsgrad des Computers
+                    case Schwer:
+                        TapatanMakeBestMove(BoardDisplay);                                                                      // Besten Zug für den Computer bestimmen
+                        break;
+                    case Mittel:
+                        TapatanMakeRandomMove(BoardDisplay);                                                                    // Zufälligen Zug für den Computer bestimmen
+                        Serial.println("Zufälliger Zug");
+                        break;
+                    default:
+                        TapatanMakeRandomMove(BoardDisplay);                                                                    // Zufälligen Zug für
+                        break;
+                }
+
                 delay(400);
                 displayGameScreen(lcd, gameSettings, BoardDisplay, currentPlayer);
                 awaitBoardIsEqual(Board, BoardDisplay, potPins);
