@@ -15,6 +15,7 @@
 #include "input.h"
 #include "tictactoe.h"
 #include "tapatan.h"
+#include "led.h"
 
 // Globale Variablen
 volatile int rotarySwitchValue = 0;                                                                       // Aktueller Wert des Encoders
@@ -33,6 +34,15 @@ const int rotarySwitchPin1 = 3;                                                 
 const int rotarySwitchPin2 = 2;                                                                           // Pin für den Rotary-Encoder (DT)
 const int gameButtonPin = 4;                                                                              // Pin für den Bestätigungsknopf (SW)
 const int emptyAnalogPin = A10;                                                                           // Pin für den Seed der Zufallsfunktion
+const int RED_LED = 13;                                                                                   // Pin für die rote LED im LED Streifen
+const int GREEN_LED = 22;                                                                                 // Pin für die grüne LED im LED Streifen
+const int BLUE_LED = 12;                                                                                  // Pin für die blaue LED im LED Streifen
+int ledPins[] = {RED_LED, GREEN_LED, BLUE_LED};                                                     // Pins für die LEDs im LED Streifen
+const int aus = 0;                                                                                        // Konstante für die Farbe aus
+const int rot = 1;                                                                                        // Konstante für die Farbe rot
+const int gruen = 2;                                                                                      // Konstante für die Farbe grün
+const int blau = 3;                                                                                       // Konstante für die Farbe blau
+const int weiss = 4;                                                                                      // Konstante für die Farbe weiss
 
 // Spieleinstellungen
 GameSettings gameSettings = {                                                           
@@ -63,6 +73,10 @@ void setup() {
   pinMode(rotarySwitchPin1, INPUT_PULLUP);                                                                // Pin für den Rotary-Encoder (CLK) als Eingang
   pinMode(rotarySwitchPin2, INPUT_PULLUP);                                                                // Pin für den Rotary-Encoder (DT) als Eingang
   pinMode(gameButtonPin, INPUT_PULLUP);                                                                   // Pin für den Bestätigungsknopf (SW) als Eingang
+  pinMode(GREEN_LED, OUTPUT);                                                                             // Pin für die grüne LED im LED Streifen als Ausgang
+  pinMode(RED_LED, OUTPUT);                                                                               // Pin für die rote LED im LED Streifen als Ausgang
+  pinMode(BLUE_LED, OUTPUT);                                                                              // Pin für die blaue LED im LED Streifen als Ausgang
+  LED(aus, ledPins);                                                                                  // LED ausschalten
   setupvariable = false;                                                                                  // Setupvariable auf false setzen
 
   attachInterrupt(digitalPinToInterrupt(rotarySwitchPin1), handleEncoder, CHANGE);                        // Interrupt für den Rotary-Encoder einrichten
