@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
+#include <AccelStepper.h>
 
 // Einbinden der Header-Dateien
 #include "struct.h"
@@ -9,14 +10,57 @@
 #include "input.h"
 #include "tictactoe.h"
 #include "tapatan.h"
+#include "led.h"
+#include "motor.h"
+
+// Pins für die Motoren
+// Motor 1
+const int motor1StepPin = 2;
+const int motor1DirPin = 3;
+const int motor1EnablePin = 4;
+// Motor 2
+const int motor2StepPin = 5;
+const int motor2DirPin = 6;
+const int motor2EnablePin = 7;
+
+//Pins für die Endschalter
+const int endstopXPin = 8;
+const int endstopYPin = 9;
+
+// Maximale und Minimale Positionen in mm
+const int maxXPosition = 400;
+const int maxYPosition = 500;
+const int minXPosition = 0;
+const int minYPosition = 0;
+
+// Konstanten für die Schrittmotoren
+const int stepsPerRevolution = 600; // Schritte pro Umdrehung
+const int diameter = 40; // Durchmesser des Riemenantriebs in mm
+
+// AccelStepper Objekte erstellen
+AccelStepper Motor1(AccelStepper::DRIVER, motor1StepPin, motor1DirPin);
+AccelStepper Motor2(AccelStepper::DRIVER, motor2StepPin, motor2DirPin);
 
 void setup() {
-    pinMode(13, OUTPUT);
+    // Motor 1
+    pinMode(motor1StepPin, OUTPUT);
+    pinMode(motor1DirPin, OUTPUT);
+    pinMode(motor1EnablePin, OUTPUT);
+    Motor1.setMaxSpeed(1000);
+    Motor1.setAcceleration(1000);
+    // Motor 2
+    pinMode(motor2StepPin, OUTPUT);
+    pinMode(motor2DirPin, OUTPUT);
+    pinMode(motor2EnablePin, OUTPUT);
+    Motor2.setMaxSpeed(1000);
+    Motor2.setAcceleration(1000);
+    // Endschalter
+    pinMode(endstopXPin, INPUT_PULLUP);
+    pinMode(endstopYPin, INPUT_PULLUP);
+    enableMotors();
 }
 
 void loop() {
-    digitalWrite(13, HIGH);
-    delay(1000);
-    digitalWrite(13, LOW);
-    delay(1000);
+    Motor1.run();
+    Motor2.run();
 }
