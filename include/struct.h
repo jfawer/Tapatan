@@ -19,6 +19,12 @@ const int Einfach = 1;                                                          
 const int Mittel = 2;                                                             // Konstante für den Schwierigkeitsgrad Mittel
 const int Schwer = 3;                                                             // Konstante für den Schwierigkeitsgrad Schwer
 
+// Konstanten für die Farben
+const int Aus = 0;                                                                                        // Konstante für die Farbe aus
+const int Rot = 1;                                                                                        // Konstante für die Farbe rot
+const int Gruen = 2;                                                                                      // Konstante für die Farbe grün
+const int Blau = 3;                                                                                       // Konstante für die Farbe blau
+const int Weiss = 4;                                                                                      // Konstante für die Farbe weiss
 
 // Struktur für den Spielzustand
 struct GameSettings {

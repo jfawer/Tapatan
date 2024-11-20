@@ -10,6 +10,7 @@
 #include "struct.h"
 #include <limits.h>
 
+
 // ====================================================================================================
 // Hilfsfunktionen für die Spiellogik
 // ====================================================================================================
@@ -33,7 +34,7 @@ void switchPlayer(int &currentPlayer) {
 // TIc-Tac-Toe: Funktionen für die Spiellogik des Spielers
 // ====================================================================================================
 
-// Funktion zur Erkennund, ob sich das Spielfeld geändert hat
+// Funktion zur Erkennung, ob sich das Spielfeld geändert hat
 bool hasBoardChanged(int currentBoard[3][3], int savedBoard[3][3]) {
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
@@ -57,7 +58,7 @@ BoardField getChangedField(int currentBoard[3][3], int savedBoard[3][3]) {
     return {-1, -1}; // Rückgabe von (-1, -1), wenn kein Feld geändert wurde
 }
 
-// Funktion zum Überprüfen, ob der Zug des Spielers gültig ist
+// Funktion zum Überprüfen, ob der Zug gültig ist
 bool isValidMove(int currentBoard[3][3], int savedBoard[3][3], int currentPlayer) {
     BoardField changedField = getChangedField(currentBoard, savedBoard);
     int row = changedField.row;
@@ -99,13 +100,13 @@ void awaitBoardIsEqual(int currentBoard[3][3], int savedBoard[3][3], const int p
 
 // Funktion zur Handhabung eines illegalen Zugs
 void handleIllegalMove(LiquidCrystal_I2C &lcd, int Board[3][3], int BoardMemory[3][3], const int potPins[], GameSettings gameSettings, int currentPlayer) {
-  displayBoard(lcd, BoardMemory);         // Zeigt den alten Zustand des Spielfelds
-  displayIllegalMove(lcd);                // Zeigt eine Meldung für einen illegalen Zug
-  awaitBoardIsEqual(Board, BoardMemory, potPins);  // Wartet, bis das Spielfeld zurückgesetzt ist
-  displayPlayer(lcd, gameSettings, currentPlayer); // Zeigt den Spieler, der am Zug ist, erneut an
+  displayBoard(lcd, BoardMemory);                                                     // Zeigt den alten Zustand des Spielfelds
+  displayIllegalMove(lcd);                                                            // Zeigt eine Meldung für einen illegalen Zug
+  awaitBoardIsEqual(Board, BoardMemory, potPins);                                     // Wartet, bis das Spielfeld zurückgesetzt ist
+  displayPlayer(lcd, gameSettings, currentPlayer);                                    // Zeigt den Spieler, der am Zug ist, erneut an
 }
 
-// Funktion zum Überprüfen, ob das Spielfeld geändert wurde und der Zug gültig ist
+// Funktion für das Platzieren eines Spielsteins durch den Spieler
 bool playerPlaces(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[]) {
   bool turnOver = false;
     
@@ -120,11 +121,12 @@ bool playerPlaces(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3
   return turnOver;
 }
 
+
 // ====================================================================================================
 // Tic-Tac-Toe: Funktionen für die Spiellogik des Computers / Spielfeldauswertung
 // ====================================================================================================
 
-// Funktion zum Überprüfen, ob noch Felder frei sind
+// Funktion zur Überprüfung, ob noch Felder frei sind
 bool checkFieldsLeft(int Board[3][3]) {
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
@@ -270,7 +272,7 @@ int countPlayerStones(int Board[3][3], int player) {
   return count;
 }
 
-// Funktion, die überprüft, ob im Umkreis von 1 um das Ursprungsfeld ein leeres Feld vorhanden ist
+// Funktion zum Überprüfen, ob ein gültiger Spielstein zum Verschieben ausgewählt wurde
 bool isValidPick(int currentBoard[3][3], BoardField originField) {
   int row = originField.row;
   int col = originField.col;
@@ -298,14 +300,14 @@ bool isValidPick(int currentBoard[3][3], BoardField originField) {
   return false; // Kein leeres benachbartes Feld gefunden
 }
 
-// Funktion zum Überprüfen, die Verschiebung des Spielsteins gültig ist
+// Funktion zum Überprüfen, ob ein gültiger Zug durchgeführt wurde
 bool isValidPlacement(int currentBoard[3][3], int savedBoard[3][3], int currentPlayer, BoardField originField) {
   BoardField changedField = getChangedField(currentBoard, savedBoard);
   int row = changedField.row;
   int col = changedField.col;
 
   if (row == -1 && col == -1) {
-    return false; // Kein Feld wurde geändert
+    return false;// Kein Feld wurde geändert
   }
 
   int oldValue = savedBoard[row][col];   
@@ -324,28 +326,28 @@ bool isValidPlacement(int currentBoard[3][3], int savedBoard[3][3], int currentP
 
 // Funktion zur Handhabung der Bewegung des Spielers
 bool handlePlayerMovement(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[]) {
-  displayBoard(lcd, Board);               // Zeigt den aktuellen Zustand des Spielfelds
-  BoardField originField = getChangedField(Board, BoardMemory); // Bestimmt das ursprüngliche Feld der Bewegung
+  displayBoard(lcd, Board);                                                                   // Zeigt den aktuellen Zustand des Spielfelds
+  BoardField originField = getChangedField(Board, BoardMemory);                               // Ausgewählter Spielstein
 
-  if (!isValidPick(Board, originField)) { // Überprüft, ob ein gültiger Spielstein ausgewählt wurde
-    handleIllegalMove(lcd, Board, BoardMemory, potPins, gameSettings, currentPlayer); // Handhabt ungültige Züge
+  if (!isValidPick(Board, originField)) {                                                     // Überprüfung, ob ein gültiger Spielstein ausgewählt wurde
+    handleIllegalMove(lcd, Board, BoardMemory, potPins, gameSettings, currentPlayer);         // Handhabung eines ungültigen Zugs
   } else {
-    copyBoard(Board, BoardMemory);      // Aktualisiert das BoardMemory, um den neuen Zustand zu speichern
+    copyBoard(Board, BoardMemory);                                                            // Kopiert das aktuelle Spielfeld in das Speicherfeld
     bool validMove = false;
-    while (!validMove) {
-      updateBoard(Board, potPins);    // Aktualisiert das Spielfeld basierend auf Sensor-Eingaben
-      if (hasBoardChanged(Board, BoardMemory)) {
-        if (isValidPlacement(Board, BoardMemory, currentPlayer, originField)) {
-          displayBoard(lcd, Board);   // Zeigt den neuen, gültigen Zustand des Spielfelds
-          validMove = true;           // Setzt validMove auf true, um die Schleife zu beenden
-          return true;                // Die Bewegung wurde erfolgreich abgeschlossen
+    while (!validMove) {                                                                      // Schleife, bis eine gültige Bewegung durchgeführt wurde
+      updateBoard(Board, potPins); 
+      if (hasBoardChanged(Board, BoardMemory)) {                                              // Überprüfen, ob sich das Spielfeld geändert hat
+        if (isValidPlacement(Board, BoardMemory, currentPlayer, originField)) {               // Überprüfen, ob eine gültige Bewegung durchgeführt wurde
+          displayBoard(lcd, Board);                                                           
+          validMove = true;                                                                   // Beeendet die Schleife
+          return true;                                                                        // Gültige Bewegung durchgeführt
         } else {
-          handleIllegalMove(lcd, Board, BoardMemory, potPins, gameSettings, currentPlayer); // Handhabt ungültige Züge
+          handleIllegalMove(lcd, Board, BoardMemory, potPins, gameSettings, currentPlayer);   // Handhabung eines ungültigen Zugs
         }
       }
     }
   }
-  return false;  // Wenn keine gültige Bewegung durchgeführt wurde, false zurückgeben
+  return false;                                                                               // Ungültige Bewegung durchgeführt                     
 }
 
 
@@ -365,7 +367,8 @@ void TapatangetChildren(int Board[3][3], int children[9][3][3], BoardField moves
                 
                 // Prüfe die möglichen Bewegungen (oben, unten, links, rechts, und diagonal)
                 int directions[8][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
-                
+
+                // Durchlaufe alle Richtungen
                 for (int d = 0; d < 8; d++) {
                     int newRow = i + directions[d][0];
                     int newCol = j + directions[d][1];
@@ -375,8 +378,8 @@ void TapatangetChildren(int Board[3][3], int children[9][3][3], BoardField moves
                         
                         // Kopiere das aktuelle Board und verschiebe den Spielstein
                         copyBoard(Board, children[numChildren]);
-                        children[numChildren][i][j] = 0;          // Leere das Ursprungsfeld
-                        children[numChildren][newRow][newCol] = currentPlayer; // Setze den Spielstein auf das neue Feld
+                        children[numChildren][i][j] = 0;                        // Leere das Ursprungsfeld
+                        children[numChildren][newRow][newCol] = currentPlayer;  // Setze den Spielstein auf das neue Feld
                         
                         // Speichere den Zug (ursprüngliche und neue Position)
                         moves[numChildren].row = newRow;
@@ -456,13 +459,54 @@ int Tapatanminimax(int Board[3][3], int depth, int alpha, int beta, bool maximiz
   }
 }
 
-// Funktion zum Bestimmen des besten Zugs für den Computer
-void TapatanmakeBestMove(int Board[3][3]) {
+// Funktion zur Bestimmung eines zufälligen Zuges für den Computer und Einfügen in das Board
+void TapatanMakeRandomMove(int Board[3][3]) {
+  int possibleMoves[8][2];                                                                            // Array für mögliche Züge
+  int possibleMoveCount = 0;                                                                          // Zähler für die Anzahl der möglichen Züge
+  int row, col;                                                                                       // Variablen für die Zeile und Spalte des Spielsteins
+  bool validMove = false;                                                                             // Flag für die Gültigkeit des Zugs
+
+  do {
+    // Zufällige Auswahl eines Spielsteins
+    row = random(0, 3);
+    col = random(0, 3);
+    
+    if (isValidPick(Board, {row, col}) && Board[row][col] == 2) {                                     // Überprüfen, ob das Feld ein gültiges Feld ist und dem Computer gehört
+      int directions[8][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};  // Array für die 8 Richtungen
+      
+      for (int d = 0; d < 8; d++) {                                                                   // Durchlaufe alle Richtungen
+        int newRow = row + directions[d][0];
+        int newCol = col + directions[d][1];
+
+        if (newRow >= 0 && newRow < 3 && newCol >= 0 && newCol < 3 && Board[newRow][newCol] == 0) {   // Überprüfen, ob das Feld leer ist und innerhalb des Spielfelds liegt
+          possibleMoves[possibleMoveCount][0] = newRow;                                               
+          possibleMoves[possibleMoveCount][1] = newCol;                                               
+          possibleMoveCount++;                                                                        // Erhöhe die Anzahl der möglichen Züge
+        }
+      }
+      
+      if (possibleMoveCount > 0) {                                                                    // Überprüfen, ob mindestens ein möglicher Zug gefunden wurde
+        validMove = true;
+      }
+    }
+  } while (!validMove);                                                                               // Wiederhole, bis ein gültiger Zug gefunden wurde
+
+  int randomMove = random(0, possibleMoveCount);                                                      // Zufällige Auswahl unter den möglichen Zügen
+  int newRow = possibleMoves[randomMove][0];
+  int newCol = possibleMoves[randomMove][1];
+  
+  Board[row][col] = 0;                                                                                // Ursprungsfeld auf 0 setzen / leeren
+  Board[newRow][newCol] = 2;                                                                          // Neues Feld auf 2 setzen
+}
+
+// Funktion zur Bestimmung des besten Zuges für den Computer und Einfügen in das Board
+void TapatanMakeBestMove(int Board[3][3]) {
   BoardField bestMove;
   int bestChildBoard[3][3];
   Tapatanminimax(Board, 9, INT_MIN, INT_MAX, false, bestMove, bestChildBoard);
   copyBoard(bestChildBoard, Board);
 }
+
 
 // ====================================================================================================
 // Funktionen für das Zurücksetzen der Spieleinstellungen / des Spielfelds
