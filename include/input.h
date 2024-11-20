@@ -40,18 +40,21 @@ bool fallendeFlanke(int buttonPin) {
 
 // Funktion zum Auslesen des Rotary-Encoders
 void getRotaryValue(int rotarySwitchPin1, int rotarySwitchPin2, volatile int &rotarySwitchValue) {
+  int minVal = 0;                                                                               // Minimaler Wert des Rotary-Encoders
+  int maxVal = 24;                                                                              // Maximaler Wert des Rotary-Encoders
+
   if (digitalRead(rotarySwitchPin1) == LOW) {                                                   // Überprüfen, ob der Pin auf LOW ist
     if (digitalRead(rotarySwitchPin2) == LOW) {                                                 // Richtung des Encoders auslesen
       // Rechtsdrehung
       rotarySwitchValue++;                                                                      // Wert erhöhen
-      if (rotarySwitchValue > 40) {
-          rotarySwitchValue = 0;
+      if (rotarySwitchValue > maxVal) {
+          rotarySwitchValue = maxVal;
       }
     } else {
       // Linksdrehung
       rotarySwitchValue--;                                                                      // Wert verringern
-      if (rotarySwitchValue < 0) {
-          rotarySwitchValue = 40;
+      if (rotarySwitchValue < minVal) {
+          rotarySwitchValue = minVal;
       }
     }
   }
@@ -59,20 +62,22 @@ void getRotaryValue(int rotarySwitchPin1, int rotarySwitchPin2, volatile int &ro
 
 // Funktion zur Berechnung des Bereichs des Rotary-Encoders
 int getRotarySwitchRangeValue(int numRange, int rotarySwitchValue) {
+  int maxVal = 24;                                                                              // Maximale Wert des Rotary-Encoders
+  int rangeSize = maxVal / numRange;                                                            // Grösse der Bereiche
 
-  int rangeSize = 40 / numRange;                                                                // Grösse der Bereiche
-  int midRangeSize = rangeSize/2;                                                               // Grösse des mittleren Bereichs
+  for (int i = 0; i < numRange; i++) {                                                          // Durchlaufe alle Bereiche
+    int rangeStart = i * rangeSize;                                                             // Start des aktuellen Bereichs
+    int rangeEnd = (i + 1) * rangeSize;                                                         // Ende des aktuellen Bereichs (inklusiv)
 
-  if(rotarySwitchValue <= midRangeSize || rotarySwitchValue >= (40-midRangeSize)){              // Überprüfen, ob der Wert im ersten oder letzten Bereich liegt
-    return 1;
-  }
+    if (i == numRange - 1) {                                                                    // Stelle sicher, dass der letzte Bereich maxVal enthält
+      rangeEnd = maxVal;
+    }
 
-  for (int i = 0; i < numRange-1; i++) {                                                        // Überprüfen, in welchem Bereich der Wert liegt
-    if(rotarySwitchValue >= (i * rangeSize) + midRangeSize && rotarySwitchValue <= ((i + 1) * rangeSize) + midRangeSize){
-      return i + 2;
+    if (rotarySwitchValue >= rangeStart && rotarySwitchValue <= rangeEnd) {                     // Prüfe, ob der Wert im Bereich liegt
+      return i + 1;                                                                             // Gib den Bereichsindex (beginnend bei 1) zurück
     }
   }
-  return 0;
+  return -1;                                                                                    // Rückgabewert bei ungültigem rotarySwitchValue
 }
 
 #endif

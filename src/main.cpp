@@ -55,7 +55,6 @@ bool setupvariable;                                                             
 void handleEncoder() {
   if (setupvariable) {                                                                                    // Überprüfen, ob die Setupvariable gesetzt ist
     getRotaryValue(rotarySwitchPin1, rotarySwitchPin2, rotarySwitchValue);                                // Encoderwert auslesen
-    Serial.println("Lese Encoder");
   }
 }
 

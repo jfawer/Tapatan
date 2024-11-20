@@ -459,7 +459,6 @@ int Tapatanminimax(int Board[3][3], int depth, int alpha, int beta, bool maximiz
   }
 }
 
-
 // Funktion zur Bestimmung eines zufälligen Zuges für den Computer und Einfügen in das Board
 void TapatanMakeRandomMove(int Board[3][3]) {
   int possibleMoves[8][2];                                                                            // Array für mögliche Züge

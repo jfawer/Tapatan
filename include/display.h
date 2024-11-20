@@ -158,7 +158,6 @@ void choseGame(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int gameButto
   }
 }
 
-
 // Funktion zur Anzeige der Modusauswahl
 void displayModeSelection(LiquidCrystal_I2C &lcd) {
   lcd.clear();                                                                                                   // LCD löschen
