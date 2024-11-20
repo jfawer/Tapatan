@@ -33,16 +33,13 @@ const int potPins[] = {A0, A1, A2, A3, A4, A5, A6, A7, A8};
 const int rotarySwitchPin1 = 3;                                                                           // Pin für den Rotary-Encoder (CLK)
 const int rotarySwitchPin2 = 2;                                                                           // Pin für den Rotary-Encoder (DT)
 const int gameButtonPin = 4;                                                                              // Pin für den Bestätigungsknopf (SW)
+const int redLED = 13;                                                                                   // Pin für die rote LED im LED Streifen
+const int greenLED = 22;                                                                                 // Pin für die grüne LED im LED Streifen
+const int blueLED = 12;                                                                                  // Pin für die blaue LED im LED Streifen
 const int emptyAnalogPin = A10;                                                                           // Pin für den Seed der Zufallsfunktion
-const int RED_LED = 13;                                                                                   // Pin für die rote LED im LED Streifen
-const int GREEN_LED = 22;                                                                                 // Pin für die grüne LED im LED Streifen
-const int BLUE_LED = 12;                                                                                  // Pin für die blaue LED im LED Streifen
-int ledPins[] = {RED_LED, GREEN_LED, BLUE_LED};                                                     // Pins für die LEDs im LED Streifen
-const int aus = 0;                                                                                        // Konstante für die Farbe aus
-const int rot = 1;                                                                                        // Konstante für die Farbe rot
-const int gruen = 2;                                                                                      // Konstante für die Farbe grün
-const int blau = 3;                                                                                       // Konstante für die Farbe blau
-const int weiss = 4;                                                                                      // Konstante für die Farbe weiss
+
+// Pins für die LEDs im LED Streifen
+int ledPins[] = {redLED, greenLED, blueLED};                                                           // Pins für die LEDs im LED Streifen
 
 // Spieleinstellungen
 GameSettings gameSettings = {                                                           
@@ -73,10 +70,10 @@ void setup() {
   pinMode(rotarySwitchPin1, INPUT_PULLUP);                                                                // Pin für den Rotary-Encoder (CLK) als Eingang
   pinMode(rotarySwitchPin2, INPUT_PULLUP);                                                                // Pin für den Rotary-Encoder (DT) als Eingang
   pinMode(gameButtonPin, INPUT_PULLUP);                                                                   // Pin für den Bestätigungsknopf (SW) als Eingang
-  pinMode(GREEN_LED, OUTPUT);                                                                             // Pin für die grüne LED im LED Streifen als Ausgang
-  pinMode(RED_LED, OUTPUT);                                                                               // Pin für die rote LED im LED Streifen als Ausgang
-  pinMode(BLUE_LED, OUTPUT);                                                                              // Pin für die blaue LED im LED Streifen als Ausgang
-  LED(aus, ledPins);                                                                                  // LED ausschalten
+  pinMode(greenLED, OUTPUT);                                                                              // Pin für die grüne LED im LED Streifen als Ausgang
+  pinMode(redLED, OUTPUT);                                                                                // Pin für die rote LED im LED Streifen als Ausgang
+  pinMode(blueLED, OUTPUT);                                                                               // Pin für die blaue LED im LED Streifen als Ausgang
+  
   setupvariable = false;                                                                                  // Setupvariable auf false setzen
 
   attachInterrupt(digitalPinToInterrupt(rotarySwitchPin1), handleEncoder, CHANGE);                        // Interrupt für den Rotary-Encoder einrichten
@@ -88,7 +85,10 @@ void setup() {
   lcd.createChar(0, umlautU);                                                                             // Umlaut Ü erstellen
   lcd.createChar(1, umlautO);                                                                             // Umlaut Ö erstellen
   lcd.createChar(2, umlautA);                                                                             // Umlaut Ä erstellen
+
+  // Beleuchtung / Lichter
   lcd.backlight();                                                                                        // Hintergrundbeleuchtung einschalten
+  steuereLED(Aus, ledPins);                                                                               // LED Streifen ausschalten
   
   displayStart(lcd);                                                                                      // Startbildschirm anzeigen                                                                               
   delay(2000);
