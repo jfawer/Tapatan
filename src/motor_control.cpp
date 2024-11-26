@@ -35,7 +35,8 @@ int BoardPosition[3][3][2] = {                                                  
     {{14, 10}, {20, 10}, {26, 10}}
 };        
 
-int laneAxisPosition[2] = {12, 17};                                                                                 // Array für die Achsen der Fahrbahnen
+int verticalLanePositions[2] = {12, 17};                                                                            // Array für die vertikalen Fahrbahnen
+int horizontalLanePositions[2] = {9, 30};                                                                           // Array für die horizontalen Fahrbahnen
 
 int playerGarage[5] = {0, 0, 0, 0, 0};                                                                              // Status der Garagen des Spielers
 int computerGarage[5] = {1, 0, 1, 0, 0};                                                                            // Status der Garagen des Computers
@@ -47,19 +48,8 @@ int BoardMemory [3][3] = {{0,2,1},{1,2,2},{0,1,0}};                             
 void setup() {
     Serial.begin(9600);
 
-    int lane;
-
-    lane = determineShortestDistance(5, laneAxisPosition);
-    Serial.print("Lane-1: ");
-    Serial.println(lane);
-
-    lane = determineShortestDistance(25, laneAxisPosition);
-    Serial.print("Lane-2: ");
-    Serial.println(lane);
-
-    lane = determineShortestDistance(13.5, laneAxisPosition);
-    Serial.print("Lane-3: ");
-    Serial.println(lane);
+    Move move = {6, 5, 26, 10};
+    moveStone(move, verticalLanePositions, horizontalLanePositions, computerGaragePosition);
 }
 
 

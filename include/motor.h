@@ -112,8 +112,8 @@ Move determineCleanUpMove(int Board[3][3], int BoardPosition[3][3][2], int compu
   return move;
 }
 
-// Funktion für das Ermitteln der kürzesten Distanz zwischen einer Start und mehreren Zielpositionen
-int determineShortestDistance(int col, int axisLane[2]) {
+// Funktion für das Ermitteln der kürzesten Fahrbahn
+int determineShortestLane(int col, int axisLane[2]) {
   int distance1 = abs(axisLane[0] - col);
   int distance2 = abs(axisLane[1] - col);
 
@@ -123,6 +123,102 @@ int determineShortestDistance(int col, int axisLane[2]) {
     return 0;
   } else {
     return 1;
+  }
+}
+
+// Funktion zum bestimmen, ob Start und Zielposition beide die gleiche kürzeste Fahrbahn haben
+bool isSameLane(int startCol, int targetCol, int axisLane[2]) {
+  int startLane = determineShortestLane(startCol, axisLane);
+  int targetLane = determineShortestLane(targetCol, axisLane);
+
+  return startLane == targetLane;
+}
+
+bool isInGarage(int row, int col, int garagePosition[5][2]) {
+  for (int i = 0; i < 5; i++) {
+    if (row == garagePosition[i][0] && col == garagePosition[i][1]) {
+      return true;
+    }
+  }
+  return false;
+}
+
+
+void SerialMoveToPostion(int x, int y) {
+  Serial.println("Move to Position: " + String(x) + ", " + String(y));
+}
+
+void moveStone(Move move, int verticalLanePositions[2], int horizontalLanePositions[2], int computerGaragePosition[5][2]) {
+
+  // Überprüfen, ob sich die Startposition in einer Garage befindet
+  if (isInGarage(move.startRow, move.startCol, computerGaragePosition)) {
+
+    // Bestimmen der Fahrbahnen für die Bwegung
+    int lane = determineShortestLane(move.targetCol, verticalLanePositions);
+    int horizontalLane = determineShortestLane(move.startRow, horizontalLanePositions);
+
+    SerialMoveToPostion(move.startRow, move.startCol);
+    delay(200);
+    SerialMoveToPostion(horizontalLanePositions[horizontalLane], move.startCol);
+    delay(200);
+    SerialMoveToPostion(horizontalLanePositions[horizontalLane], verticalLanePositions[lane]);
+    delay(200);
+    SerialMoveToPostion(move.targetRow, verticalLanePositions[lane]);
+    delay(200);
+    SerialMoveToPostion(move.targetRow, move.targetCol);
+    return;
+  }
+
+  // Überprüfen, ob sich die Zielposition in einer Garage befindet
+  if (isInGarage(move.targetCol, move.targetCol, computerGaragePosition)) {
+    // Bestimmen der Fahrbahnen für die Bewegung
+    int lane = determineShortestLane(move.startCol, verticalLanePositions);
+    int horizontalLane = determineShortestLane(move.targetRow, horizontalLanePositions);
+
+    SerialMoveToPostion(move.startRow, move.startCol);
+    delay(200);
+    SerialMoveToPostion(move.startRow, verticalLanePositions[lane]);
+    delay(200);
+    SerialMoveToPostion(horizontalLanePositions[horizontalLane], verticalLanePositions[lane]);
+    delay(200);
+    SerialMoveToPostion(horizontalLanePositions[horizontalLane], move.targetCol);
+    delay(200);
+    SerialMoveToPostion(move.targetRow, move.targetCol);
+    return;
+  }
+  
+  // Überprüfen, ob sich die Start- und Zielposition auf der gleichen Fahrbahn befinden
+  if (isSameLane(move.startCol, move.targetCol, verticalLanePositions)) {
+    // Bestimmen der gemeinsamen Fahrbahn
+    int lane = determineShortestLane(move.startCol, verticalLanePositions);
+
+    SerialMoveToPostion(move.startRow, move.startCol);
+    delay(200);
+    SerialMoveToPostion(move.startRow, verticalLanePositions[lane]);
+    delay(200);
+    SerialMoveToPostion(move.targetRow, verticalLanePositions[lane]);
+    delay(200);
+    SerialMoveToPostion(move.targetRow, move.targetCol);
+    return;
+
+  } else {
+    // Bestimmen der kürzesten Fahrbahn für Start- und Zielposition
+    int startLane = determineShortestLane(move.startCol, verticalLanePositions);
+    int targetLane = determineShortestLane(move.targetCol, verticalLanePositions);
+    int horizontalLane = determineShortestLane(move.targetRow, horizontalLanePositions);
+
+    SerialMoveToPostion(move.startRow, move.startCol);
+    delay(200);
+    SerialMoveToPostion(move.startRow, verticalLanePositions[startLane]);
+    delay(200);
+    SerialMoveToPostion(horizontalLanePositions[horizontalLane], verticalLanePositions[startLane]);
+    delay(200);
+    SerialMoveToPostion(horizontalLanePositions[horizontalLane], verticalLanePositions[targetLane]);
+    delay(200);
+    SerialMoveToPostion(move.targetRow, verticalLanePositions[targetLane]);
+    delay(200);
+    SerialMoveToPostion(move.targetRow, move.targetCol);
+    return;
   }
 }
 
