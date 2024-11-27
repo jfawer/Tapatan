@@ -5,15 +5,15 @@
 
 #include <Arduino.h>
 #include <AccelStepper.h>
-
 #include "struct.h"
+#include "game_logic.h"
 
 // ====================================================================================================
 // Funktionen zur Ermittlung der Zielposition bzw. Startposition der Motorbewegung
 // ====================================================================================================
 
-// Funktion zum Ermitteln der Startposition der Spielsteine
-int findGaragestate(int garagestate[4], int value) {
+// Funktion für das Ermitteln eines Garagenzustands (belegt oder leer)
+int findGaragestate(int garagestate[4], int value) {  
   for (int i = 0; i < 4; i++) {
     if (garagestate[i] == value) {
       return i;
@@ -22,7 +22,7 @@ int findGaragestate(int garagestate[4], int value) {
   return -1;
 }
 
-// Funktion für das Überlagern zweier Boards
+// Funktion für das Überlagern zweier Spielfelder (Board und BoardMemory) und speichern des Ergebnisses in einem dritten Spielfeld (BoardOverlay)
 void overlayBoard(int Board[3][3], int BoardMemory[3][3], int BoardOverlay[3][3]) {
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
@@ -35,6 +35,18 @@ void overlayBoard(int Board[3][3], int BoardMemory[3][3], int BoardOverlay[3][3]
   }
 }
 
+// Funktion zum Erkennen des geänderten Feldes im Spielfeld
+BoardField identifyChangedField(int currentBoard[3][3], int savedBoard[3][3]) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      if (currentBoard[i][j] != savedBoard[i][j]) {
+        return {i, j}; // Rückgabe des geänderten Feldes
+      }
+    }
+  }
+  return {-1, -1}; // Rückgabe von (-1, -1), wenn kein Feld geändert wurde
+}
+
 // Funktion für das Ermitteln der Start und Zielposition der Motorbewegung (Platzierung der Spielsteine)
 Move determineMoveToPlace(int Board[3][3], int BoardMemory[3][3], int computerGarage[4], int computerGaragePosition[5][2], int BoardPosition[3][3][2]) {
   Move move;
@@ -45,7 +57,7 @@ Move determineMoveToPlace(int Board[3][3], int BoardMemory[3][3], int computerGa
   move.startCol = computerGaragePosition[garagePosition][1];
   
   // Ermitteln der Zielposition
-  BoardField targetField = getChangedField(Board, BoardMemory);
+  BoardField targetField = identifyChangedField(Board, BoardMemory);
   move.targetRow = BoardPosition[targetField.row][targetField.col][0];
   move.targetCol = BoardPosition[targetField.row][targetField.col][1];
 
@@ -61,12 +73,12 @@ Move determineMoveToMove(int Board[3][3], int BoardMemory[3][3], int BoardPositi
   overlayBoard(Board, BoardMemory, BoardOverlay);
   
   // Ermitteln der Startposition
-  BoardField startField = getChangedField(BoardOverlay, BoardMemory);
+  BoardField startField = identifyChangedField(BoardOverlay, BoardMemory);
   move.startRow = BoardPosition[startField.row][startField.col][0];
   move.startCol = BoardPosition[startField.row][startField.col][1];
 
   // Ermitteln der Zielposition
-  BoardField targetField = getChangedField(BoardOverlay, Board);
+  BoardField targetField = identifyChangedField(BoardOverlay, Board);
   move.targetRow = BoardPosition[targetField.row][targetField.col][0];
   move.targetCol = BoardPosition[targetField.row][targetField.col][1];
 
@@ -112,6 +124,21 @@ Move determineCleanUpMove(int Board[3][3], int BoardPosition[3][3][2], int compu
   return move;
 }
 
+
+// ====================================================================================================
+// Testfunktionen für die Motorbewegung
+// ====================================================================================================
+
+// Funktion für die Ausgabe der Motorbewegung
+void SerialMoveToPostion(int x, int y) {
+  Serial.println("Move to Position: " + String(x) + ", " + String(y));
+}
+
+
+// ====================================================================================================
+// Funktionen (Logik) für die Motorbewegung
+// ====================================================================================================
+
 // Funktion für das Ermitteln der kürzesten Fahrbahn
 int determineShortestLane(int col, int axisLane[2]) {
   int distance1 = abs(axisLane[0] - col);
@@ -134,6 +161,7 @@ bool isSameLane(int startCol, int targetCol, int axisLane[2]) {
   return startLane == targetLane;
 }
 
+// Funktion zum Überprüfen, ob sich die Position in einer Garage befindet
 bool isInGarage(int row, int col, int garagePosition[5][2]) {
   for (int i = 0; i < 5; i++) {
     if (row == garagePosition[i][0] && col == garagePosition[i][1]) {
@@ -143,11 +171,7 @@ bool isInGarage(int row, int col, int garagePosition[5][2]) {
   return false;
 }
 
-
-void SerialMoveToPostion(int x, int y) {
-  Serial.println("Move to Position: " + String(x) + ", " + String(y));
-}
-
+// Funktion für die Bewegung des Motors je nach Spielzug (Platzierung, Verschieben, Aufräumen)
 void moveStone(Move move, int verticalLanePositions[2], int horizontalLanePositions[2], int computerGaragePosition[5][2]) {
 
   // Überprüfen, ob sich die Startposition in einer Garage befindet
@@ -223,6 +247,13 @@ void moveStone(Move move, int verticalLanePositions[2], int horizontalLanePositi
 }
 
 
+// ====================================================================================================
+// Funktionen für die Motorsteuerung
+// ====================================================================================================
+
+
+
+
 // Pins für die Motoren
 // Motor 1
 const int motor1StepPin = 2;
@@ -292,6 +323,5 @@ void disableMotors() {
   // Motor 2
   digitalWrite(motor2EnablePin, HIGH);
 }
-
 
 #endif

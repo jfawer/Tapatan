@@ -7,8 +7,11 @@
 #include <Arduino.h>
 
 // Einbinden der Header-Dateien
-#include "struct.h"
 #include <limits.h>
+#include "struct.h"
+#include "input.h"
+#include "display.h"
+#include "motor.h"
 
 // ====================================================================================================
 // Hilfsfunktionen für die Spiellogik
@@ -28,9 +31,20 @@ void switchPlayer(int &currentPlayer) {
   currentPlayer = (currentPlayer == 1) ? 2 : 1; 
 }
 
+// Funktion zum Erkennen des geänderten Feldes im Spielfeld
+BoardField getChangedField(int currentBoard[3][3], int savedBoard[3][3]) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      if (currentBoard[i][j] != savedBoard[i][j]) {
+        return {i, j}; // Rückgabe des geänderten Feldes
+      }
+    }
+  }
+  return {-1, -1}; // Rückgabe von (-1, -1), wenn kein Feld geändert wurde
+}
 
 // ====================================================================================================
-// TIc-Tac-Toe: Funktionen für die Spiellogik des Spielers
+// Tic-Tac-Toe: Funktionen für die Spiellogik des Spielers
 // ====================================================================================================
 
 // Funktion zur Erkennung, ob sich das Spielfeld geändert hat
@@ -43,18 +57,6 @@ bool hasBoardChanged(int currentBoard[3][3], int savedBoard[3][3]) {
     }
   }
   return false;
-}
-
-// Funktion zum Erkennen des geänderten Feldes
-BoardField getChangedField(int currentBoard[3][3], int savedBoard[3][3]) {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            if (currentBoard[i][j] != savedBoard[i][j]) {
-                return {i, j}; // Rückgabe des geänderten Feldes
-            }
-        }
-    }
-    return {-1, -1}; // Rückgabe von (-1, -1), wenn kein Feld geändert wurde
 }
 
 // Funktion zum Überprüfen, ob der Zug gültig ist

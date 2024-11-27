@@ -10,12 +10,9 @@
 #include <LiquidCrystal_I2C.h>
 
 // Einbinden der Header-Dateien
-#include "struct.h"
-#include "display.h"
-#include "input.h"
+#include "led.h"
 #include "tictactoe.h"
 #include "tapatan.h"
-#include "led.h"
 
 // Globale Variablen
 volatile int rotarySwitchValue = 0;                                                                       // Aktueller Wert des Encoders
@@ -33,13 +30,13 @@ const int potPins[] = {A0, A1, A2, A3, A4, A5, A6, A7, A8};
 const int rotarySwitchPin1 = 3;                                                                           // Pin für den Rotary-Encoder (CLK)
 const int rotarySwitchPin2 = 2;                                                                           // Pin für den Rotary-Encoder (DT)
 const int gameButtonPin = 4;                                                                              // Pin für den Bestätigungsknopf (SW)
-const int redLED = 13;                                                                                   // Pin für die rote LED im LED Streifen
-const int greenLED = 22;                                                                                 // Pin für die grüne LED im LED Streifen
-const int blueLED = 12;                                                                                  // Pin für die blaue LED im LED Streifen
+const int redLED = 13;                                                                                    // Pin für die rote LED im LED Streifen
+const int greenLED = 22;                                                                                  // Pin für die grüne LED im LED Streifen
+const int blueLED = 12;                                                                                   // Pin für die blaue LED im LED Streifen
 const int emptyAnalogPin = A10;                                                                           // Pin für den Seed der Zufallsfunktion
 
 // Pins für die LEDs im LED Streifen
-int ledPins[] = {redLED, greenLED, blueLED};                                                           // Pins für die LEDs im LED Streifen
+int ledPins[] = {redLED, greenLED, blueLED};                                                              // Pins für die LEDs im LED Streifen
 
 // Spieleinstellungen
 GameSettings gameSettings = {                                                           
@@ -92,6 +89,14 @@ void setup() {
   
   displayStart(lcd);                                                                                      // Startbildschirm anzeigen                                                                               
   delay(2000);
+
+  updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
+  if (!isBoardEqual(Board, ResetBoard)) {                                                                 // Überprüfen, ob das Spielfeld nicht in der Ausgangsposition ist
+    displayReset(lcd);                                                                                    // Anzeige zum Zurücksetzen des Spielfelds
+    awaitBoardReset(Board, potPins);                                                                      // Warten auf das Zurücksetzen des Spielfelds
+    resetGameSettings(gameSettings);                                                                      // Spieleinstellungen zurücksetzen
+    copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
+  }
 }
 
 // Loop Funktion

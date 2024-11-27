@@ -4,14 +4,7 @@
 #include <LiquidCrystal_I2C.h>
 
 // Einbinden der Header-Dateien
-#include "struct.h"
-#include "display.h"
-#include "input.h"
-#include "tictactoe.h"
-#include "tapatan.h"
 #include "motor.h"
-
-
 
 int playerGaragePosition[5][2] = {                                                                                  // Positionen der Garagen des Spielers
     {34, 25}, 
