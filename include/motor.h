@@ -5,14 +5,23 @@
 
 #include <Arduino.h>
 
+/*
 void moveToPosition(int x, int y) {
+  // Berechne die Differenz der Positionen
+  int deltaX = x - currentXPosition;
+  int deltaY = y - currentYPosition;
+  currentXPosition = x;
+  currentYPosition = y;
+  // Setze die aktuelle Position der Motoren auf 0, damit die Schritte relativ zur aktuellen Position berechnet werden
+  Motor1.setCurrentPosition(0);
+  Motor2.setCurrentPosition(0);
   // Berechne die Schritte für Motor 1
-  int m1StepsToDo = ((x + y) * stepsPerRevolution) / (2 * PI * diameter);
+  int m1StepsToDo = ((deltaX + deltaY) * stepsPerRevolution) / (2 * PI * diameter);
   // Berechne die Schritte für Motor 2
-  int m2StepsToDo = ((x - y) * stepsPerRevolution) / (2 * PI * diameter);
+  int m2StepsToDo = ((deltaX - deltaY) * stepsPerRevolution) / (2 * PI * diameter);
   // Setze die Schritte für die Motoren
-  Motor1.moveTo(m1StepsToDo);
-  Motor2.moveTo(m2StepsToDo);
+  long positions[2] = {m1StepsToDo, m2StepsToDo};
+  Motoren.moveTo(positions);
 }
 
 void enableMotors() {
@@ -28,6 +37,7 @@ void disableMotors() {
   // Motor 2
   digitalWrite(motor2EnablePin, HIGH);
 }
+*/
 
 
 #endif
