@@ -20,11 +20,15 @@ const int Mittel = 2;                                                           
 const int Schwer = 3;                                                             // Konstante für den Schwierigkeitsgrad Schwer
 
 // Konstanten für die Farben
-const int Aus = 0;                                                                                        // Konstante für die Farbe aus
-const int Rot = 1;                                                                                        // Konstante für die Farbe rot
-const int Gruen = 2;                                                                                      // Konstante für die Farbe grün
-const int Blau = 3;                                                                                       // Konstante für die Farbe blau
-const int Weiss = 4;                                                                                      // Konstante für die Farbe weiss
+const int Aus = 0;                                                                // Konstante für die Farbe aus
+const int Rot = 1;                                                                // Konstante für die Farbe rot
+const int Gruen = 2;                                                              // Konstante für die Farbe grün
+const int Blau = 3;                                                               // Konstante für die Farbe blau
+const int Weiss = 4;                                                              // Konstante für die Farbe weiss
+
+// Konstanten für die Garage
+const int Leer = 0;                                                               // Konstante für die Garage leer
+const int Belegt = 1;                                                             // Konstante für die Garage belegt
 
 // Struktur für den Spielzustand
 struct GameSettings {
@@ -35,8 +39,16 @@ struct GameSettings {
 
 // Struktur für ein Feld des Spielfelds
 struct BoardField {
-    int row;                                                                      // Zeile des Feldes
-    int col;                                                                      // Spalte des Feldes
+  int row;                                                                        // Zeile des Feldes
+  int col;                                                                        // Spalte des Feldes
+};
+
+// Struktur für die Bewegung des Motors
+struct Move {
+  int startRow;                                                                   // Startzeile des Motors
+  int startCol;                                                                   // Startspalte des Motors
+  int targetRow;                                                                  // Zielzeile des Motors
+  int targetCol;                                                                  // Zielspalte des Motors
 };
 
 #endif
