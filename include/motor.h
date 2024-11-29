@@ -246,12 +246,9 @@ void moveStone(Move move, int verticalLanePositions[2], int horizontalLanePositi
   }
 }
 
-
 // ====================================================================================================
 // Funktionen für die Motorsteuerung
 // ====================================================================================================
-
-
 
 
 // Pins für die Motoren
@@ -282,32 +279,24 @@ const int diameter = 40; // Durchmesser des Riemenantriebs in mm
 AccelStepper Motor1(AccelStepper::DRIVER, motor1StepPin, motor1DirPin);
 AccelStepper Motor2(AccelStepper::DRIVER, motor2StepPin, motor2DirPin);
 
-void moveToPosition(int x, int y) {
-  // Berechne die Schritte für Motor 1
-  int m1StepsToDo = ((x + y) * stepsPerRevolution) / (2 * PI * diameter);
-  // Berechne die Schritte für Motor 2
-  int m2StepsToDo = ((x - y) * stepsPerRevolution) / (2 * PI * diameter);
-  // Setze die Schritte für die Motoren
-  Motor1.moveTo(m1StepsToDo);
-  Motor2.moveTo(m2StepsToDo);
-}
 
-void setupMotors() {
-  // Motor 1
-  pinMode(motor1StepPin, OUTPUT);
-  pinMode(motor1DirPin, OUTPUT);
-  pinMode(motor1EnablePin, OUTPUT);
-  Motor1.setMaxSpeed(1000);
-  Motor1.setAcceleration(1000);
-  // Motor 2
-  pinMode(motor2StepPin, OUTPUT);
-  pinMode(motor2DirPin, OUTPUT);
-  pinMode(motor2EnablePin, OUTPUT);
-  Motor2.setMaxSpeed(1000);
-  Motor2.setAcceleration(1000);
-  // Endschalter
-  pinMode(endstopXPin, INPUT_PULLUP);
-  pinMode(endstopYPin, INPUT_PULLUP);
+/*
+void moveToPosition(int x, int y) {
+  // Berechne die Differenz der Positionen
+  int deltaX = x - currentXPosition;
+  int deltaY = y - currentYPosition;
+  currentXPosition = x;
+  currentYPosition = y;
+  // Setze die aktuelle Position der Motoren auf 0, damit die Schritte relativ zur aktuellen Position berechnet werden
+  Motor1.setCurrentPosition(0);
+  Motor2.setCurrentPosition(0);
+  // Berechne die Schritte für Motor 1
+  int m1StepsToDo = ((deltaX + deltaY) * stepsPerRevolution) / (2 * PI * diameter);
+  // Berechne die Schritte für Motor 2
+  int m2StepsToDo = ((deltaX - deltaY) * stepsPerRevolution) / (2 * PI * diameter);
+  // Setze die Schritte für die Motoren
+  long positions[2] = {m1StepsToDo, m2StepsToDo};
+  Motoren.moveTo(positions);
 }
 
 void enableMotors() {
@@ -323,5 +312,6 @@ void disableMotors() {
   // Motor 2
   digitalWrite(motor2EnablePin, HIGH);
 }
+*/
 
 #endif
