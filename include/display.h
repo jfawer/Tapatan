@@ -34,7 +34,7 @@ void displayPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int curren
   lcd.print("Am Zug:      ");                                                                                     // Zeige den Spieler, der am Zug ist
   lcd.setCursor(0, 3);                                                                                    
   if (gameSettings.mode == 1) {                                                                                   // Überprüfen, ob der Spieler gegen den Computer spielt
-    lcd.print(currentPlayer == 1 ? "Spieler      " : "Computer     ");
+    lcd.print(currentPlayer == 1 ? "Spieler   (X)" : "Computer  (O)");
   } else {
     lcd.print(currentPlayer == 1 ? "Spieler 1 (X)" : "Spieler 2 (O)");
   }
@@ -81,7 +81,7 @@ void displayDraw(LiquidCrystal_I2C &lcd) {
   lcd.setCursor(0, 2);
   lcd.print("Unentschieden!");                                                                                    // Text auf dem LCD anzeigen 
   lcd.setCursor(0, 3);
-  lcd.print("         ");
+  lcd.print("              ");
 }
 
 

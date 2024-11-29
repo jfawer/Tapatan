@@ -119,14 +119,19 @@ void TapatanPlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
                 // Computerzug
                 int BoardDisplay[3][3];
                 copyBoard(Board, BoardDisplay);
+                static bool useRandomMove = true;                                                                               // Flag für den ersten Computerzug
 
                 switch (gameSettings.difficulty) {                                                                              // Schwierigkeitsgrad des Computers
                     case Schwer:
                         TapatanMakeBestMove(BoardDisplay);                                                                      // Besten Zug für den Computer bestimmen
                         break;
                     case Mittel:
-                        TapatanMakeRandomMove(BoardDisplay);                                                                    // Zufälligen Zug für den Computer bestimmen
-                        Serial.println("Zufälliger Zug");
+                        if (useRandomMove) {
+                            TapatanMakeBestMove(BoardDisplay);                                                                  // Besten Zug für den Computer bestimmen
+                        } else {
+                            TapatanMakeRandomMove(BoardDisplay);                                                                // Zufälligen Zug für den Computer bestimmen
+                        }
+                        useRandomMove = !useRandomMove;                                                                         // Zugtyp umschalten
                         break;
                     default:
                         TapatanMakeRandomMove(BoardDisplay);                                                                    // Zufälligen Zug für
