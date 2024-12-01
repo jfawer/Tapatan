@@ -5,6 +5,7 @@
 
 #include <Arduino.h>
 #include <AccelStepper.h>
+#include <MultiStepper.h>
 #include "struct.h"
 #include "game_logic.h"
 
@@ -290,4 +291,14 @@ void disableMotors(int motor1EnablePin, int motor2EnablePin) {
   digitalWrite(motor2EnablePin, HIGH);    // Motor 2
 }
 
+// ====================================================================================================
+// Funktionen für die Elektromagnetsteuerung
+// ====================================================================================================
+
+//Funktion zur Ansteuerung des Elektromagneten
+void electromagnetControl(int electromagnetPin, int electromagnetPolarityPin, bool state, bool polarity) {
+  digitalWrite(electromagnetPin, LOW);
+  digitalWrite(electromagnetPolarityPin, polarity);
+  digitalWrite(electromagnetPin, state);
+}
 #endif
