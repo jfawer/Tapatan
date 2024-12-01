@@ -85,7 +85,7 @@ void processSerialInput(String input) {
   if (commaIndex > 0) {
     int x = input.substring(0, commaIndex).toInt();
     int y = input.substring(commaIndex + 1).toInt();
-    moveToPosition(x, y, Motoren, Motor1, Motor2, currentXPosition, currentYPosition);
+    moveToPosition(x, y, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
   }
 }
 
