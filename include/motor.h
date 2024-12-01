@@ -5,6 +5,7 @@
 
 #include <Arduino.h>
 #include <AccelStepper.h>
+#include <MultiStepper.h>
 #include "struct.h"
 #include "game_logic.h"
 
@@ -288,6 +289,36 @@ void enableMotors(int motor1EnablePin, int motor2EnablePin) {
 void disableMotors(int motor1EnablePin, int motor2EnablePin) {
   digitalWrite(motor1EnablePin, HIGH);    // Motor 1
   digitalWrite(motor2EnablePin, HIGH);    // Motor 2
+}
+
+void homeMotors(MultiStepper& Motoren, AccelStepper& Motor1, AccelStepper& Motor2, int endstopXPin, int endstopYPin, int maxXPosition, int maxYPosition, int minXPosition, int minYPosition,  int& currentXPosition, int& currentYPosition) {
+  // Aktuelle Position auf die weit entferteste Position setzen
+  currentXPosition = maxXPosition;
+  currentYPosition = maxYPosition;
+  // Y-Achse entlang fahren, bis der Endschalter erreicht wird
+  moveToPosition(maxXPosition, minYPosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition);
+  while (digitalRead(endstopYPin) == HIGH) {
+    Motoren.run();
+  }
+  // X-Achse entlang fahren, bis der Endschalter erreicht wird
+  moveToPosition(minXPosition, minYPosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition);
+  while (digitalRead(endstopXPin) == HIGH) {
+    Motoren.run();
+  }
+  // Aktuelle Position auf 0 setzen
+  currentXPosition = 0;
+  currentYPosition = 0;
+}
+
+// ====================================================================================================
+// Funktionen für die Elektromagnetsteuerung
+// ====================================================================================================
+
+//Funktion zur Ansteuerung des Elektromagneten
+void electromagnetControl(int electromagnetPin, int electromagnetPolarityPin, bool state, bool polarity) {
+  digitalWrite(electromagnetPin, LOW);
+  digitalWrite(electromagnetPolarityPin, polarity);
+  digitalWrite(electromagnetPin, state);
 }
 
 #endif

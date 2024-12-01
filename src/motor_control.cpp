@@ -69,6 +69,10 @@ const int motor2EnablePin = 7;
 const int endstopXPin = 8;
 const int endstopYPin = 9;
 
+//Pins für den Elektromagneten
+const int electromagnetPin = 10;
+const int electromagnetPolarityPin = 11;
+
 // AccelStepper Objekte erstellen
 AccelStepper Motor1(AccelStepper::DRIVER, motor1StepPin, motor1DirPin);
 AccelStepper Motor2(AccelStepper::DRIVER, motor2StepPin, motor2DirPin);
@@ -106,6 +110,7 @@ void setup() {
   pinMode(endstopXPin, INPUT_PULLUP);
   pinMode(endstopYPin, INPUT_PULLUP);
   enableMotors(motor1EnablePin, motor2EnablePin);
+  //homeMotors(Motoren, Motor1, Motor2, endstopXPin, endstopYPin, maxXPosition, maxYPosition, minXPosition, minYPosition, currentXPosition, currentYPosition);
 }
 
 void loop() {
