@@ -261,24 +261,31 @@ float calculateSteps(float delta) {
 }
 
 // Funktion für die Bewegung zu einer bestimmten Position
-void moveToPosition(int x, int y, MultiStepper& Motoren, AccelStepper& Motor1, AccelStepper& Motor2, int& currentXPosition, int& currentYPosition) {
-  // Berechne die Differenz der Positionen
-  int deltaX = x - currentXPosition;
-  int deltaY = y - currentYPosition;
-  currentXPosition = x;
-  currentYPosition = y;
-
-  // Setze die aktuelle Position der Motoren auf 0, damit die Schritte relativ zur aktuellen Position berechnet werden
-  Motor1.setCurrentPosition(0);
-  Motor2.setCurrentPosition(0);
+void moveToPosition(int x, int y, MultiStepper& Motoren, AccelStepper& Motor1, AccelStepper& Motor2, int& currentXPosition, int& currentYPosition, int maxXPosition, int maxYPosition, int minXPosition, int minYPosition) {
   
-  // Berechne die Schritte für Motor 1 und Motor 2 basierend auf der Differenz der Positionen
-  float m1StepsToDo = calculateSteps(deltaX + deltaY);
-  float m2StepsToDo = calculateSteps(deltaX - deltaY);
+  if (x <= maxXPosition && x >= minXPosition && y <= maxYPosition && y >= minYPosition) {
+    // Berechne die Differenz der Positionen
+    int deltaX = x - currentXPosition;
+    int deltaY = y - currentYPosition;
+    currentXPosition = x;
+    currentYPosition = y;
 
-  // Setze die Schritte für die Motoren
-  long positions[2] = {(int)m1StepsToDo, (int)m2StepsToDo};
-  Motoren.moveTo(positions);
+    // Setze die aktuelle Position der Motoren auf 0, damit die Schritte relativ zur aktuellen Position berechnet werden
+    Motor1.setCurrentPosition(0);
+    Motor2.setCurrentPosition(0);
+    
+    // Berechne die Schritte für Motor 1 und Motor 2 basierend auf der Differenz der Positionen
+    float m1StepsToDo = calculateSteps(deltaX + deltaY);
+    float m2StepsToDo = calculateSteps(deltaX - deltaY);
+
+    // Setze die Schritte für die Motoren
+    long positions[2] = {(int)m1StepsToDo, (int)m2StepsToDo};
+    Motoren.moveTo(positions);
+  }
+  else {
+    // Fehlermeldung, wenn die Position außerhalb des erlaubten Bereichs liegt
+    Serial.println("Position ausserhalb des erlaubten Bereichs");
+  }
 }
 
 void enableMotors(int motor1EnablePin, int motor2EnablePin) {
@@ -296,12 +303,12 @@ void homeMotors(MultiStepper& Motoren, AccelStepper& Motor1, AccelStepper& Motor
   currentXPosition = maxXPosition;
   currentYPosition = maxYPosition;
   // Y-Achse entlang fahren, bis der Endschalter erreicht wird
-  moveToPosition(maxXPosition, minYPosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition);
+  moveToPosition(maxXPosition, minYPosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
   while (digitalRead(endstopYPin) == HIGH) {
     Motoren.run();
   }
   // X-Achse entlang fahren, bis der Endschalter erreicht wird
-  moveToPosition(minXPosition, minYPosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition);
+  moveToPosition(minXPosition, minYPosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
   while (digitalRead(endstopXPin) == HIGH) {
     Motoren.run();
   }
