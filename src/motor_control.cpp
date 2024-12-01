@@ -110,6 +110,7 @@ void setup() {
   pinMode(endstopXPin, INPUT_PULLUP);
   pinMode(endstopYPin, INPUT_PULLUP);
   enableMotors(motor1EnablePin, motor2EnablePin);
+  //homeMotors(Motoren, Motor1, Motor2, endstopXPin, endstopYPin, maxXPosition, maxYPosition, minXPosition, minYPosition, currentXPosition, currentYPosition);
 }
 
 void loop() {
