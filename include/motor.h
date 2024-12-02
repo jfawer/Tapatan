@@ -304,17 +304,20 @@ void homeMotors(MultiStepper& Motoren, AccelStepper& Motor1, AccelStepper& Motor
   currentYPosition = maxYPosition;
   // Y-Achse entlang fahren, bis der Endschalter erreicht wird
   moveToPosition(maxXPosition, minYPosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
-  while (digitalRead(endstopYPin) == HIGH) {
+  while (digitalRead(endstopYPin) != LOW) {
     Motoren.run();
   }
+  currentXPosition = maxXPosition;
+  currentYPosition = minYPosition;
   // X-Achse entlang fahren, bis der Endschalter erreicht wird
   moveToPosition(minXPosition, minYPosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
-  while (digitalRead(endstopXPin) == HIGH) {
+  while (digitalRead(endstopXPin) != LOW) {
     Motoren.run();
   }
   // Aktuelle Position auf 0 setzen
-  currentXPosition = 0;
-  currentYPosition = 0;
+  currentXPosition = minXPosition;
+  currentYPosition = minYPosition;
+  moveToPosition(minXPosition, minYPosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
 }
 
 // ====================================================================================================

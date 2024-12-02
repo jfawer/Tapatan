@@ -15,8 +15,8 @@
 #include "motor.h"
 
 // Maximale und Minimale Positionen in mm
-const int maxXPosition = 400;
-const int maxYPosition = 500;
+const int maxXPosition = 315;
+const int maxYPosition = 405;
 const int minXPosition = 0;
 const int minYPosition = 0;
 
@@ -110,7 +110,7 @@ void setup() {
   pinMode(endstopXPin, INPUT_PULLUP);
   pinMode(endstopYPin, INPUT_PULLUP);
   enableMotors(motor1EnablePin, motor2EnablePin);
-  //homeMotors(Motoren, Motor1, Motor2, endstopXPin, endstopYPin, maxXPosition, maxYPosition, minXPosition, minYPosition, currentXPosition, currentYPosition);
+  homeMotors(Motoren, Motor1, Motor2, endstopXPin, endstopYPin, maxXPosition, maxYPosition, minXPosition, minYPosition, currentXPosition, currentYPosition);
 }
 
 void loop() {
