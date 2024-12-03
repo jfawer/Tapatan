@@ -21,29 +21,30 @@ const int minXPosition = 0;
 const int minYPosition = 0;
 
 int playerGaragePosition[5][2] = {                                                                                  // Positionen der Garagen des Spielers
-  {34, 25}, 
-  {34, 20}, 
-  {34, 15}, 
-  {34, 10},
-  {34, 5}
+  {20, 350}, 
+  {80, 350}, 
+  {140, 350}, 
+  {200, 350},
+  {260, 350}
 };
 
 int computerGaragePosition[5][2] = {                                                                                // Positionen der Garagen des Computers
-  {6, 25}, 
-  {6, 20},
-  {6, 15}, 
-  {6, 10}, 
-  {6, 5}
+  {20, 50}, 
+  {80, 50},
+  {140, 50}, 
+  {200, 50}, 
+  {260, 50}
 };                                                                                                                  
 
 int BoardPosition[3][3][2] = {                                                                                      // Positionen der Spielfelder
-  {{14, 20}, {20, 20}, {26, 20}}, 
-  {{14, 15}, {20, 15}, {26, 15}}, 
-  {{14, 10}, {20, 10}, {26, 10}}
-};        
+  {{80, 100}, {80, 150}, {80, 200}}, 
+  {{140, 100}, {140, 150}, {140, 200}}, 
+  {{200, 100}, {200, 150}, {200, 200}}
+};
 
-int verticalLanePositions[2] = {12, 17};                                                                            // Array für die vertikalen Fahrbahnen
-int horizontalLanePositions[2] = {9, 30};                                                                           // Array für die horizontalen Fahrbahnen
+int horizontalLanePositions[2] = {120, 180};                                                                         // Array für die horizontalen Fahrbahnen (X-Achsen-Positionen)
+int verticalLanePositions[2] = {75, 225};                                                                            // Array für die vertikalen Fahrbahnen (Y-Achsen-Positionen)
+
 
 int playerGarage[5] = {0, 0, 0, 0, 0};                                                                              // Status der Garagen des Spielers
 int computerGarage[5] = {1, 0, 1, 0, 0};                                                                            // Status der Garagen des Computers
@@ -91,6 +92,7 @@ void processSerialInput(String input) {
 
 void setup() {
   Serial.begin(9600);
+
   // Motor 1
   pinMode(motor1StepPin, OUTPUT);
   pinMode(motor1DirPin, OUTPUT);
@@ -109,16 +111,39 @@ void setup() {
   // Endschalter
   pinMode(endstopXPin, INPUT_PULLUP);
   pinMode(endstopYPin, INPUT_PULLUP);
+
+
+  // Motoren aktivieren
   enableMotors(motor1EnablePin, motor2EnablePin);
+
+  // Motoren in die Homeposition fahren
   homeMotors(Motoren, Motor1, Motor2, endstopXPin, endstopYPin, maxXPosition, maxYPosition, minXPosition, minYPosition, currentXPosition, currentYPosition);
+  delay(2000);
+
+  /*
+  Move move;
+
+  // Situation Von Garage aus
+  move = {20, 350, 80, 100};
+  moveStone(move, verticalLanePositions, horizontalLanePositions, computerGaragePosition, playerGaragePosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+  delay(2000);
+
+  // Situation gleiche Fahrbahn
+  move = {200, 100, 200, 200};
+  moveStone(move, verticalLanePositions, horizontalLanePositions, computerGaragePosition, playerGaragePosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+  delay(2000);
+
+  // Situation unterschiedliche Fahrbahnen
+  move = {80, 100, 200, 200};
+  moveStone(move, verticalLanePositions, horizontalLanePositions, computerGaragePosition, playerGaragePosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+  delay(2000);
+  */
 }
 
 void loop() {
- if (Serial.available() > 0) {
-  String input = Serial.readStringUntil('\n');
-  processSerialInput(input);
-  Serial.println(input);
- }
- Motoren.run();
- //Motoren.runSpeedToPosition();     //stellt sicher, das die Motoren zu ihrer Zielposition mit der vorgeschriebenen Beschleunigung und Geschwindigkeit fahren. Blockirt aber!!!
+  if (Serial.available() > 0) {
+    String input = Serial.readStringUntil('\n');
+    processSerialInput(input);
+    Serial.println(input);
+  }
 }
