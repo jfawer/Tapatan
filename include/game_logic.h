@@ -43,6 +43,7 @@ BoardField getChangedField(int currentBoard[3][3], int savedBoard[3][3]) {
   return {-1, -1}; // Rückgabe von (-1, -1), wenn kein Feld geändert wurde
 }
 
+
 // ====================================================================================================
 // Tic-Tac-Toe: Funktionen für die Spiellogik des Spielers
 // ====================================================================================================

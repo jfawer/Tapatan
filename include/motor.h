@@ -5,6 +5,7 @@
 
 #include <Arduino.h>
 #include <AccelStepper.h>
+#include <MultiStepper.h>
 #include "struct.h"
 #include "game_logic.h"
 
@@ -53,13 +54,13 @@ Move determineMoveToPlace(int Board[3][3], int BoardMemory[3][3], int computerGa
 
   // Ermitteln der Startposition / Besetzer Stein in der Garage
   int garagePosition = findGaragestate(computerGarage, 1);
-  move.startRow = computerGaragePosition[garagePosition][0];
-  move.startCol = computerGaragePosition[garagePosition][1];
+  move.startX = computerGaragePosition[garagePosition][0];
+  move.startY = computerGaragePosition[garagePosition][1];
   
   // Ermitteln der Zielposition
   BoardField targetField = identifyChangedField(Board, BoardMemory);
-  move.targetRow = BoardPosition[targetField.row][targetField.col][0];
-  move.targetCol = BoardPosition[targetField.row][targetField.col][1];
+  move.targetX = BoardPosition[targetField.row][targetField.col][0];
+  move.targetY = BoardPosition[targetField.row][targetField.col][1];
 
   return move;
 }
@@ -74,13 +75,13 @@ Move determineMoveToMove(int Board[3][3], int BoardMemory[3][3], int BoardPositi
   
   // Ermitteln der Startposition
   BoardField startField = identifyChangedField(BoardOverlay, BoardMemory);
-  move.startRow = BoardPosition[startField.row][startField.col][0];
-  move.startCol = BoardPosition[startField.row][startField.col][1];
+  move.startX = BoardPosition[startField.row][startField.col][0];
+  move.startY = BoardPosition[startField.row][startField.col][1];
 
   // Ermitteln der Zielposition
   BoardField targetField = identifyChangedField(BoardOverlay, Board);
-  move.targetRow = BoardPosition[targetField.row][targetField.col][0];
-  move.targetCol = BoardPosition[targetField.row][targetField.col][1];
+  move.targetX = BoardPosition[targetField.row][targetField.col][0];
+  move.targetY = BoardPosition[targetField.row][targetField.col][1];
 
   return move;
 }
@@ -107,18 +108,18 @@ Move determineCleanUpMove(int Board[3][3], int BoardPosition[3][3][2], int compu
   }
 
   // Ermitteln der Startposition
-  move.startRow = BoardPosition[BoardField.row][BoardField.col][0];
-  move.startCol = BoardPosition[BoardField.row][BoardField.col][1];
+  move.startX = BoardPosition[BoardField.row][BoardField.col][0];
+  move.startY = BoardPosition[BoardField.row][BoardField.col][1];
 
   // Ermitteln eines freien Platzes und setzen der Zielposition
   if (stoneType == Player1) {
     int garagePosition = findGaragestate(playerGarage, Leer);
-    move.targetRow = playerGaragePosition[garagePosition][0];
-    move.targetCol = playerGaragePosition[garagePosition][1];
+    move.targetX = playerGaragePosition[garagePosition][0];
+    move.targetY = playerGaragePosition[garagePosition][1];
   } else {
     int garagePosition = findGaragestate(computerGarage, Leer);
-    move.targetRow = computerGaragePosition[garagePosition][0];
-    move.targetCol = computerGaragePosition[garagePosition][1];
+    move.targetX = computerGaragePosition[garagePosition][0];
+    move.targetY = computerGaragePosition[garagePosition][1];
   }
 
   return move;
@@ -126,12 +127,90 @@ Move determineCleanUpMove(int Board[3][3], int BoardPosition[3][3][2], int compu
 
 
 // ====================================================================================================
-// Testfunktionen für die Motorbewegung
+// Funktionen für die Motorsteuerung
 // ====================================================================================================
 
-// Funktion für die Ausgabe der Motorbewegung
-void SerialMoveToPostion(int x, int y) {
-  Serial.println("Move to Position: " + String(x) + ", " + String(y));
+// Funktion zur Berechnung der Schritte basierend auf Delta und Motorparametern
+float calculateSteps(float delta) {
+  // Konstanten der Schrittmotoren
+  const float stepsPerRevolution = 800.0;   // Schritte pro Umdrehung
+  const float diameter = 10.0;              // Durchmesser des Riemenantriebs in mm
+  
+  return round((delta * stepsPerRevolution) / (PI * diameter));
+}
+
+// Funktion zum Setzen der Zielposition der Motoren
+void setPosition(int x, int y, MultiStepper& Motoren, AccelStepper& Motor1, AccelStepper& Motor2, int& currentXPosition, int& currentYPosition, int maxXPosition, int maxYPosition, int minXPosition, int minYPosition) {
+  if (x <= maxXPosition && x >= minXPosition && y <= maxYPosition && y >= minYPosition) {
+    // Berechne die Differenz der Positionen
+    int deltaX = x - currentXPosition;
+    int deltaY = y - currentYPosition;
+    currentXPosition = x;
+    currentYPosition = y;
+
+    // Setze die aktuelle Position der Motoren auf 0, damit die Schritte relativ zur aktuellen Position berechnet werden
+    Motor1.setCurrentPosition(0);
+    Motor2.setCurrentPosition(0);
+    
+    // Berechne die Schritte für Motor 1 und Motor 2 basierend auf der Differenz der Positionen
+    float m1StepsToDo = calculateSteps(deltaX + deltaY);
+    float m2StepsToDo = calculateSteps(deltaX - deltaY);
+
+    // Setze die Schritte für die Motoren
+    long positions[2] = {(int)m1StepsToDo, (int)m2StepsToDo};
+    Motoren.moveTo(positions);
+  } else {
+    // Fehlermeldung, wenn die Position außerhalb des erlaubten Bereichs liegt
+    Serial.println("Position ausserhalb des erlaubten Bereichs");
+  }
+}
+
+// Funktionen zur Bewegung zu einer vorbereiteten Position
+void moveToPosition(int x, int y, MultiStepper& Motoren, AccelStepper& Motor1, AccelStepper& Motor2, int& currentXPosition, int& currentYPosition, int maxXPosition, int maxYPosition, int minXPosition, int minYPosition) {
+  // Setze die Zielposition
+  setPosition(x, y, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+
+  // Bewegung ausführen, bis die Zielposition erreicht ist
+  Motoren.runSpeedToPosition(); // Blockiert, bis alle Motoren an ihrer Zielposition angekommen sind
+}
+
+// Funktion zur Freigabe der Motoren
+void enableMotors(int motor1EnablePin, int motor2EnablePin) {
+  digitalWrite(motor1EnablePin, LOW);     // Motor 1
+  digitalWrite(motor2EnablePin, LOW);     // Motor 2
+}
+
+// Funktion zum Deaktivieren der Motoren
+void disableMotors(int motor1EnablePin, int motor2EnablePin) {
+  digitalWrite(motor1EnablePin, HIGH);    // Motor 1
+  digitalWrite(motor2EnablePin, HIGH);    // Motor 2
+}
+
+// Funktion zum 0-Positionieren der Motoren
+void homeMotors(MultiStepper& Motoren, AccelStepper& Motor1, AccelStepper& Motor2, int endstopXPin, int endstopYPin, int maxXPosition, int maxYPosition, int minXPosition, int minYPosition, int& currentXPosition, int& currentYPosition) {
+  // Aktuelle Position auf die weit entfernte Position setzen
+  currentXPosition = maxXPosition;
+  currentYPosition = maxYPosition;
+
+  // Y-Achse entlang fahren, bis der Endschalter erreicht wird
+  setPosition(maxXPosition, minYPosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+  while (digitalRead(endstopYPin) != LOW) {
+    Motoren.run(); // Bewegung manuell steuern, bis der Endschalter ausgelöst wird
+  }
+
+  // X-Achse entlang fahren, bis der Endschalter erreicht wird
+  setPosition(minXPosition, minYPosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+  while (digitalRead(endstopXPin) != LOW) {
+    Motoren.run(); // Bewegung manuell steuern, bis der Endschalter ausgelöst wird
+  }
+
+  // AKtuelle Position auf 0 setzen
+  currentXPosition = minXPosition;
+  currentYPosition = minYPosition;
+
+  // Setze die aktuelle Position der Motoren auf (0,0)
+  Motor1.setCurrentPosition(0);
+  Motor2.setCurrentPosition(0);
 }
 
 
@@ -147,7 +226,7 @@ int determineShortestLane(int col, int axisLane[2]) {
   if (distance1 < distance2) {
     return 0;
   } else  if (distance1 == distance2) {
-    return 0;
+    return 1;
   } else {
     return 1;
   }
@@ -162,9 +241,12 @@ bool isSameLane(int startCol, int targetCol, int axisLane[2]) {
 }
 
 // Funktion zum Überprüfen, ob sich die Position in einer Garage befindet
-bool isInGarage(int row, int col, int garagePosition[5][2]) {
+bool isInGarage(int row, int col, int computerGaragePosition[5][2], int playerGaragePosition[5][2]) {
   for (int i = 0; i < 5; i++) {
-    if (row == garagePosition[i][0] && col == garagePosition[i][1]) {
+    if (computerGaragePosition[i][0] == row && computerGaragePosition[i][1] == col) {
+      return true;
+    }
+    if (playerGaragePosition[i][0] == row && playerGaragePosition[i][1] == col) {
       return true;
     }
   }
@@ -172,146 +254,76 @@ bool isInGarage(int row, int col, int garagePosition[5][2]) {
 }
 
 // Funktion für die Bewegung des Motors je nach Spielzug (Platzierung, Verschieben, Aufräumen)
-void moveStone(Move move, int verticalLanePositions[2], int horizontalLanePositions[2], int computerGaragePosition[5][2]) {
+void moveStone(Move move, int verticalLanePositions[2], int horizontalLanePositions[2], int computerGaragePosition[5][2], int playerGaragePosition[5][2], MultiStepper& Motoren, AccelStepper& Motor1, AccelStepper& Motor2, int& currentXPosition, int& currentYPosition, int maxXPosition, int maxYPosition, int minXPosition, int minYPosition) {
+  int startdelay = 2000;
+  int delayTime = 500;
 
   // Überprüfen, ob sich die Startposition in einer Garage befindet
-  if (isInGarage(move.startRow, move.startCol, computerGaragePosition)) {
-
+  if (isInGarage(move.startX, move.startY, computerGaragePosition, playerGaragePosition)) {
     // Bestimmen der Fahrbahnen für die Bwegung
-    int lane = determineShortestLane(move.targetCol, verticalLanePositions);
-    int horizontalLane = determineShortestLane(move.startRow, horizontalLanePositions);
-
-    SerialMoveToPostion(move.startRow, move.startCol);
-    delay(200);
-    SerialMoveToPostion(horizontalLanePositions[horizontalLane], move.startCol);
-    delay(200);
-    SerialMoveToPostion(horizontalLanePositions[horizontalLane], verticalLanePositions[lane]);
-    delay(200);
-    SerialMoveToPostion(move.targetRow, verticalLanePositions[lane]);
-    delay(200);
-    SerialMoveToPostion(move.targetRow, move.targetCol);
+    int lane = determineShortestLane(move.startY, verticalLanePositions);               // Vertikale Fahrbahn
+    int horizontalLane = determineShortestLane(move.targetX, horizontalLanePositions);  // Horizontale Fahrbahn
+    
+    // Bewegung des Motors
+    moveToPosition(move.startX, move.startY, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(startdelay);
+    moveToPosition(move.startX, verticalLanePositions[lane], Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(delayTime);
+    moveToPosition(horizontalLanePositions[horizontalLane], verticalLanePositions[lane], Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(delayTime);
+    moveToPosition(horizontalLanePositions[horizontalLane], move.targetY, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(delayTime);
+    moveToPosition(move.targetX, move.targetY, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
     return;
   }
 
-  // Überprüfen, ob sich die Zielposition in einer Garage befindet
-  if (isInGarage(move.targetCol, move.targetCol, computerGaragePosition)) {
-    // Bestimmen der Fahrbahnen für die Bewegung
-    int lane = determineShortestLane(move.startCol, verticalLanePositions);
-    int horizontalLane = determineShortestLane(move.targetRow, horizontalLanePositions);
-
-    SerialMoveToPostion(move.startRow, move.startCol);
-    delay(200);
-    SerialMoveToPostion(move.startRow, verticalLanePositions[lane]);
-    delay(200);
-    SerialMoveToPostion(horizontalLanePositions[horizontalLane], verticalLanePositions[lane]);
-    delay(200);
-    SerialMoveToPostion(horizontalLanePositions[horizontalLane], move.targetCol);
-    delay(200);
-    SerialMoveToPostion(move.targetRow, move.targetCol);
-    return;
-  }
-  
   // Überprüfen, ob sich die Start- und Zielposition auf der gleichen Fahrbahn befinden
-  if (isSameLane(move.startCol, move.targetCol, verticalLanePositions)) {
+  if (isSameLane(move.startX, move.targetX, horizontalLanePositions)) {
     // Bestimmen der gemeinsamen Fahrbahn
-    int lane = determineShortestLane(move.startCol, verticalLanePositions);
+    int lane = determineShortestLane(move.startX, horizontalLanePositions);              // Gemeinsame Fahrbahn
 
-    SerialMoveToPostion(move.startRow, move.startCol);
-    delay(200);
-    SerialMoveToPostion(move.startRow, verticalLanePositions[lane]);
-    delay(200);
-    SerialMoveToPostion(move.targetRow, verticalLanePositions[lane]);
-    delay(200);
-    SerialMoveToPostion(move.targetRow, move.targetCol);
+    // Bewegung des Motors
+    moveToPosition(move.startX, move.startY, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(startdelay);
+    moveToPosition(horizontalLanePositions[lane], move.startY, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(delayTime);
+    moveToPosition(horizontalLanePositions[lane], move.targetY, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(delayTime);
+    moveToPosition(move.targetX, move.targetY, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
     return;
 
   } else {
     // Bestimmen der kürzesten Fahrbahn für Start- und Zielposition
-    int startLane = determineShortestLane(move.startCol, verticalLanePositions);
-    int targetLane = determineShortestLane(move.targetCol, verticalLanePositions);
-    int horizontalLane = determineShortestLane(move.targetRow, horizontalLanePositions);
+    int startLane = determineShortestLane(move.startX, horizontalLanePositions);          // Startfahrbahn (Horizontale Fahrbahn)
+    int targetLane = determineShortestLane(move.targetX, horizontalLanePositions);        // Zielfahrbahn  (Horizontale Fahrbahn)
+    int verticalLane = determineShortestLane(move.targetY, verticalLanePositions);        // Vertikale Fahrbahn
 
-    SerialMoveToPostion(move.startRow, move.startCol);
-    delay(200);
-    SerialMoveToPostion(move.startRow, verticalLanePositions[startLane]);
-    delay(200);
-    SerialMoveToPostion(horizontalLanePositions[horizontalLane], verticalLanePositions[startLane]);
-    delay(200);
-    SerialMoveToPostion(horizontalLanePositions[horizontalLane], verticalLanePositions[targetLane]);
-    delay(200);
-    SerialMoveToPostion(move.targetRow, verticalLanePositions[targetLane]);
-    delay(200);
-    SerialMoveToPostion(move.targetRow, move.targetCol);
+    // Bewegung des Motors
+    moveToPosition(move.startX, move.startY, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(startdelay);
+    moveToPosition(horizontalLanePositions[startLane], move.startY, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(delayTime);
+    moveToPosition(horizontalLanePositions[startLane], verticalLanePositions[verticalLane], Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(delayTime);
+    moveToPosition(horizontalLanePositions[targetLane], verticalLanePositions[verticalLane], Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(delayTime);
+    moveToPosition(horizontalLanePositions[targetLane], move.targetY, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+    delay(delayTime);
+    moveToPosition(move.targetX, move.targetY, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
     return;
   }
 }
 
+
 // ====================================================================================================
-// Funktionen für die Motorsteuerung
+// Funktionen für die Elektromagnetsteuerung
 // ====================================================================================================
 
-
-// Pins für die Motoren
-// Motor 1
-const int motor1StepPin = 2;
-const int motor1DirPin = 3;
-const int motor1EnablePin = 4;
-// Motor 2
-const int motor2StepPin = 5;
-const int motor2DirPin = 6;
-const int motor2EnablePin = 7;
-
-//Pins für die Endschalter
-const int endstopXPin = 8;
-const int endstopYPin = 9;
-
-// Maximale und Minimale Positionen in mm
-const int maxXPosition = 400;
-const int maxYPosition = 500;
-const int minXPosition = 0;
-const int minYPosition = 0;
-
-// Konstanten für die Schrittmotoren
-const int stepsPerRevolution = 600; // Schritte pro Umdrehung
-const int diameter = 40; // Durchmesser des Riemenantriebs in mm
-
-// AccelStepper Objekte erstellen
-AccelStepper Motor1(AccelStepper::DRIVER, motor1StepPin, motor1DirPin);
-AccelStepper Motor2(AccelStepper::DRIVER, motor2StepPin, motor2DirPin);
-
-
-/*
-void moveToPosition(int x, int y) {
-  // Berechne die Differenz der Positionen
-  int deltaX = x - currentXPosition;
-  int deltaY = y - currentYPosition;
-  currentXPosition = x;
-  currentYPosition = y;
-  // Setze die aktuelle Position der Motoren auf 0, damit die Schritte relativ zur aktuellen Position berechnet werden
-  Motor1.setCurrentPosition(0);
-  Motor2.setCurrentPosition(0);
-  // Berechne die Schritte für Motor 1
-  int m1StepsToDo = ((deltaX + deltaY) * stepsPerRevolution) / (2 * PI * diameter);
-  // Berechne die Schritte für Motor 2
-  int m2StepsToDo = ((deltaX - deltaY) * stepsPerRevolution) / (2 * PI * diameter);
-  // Setze die Schritte für die Motoren
-  long positions[2] = {m1StepsToDo, m2StepsToDo};
-  Motoren.moveTo(positions);
+//Funktion zur Ansteuerung des Elektromagneten
+void electromagnetControl(int electromagnetPin, int electromagnetPolarityPin, bool state, bool polarity) {
+  digitalWrite(electromagnetPin, LOW);
+  digitalWrite(electromagnetPolarityPin, polarity);
+  digitalWrite(electromagnetPin, state);
 }
-
-void enableMotors() {
-  // Motor 1
-  digitalWrite(motor1EnablePin, LOW);
-  // Motor 2
-  digitalWrite(motor2EnablePin, LOW);
-}
-
-void disableMotors() {
-  // Motor 1
-  digitalWrite(motor1EnablePin, HIGH);
-  // Motor 2
-  digitalWrite(motor2EnablePin, HIGH);
-}
-*/
 
 #endif

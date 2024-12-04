@@ -14,6 +14,48 @@
 #include "led.h"
 #include "motor.h"
 
+// Maximale und Minimale Positionen in mm
+const int maxXPosition = 315;
+const int maxYPosition = 405;
+const int minXPosition = 0;
+const int minYPosition = 0;
+
+int playerGaragePosition[5][2] = {                                                                                  // Positionen der Garagen des Spielers
+  {20, 350}, 
+  {80, 350}, 
+  {140, 350}, 
+  {200, 350},
+  {260, 350}
+};
+
+int computerGaragePosition[5][2] = {                                                                                // Positionen der Garagen des Computers
+  {20, 50}, 
+  {80, 50},
+  {140, 50}, 
+  {200, 50}, 
+  {260, 50}
+};                                                                                                                  
+
+int BoardPosition[3][3][2] = {                                                                                      // Positionen der Spielfelder
+  {{80, 100}, {80, 150}, {80, 200}}, 
+  {{140, 100}, {140, 150}, {140, 200}}, 
+  {{200, 100}, {200, 150}, {200, 200}}
+};
+
+int horizontalLanePositions[2] = {120, 180};                                                                         // Array für die horizontalen Fahrbahnen (X-Achsen-Positionen)
+int verticalLanePositions[2] = {75, 225};                                                                            // Array für die vertikalen Fahrbahnen (Y-Achsen-Positionen)
+
+
+int playerGarage[5] = {0, 0, 0, 0, 0};                                                                              // Status der Garagen des Spielers
+int computerGarage[5] = {1, 0, 1, 0, 0};                                                                            // Status der Garagen des Computers
+
+int Board [3][3] = {{0,0,2},{0,2,2},{0,1,0}};                                                                       // Spielfeld
+int BoardMemory [3][3] = {{0,2,1},{1,2,2},{0,1,0}};                                                                 // Speicherfeld
+
+// Aktuelle Positionen in mm
+int currentXPosition = 0;
+int currentYPosition = 0;
+
 // Pins für die Motoren
 // Motor 1
 const int motor1StepPin = 2;
@@ -28,17 +70,9 @@ const int motor2EnablePin = 7;
 const int endstopXPin = 8;
 const int endstopYPin = 9;
 
-// Maximale und Minimale Positionen in mm
-const int maxXPosition = 400;
-const int maxYPosition = 500;
-const int minXPosition = 0;
-const int minYPosition = 0;
-
-// Konstanten für die Schrittmotoren
-const float stepsPerRevolution = 800.0; // Schritte pro Umdrehung
-const float diameter = 10.0; // Durchmesser des Riemenantriebs in mm
-int currentXPosition = 0;
-int currentYPosition = 0;
+//Pins für den Elektromagneten
+const int electromagnetPin = 10;
+const int electromagnetPolarityPin = 11;
 
 // AccelStepper Objekte erstellen
 AccelStepper Motor1(AccelStepper::DRIVER, motor1StepPin, motor1DirPin);
@@ -47,125 +81,69 @@ AccelStepper Motor2(AccelStepper::DRIVER, motor2StepPin, motor2DirPin);
 // MultiStepper Objekt erstellen
 MultiStepper Motoren;
 
-void processSerialInput(String input);
-void moveToPosition(int x, int y);
-void enableMotors();
-void disableMotors();
-
-void setup() {
-    Serial.begin(9600);
-    // Motor 1
-    pinMode(motor1StepPin, OUTPUT);
-    pinMode(motor1DirPin, OUTPUT);
-    pinMode(motor1EnablePin, OUTPUT);
-    Motor1.setMaxSpeed(4000.0);
-    Motor1.setAcceleration(2000.0);
-    // Motor 2
-    pinMode(motor2StepPin, OUTPUT);
-    pinMode(motor2DirPin, OUTPUT);
-    pinMode(motor2EnablePin, OUTPUT);
-    Motor2.setMaxSpeed(4000.0);
-    Motor2.setAcceleration(2000.0);
-    // Füge Motor1 und Motor2 zum MultiStepper Motoren hinzu
-    Motoren.addStepper(Motor1);
-    Motoren.addStepper(Motor2);
-    // Endschalter
-    pinMode(endstopXPin, INPUT_PULLUP);
-    pinMode(endstopYPin, INPUT_PULLUP);
-    enableMotors();
-}
-
-int playerGaragePosition[5][2] = {                                                                                  // Positionen der Garagen des Spielers
-    {34, 25}, 
-    {34, 20}, 
-    {34, 15}, 
-    {34, 10},
-    {34, 5}
-};
-
-int computerGaragePosition[5][2] = {                                                                                // Positionen der Garagen des Computers
-    {6, 25}, 
-    {6, 20},
-    {6, 15}, 
-    {6, 10}, 
-    {6, 5}
-};                                                                                                                  
-
-int BoardPosition[3][3][2] = {                                                                                      // Positionen der Spielfelder
-    {{14, 20}, {20, 20}, {26, 20}}, 
-    {{14, 15}, {20, 15}, {26, 15}}, 
-    {{14, 10}, {20, 10}, {26, 10}}
-};        
-
-int verticalLanePositions[2] = {12, 17};                                                                            // Array für die vertikalen Fahrbahnen
-int horizontalLanePositions[2] = {9, 30};                                                                           // Array für die horizontalen Fahrbahnen
-
-int playerGarage[5] = {0, 0, 0, 0, 0};                                                                              // Status der Garagen des Spielers
-int computerGarage[5] = {1, 0, 1, 0, 0};                                                                            // Status der Garagen des Computers
-
-int Board [3][3] = {{0,0,2},{0,2,2},{0,1,0}};                                                                       // Spielfeld
-int BoardMemory [3][3] = {{0,2,1},{1,2,2},{0,1,0}};                                                                 // Speicherfeld
-
-/*
-void setup() {
-    Serial.begin(9600);
-
-    Move move = {6, 5, 26, 10};
-    moveStone(move, verticalLanePositions, horizontalLanePositions, computerGaragePosition);
-}
-*/
-
-
-void loop() {
- if (Serial.available() > 0) {
-  String input = Serial.readStringUntil('\n');
-  processSerialInput(input);
-  Serial.println(input);
- }
- Motoren.run();
- //Motoren.runSpeedToPosition();     //stellt sicher, das die Motoren zu ihrer Zielposition mit der vorgeschriebenen Beschleunigung und Geschwindigkeit fahren. Blockirt aber!!!
-}
-
 void processSerialInput(String input) {
   int commaIndex = input.indexOf(',');
   if (commaIndex > 0) {
     int x = input.substring(0, commaIndex).toInt();
     int y = input.substring(commaIndex + 1).toInt();
-    moveToPosition(x, y);
+    moveToPosition(x, y, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
   }
 }
 
-void moveToPosition(int x, int y) {
-  // Berechne die Differenz der Positionen
-  int deltaX = x - currentXPosition;
-  int deltaY = y - currentYPosition;
-  currentXPosition = x;
-  currentYPosition = y;
-  // Setze die aktuelle Position der Motoren auf 0, damit die Schritte relativ zur aktuellen Position berechnet werden
-  Motor1.setCurrentPosition(0);
-  Motor2.setCurrentPosition(0);
-  // Berechne die Schritte für Motor 1
-  float m1StepsToDo = ((deltaX + deltaY) * stepsPerRevolution) / (PI * diameter);
-  m1StepsToDo = round(m1StepsToDo);
-  // Berechne die Schritte für Motor 2
-  float m2StepsToDo = ((deltaX - deltaY) * stepsPerRevolution) / (PI * diameter);
-  m2StepsToDo = round(m2StepsToDo);
+void setup() {
+  Serial.begin(9600);
 
-  // Setze die Schritte für die Motoren
-  long positions[2] = {(int)m1StepsToDo, (int)m2StepsToDo};
-  Motoren.moveTo(positions);
+  // Motor 1
+  pinMode(motor1StepPin, OUTPUT);
+  pinMode(motor1DirPin, OUTPUT);
+  pinMode(motor1EnablePin, OUTPUT);
+  Motor1.setMaxSpeed(4000.0);
+  Motor1.setAcceleration(2000.0);
+  // Motor 2
+  pinMode(motor2StepPin, OUTPUT);
+  pinMode(motor2DirPin, OUTPUT);
+  pinMode(motor2EnablePin, OUTPUT);
+  Motor2.setMaxSpeed(4000.0);
+  Motor2.setAcceleration(2000.0);
+  // Füge Motor1 und Motor2 zum MultiStepper Motoren hinzu
+  Motoren.addStepper(Motor1);
+  Motoren.addStepper(Motor2);
+  // Endschalter
+  pinMode(endstopXPin, INPUT_PULLUP);
+  pinMode(endstopYPin, INPUT_PULLUP);
+
+
+  // Motoren aktivieren
+  enableMotors(motor1EnablePin, motor2EnablePin);
+
+  // Motoren in die Homeposition fahren
+  homeMotors(Motoren, Motor1, Motor2, endstopXPin, endstopYPin, maxXPosition, maxYPosition, minXPosition, minYPosition, currentXPosition, currentYPosition);
+  delay(2000);
+
+  /*
+  Move move;
+
+  // Situation Von Garage aus
+  move = {20, 350, 80, 100};
+  moveStone(move, verticalLanePositions, horizontalLanePositions, computerGaragePosition, playerGaragePosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+  delay(2000);
+
+  // Situation gleiche Fahrbahn
+  move = {200, 100, 200, 200};
+  moveStone(move, verticalLanePositions, horizontalLanePositions, computerGaragePosition, playerGaragePosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+  delay(2000);
+
+  // Situation unterschiedliche Fahrbahnen
+  move = {80, 100, 200, 200};
+  moveStone(move, verticalLanePositions, horizontalLanePositions, computerGaragePosition, playerGaragePosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
+  delay(2000);
+  */
 }
 
-void enableMotors() {
-  // Motor 1
-  digitalWrite(motor1EnablePin, LOW);
-  // Motor 2
-  digitalWrite(motor2EnablePin, LOW);
-}
-
-void disableMotors() {
-  // Motor 1
-  digitalWrite(motor1EnablePin, HIGH);
-  // Motor 2
-  digitalWrite(motor2EnablePin, HIGH);
+void loop() {
+  if (Serial.available() > 0) {
+    String input = Serial.readStringUntil('\n');
+    processSerialInput(input);
+    Serial.println(input);
+  }
 }
