@@ -156,25 +156,18 @@ void loop() {
     Serial.println(input);
   }
   */
-
+  
+  
   // LED Farbe setzen
-  Serial.println("Rot");
   led.setColor("Rot");
   delay(1000);
-
-  Serial.println("Gruen");
   led.setColor("Gruen");
   delay(1000);
-
-  Serial.println("Blau");
   led.setColor("Blau");
   delay(1000);
-
-  Serial.println("Weiss");
   led.setColor("Weiss");
   delay(1000);
-
-  Serial.println("Aus");
   led.setColor("Aus");
   delay(1000);
+
 }

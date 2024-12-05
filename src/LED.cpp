@@ -19,19 +19,20 @@ void LED::setRGB(int r, int g, int b) {
     analogWrite(bluePin, b);
 }
 
-// Farbe setzen
-void LED::setColor(const String& color) {
+void LED::setColor(const String& color) {       // RGB-Farbwerte sind invertiert, weil die LED-Pins als Ground verwendet werden
     if (color == "Aus") {
-        setRGB(0, 0, 0);
-    } else if (color == "Rot") {
-        setRGB(255, 0, 0);
-    } else if (color == "Gruen") {
-        setRGB(0, 255, 0);
-    } else if (color == "Blau") {
-        setRGB(0, 0, 255);
-    } else if (color == "Weiss") {
         setRGB(255, 255, 255);
+    } else if (color == "Rot") {
+        setRGB(0, 255, 255);
+    } else if (color == "Gruen") {
+        setRGB(255, 0, 255);
+    } else if (color == "Blau") {
+        setRGB(255, 255, 0);
+    } else if (color == "Weiss") {
+        setRGB(0, 0, 0);
     } else {
-        setRGB(0, 0, 0); // Standard: aus
+        setRGB(255, 255, 255);
     }
 }
+
+
