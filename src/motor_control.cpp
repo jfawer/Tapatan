@@ -11,7 +11,7 @@
 #include "input.h"
 #include "tictactoe.h"
 #include "tapatan.h"
-#include "led.h"
+#include "LED.h"
 #include "motor.h"
 
 // Maximale und Minimale Positionen in mm
@@ -90,9 +90,18 @@ void processSerialInput(String input) {
   }
 }
 
+// LED Objekt erstellen
+LED led(13, 22, 12);
+
 void setup() {
   Serial.begin(9600);
 
+  // Initialisierung der LED
+  led.begin();
+
+  
+
+  /*
   // Motor 1
   pinMode(motor1StepPin, OUTPUT);
   pinMode(motor1DirPin, OUTPUT);
@@ -120,7 +129,6 @@ void setup() {
   homeMotors(Motoren, Motor1, Motor2, endstopXPin, endstopYPin, maxXPosition, maxYPosition, minXPosition, minYPosition, currentXPosition, currentYPosition);
   delay(2000);
 
-  /*
   Move move;
 
   // Situation Von Garage aus
@@ -141,9 +149,32 @@ void setup() {
 }
 
 void loop() {
+  /*
   if (Serial.available() > 0) {
     String input = Serial.readStringUntil('\n');
     processSerialInput(input);
     Serial.println(input);
   }
+  */
+
+  // LED Farbe setzen
+  Serial.println("Rot");
+  led.setColor("Rot");
+  delay(1000);
+
+  Serial.println("Gruen");
+  led.setColor("Gruen");
+  delay(1000);
+
+  Serial.println("Blau");
+  led.setColor("Blau");
+  delay(1000);
+
+  Serial.println("Weiss");
+  led.setColor("Weiss");
+  delay(1000);
+
+  Serial.println("Aus");
+  led.setColor("Aus");
+  delay(1000);
 }

@@ -10,7 +10,7 @@
 #include <LiquidCrystal_I2C.h>
 
 // Einbinden der Header-Dateien
-#include "led.h"
+#include "LED.h"
 #include "tictactoe.h"
 #include "tapatan.h"
 
@@ -85,7 +85,7 @@ void setup() {
 
   // Beleuchtung / Lichter
   lcd.backlight();                                                                                        // Hintergrundbeleuchtung einschalten
-  steuereLED(Aus, ledPins);                                                                               // LED Streifen ausschalten
+  //steuereLED(Aus, ledPins);                                                                               // LED Streifen ausschalten
   
   displayStart(lcd);                                                                                      // Startbildschirm anzeigen                                                                               
   delay(2000);

@@ -1,26 +1,24 @@
-// Funktionen zum Auslesen der Sensorwerte
-
 #ifndef LED_H
 #define LED_H
 
 #include <Arduino.h>
-#include "struct.h"
 
-void steuereLED(int farbe, int ledPins[]) {
-  int r = 0, g = 0, b = 0;                        // Standardfarbe: aus (0, 0, 0)
+class LED {
+private:
+    int redPin, greenPin, bluePin;
 
-  switch (farbe) {
-    case Aus: break;                              // Aus
-    case Rot: r = 255; break;                     // Rot
-    case Gruen: g = 255; break;                   // Grün
-    case Blau: b = 255; break;                    // Blau
-    case Weiss: r = g = b = 255; break;           // Weiss
-    default: break;                               // Aus
-  }
+    // Private Methode zum Setzen der RGB-Werte
+    void setRGB(int r, int g, int b);
 
-  analogWrite(ledPins[0], r);                     // Roten Kanal steuern
-  analogWrite(ledPins[1], g);                     // Grünen Kanal steuern
-  analogWrite(ledPins[2], b);                     // Blauen Kanal steuern
-}
+public:
+    // Konstruktor
+    LED(int redPin, int greenPin, int bluePin);
+
+    // Initialisierungsmethode
+    void begin();
+
+    // Methode zum Setzen der Farbe
+    void setColor(const String& color);
+};
 
 #endif
