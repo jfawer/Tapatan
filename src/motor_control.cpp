@@ -101,7 +101,6 @@ void setup() {
 
   
 
-  /*
   // Motor 1
   pinMode(motor1StepPin, OUTPUT);
   pinMode(motor1DirPin, OUTPUT);
@@ -145,7 +144,6 @@ void setup() {
   move = {80, 100, 200, 200};
   moveStone(move, verticalLanePositions, horizontalLanePositions, computerGaragePosition, playerGaragePosition, Motoren, Motor1, Motor2, currentXPosition, currentYPosition, maxXPosition, maxYPosition, minXPosition, minYPosition);
   delay(2000);
-  */
 }
 
 void loop() {
@@ -156,18 +154,5 @@ void loop() {
     Serial.println(input);
   }
   */
-  
-  
-  // LED Farbe setzen
-  led.setColor("Rot");
-  delay(1000);
-  led.setColor("Gruen");
-  delay(1000);
-  led.setColor("Blau");
-  delay(1000);
-  led.setColor("Weiss");
-  delay(1000);
-  led.setColor("Aus");
-  delay(1000);
 
 }
