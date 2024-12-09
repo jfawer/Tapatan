@@ -1,9 +1,6 @@
 // Einbinden der Bibliotheken
 #include <Arduino.h>
-#include <Wire.h>
 #include <LiquidCrystal_I2C.h>
-#include <AccelStepper.h>
-#include <MultiStepper.h>
 
 // Einbinden der Header-Dateien
 #include "MotorController.h"

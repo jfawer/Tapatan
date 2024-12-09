@@ -1,6 +1,3 @@
-#include <AccelStepper.h>
-#include <MultiStepper.h>
-#include "struct.h"
 #include "MotorController.h"
 
 MotorController::MotorController(int m1Step, int m1Dir, int m1Enable, int m2Step, int m2Dir, int m2Enable, int esX, int esY, int em, int emPolarity)

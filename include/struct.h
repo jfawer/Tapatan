@@ -19,13 +19,6 @@ const int Einfach = 1;                                                          
 const int Mittel = 2;                                                             // Konstante für den Schwierigkeitsgrad Mittel
 const int Schwer = 3;                                                             // Konstante für den Schwierigkeitsgrad Schwer
 
-// Konstanten für die Farben
-const int Aus = 0;                                                                // Konstante für die Farbe aus
-const int Rot = 1;                                                                // Konstante für die Farbe rot
-const int Gruen = 2;                                                              // Konstante für die Farbe grün
-const int Blau = 3;                                                               // Konstante für die Farbe blau
-const int Weiss = 4;                                                              // Konstante für die Farbe weiss
-
 // Konstanten für die Garage
 const int Leer = 0;                                                               // Konstante für die Garage leer
 const int Belegt = 1;                                                             // Konstante für die Garage belegt
@@ -51,11 +44,14 @@ struct Move {
   int targetY;                                                                  // Ziel Y-Position des Motors
 };
 
+// Struktur für die Konfiguration der Motorsteuerung
 struct MotorConfig {
-  int verticalLanePositions[2] = {75, 225};                    
-  int horizontalLanePositions[2] = {120, 180};                 
+  // Positionen der Fahrbahnen
+  int verticalLanePositions[2] = {75, 225};                                     
+  int horizontalLanePositions[2] = {120, 180};                                 
 
-  int computerGaragePosition[5][2] = {                         
+  // Positionen der Computer-Garagen
+  int computerGaragePosition[5][2] = {                                         
     {20, 50},
     {80, 50},
     {140, 50},
@@ -63,6 +59,7 @@ struct MotorConfig {
     {260, 50}
   };
 
+  // Positionen der Spieler-Garagen
   int playerGaragePosition[5][2] = {                           
     {20, 350},
     {80, 350},
@@ -71,12 +68,14 @@ struct MotorConfig {
     {260, 350}
   };
 
+  // Positionen der Spielfelder
   int boardPosition[3][3][2] = {                               
     {{80, 100}, {80, 150}, {80, 200}},
     {{140, 100}, {140, 150}, {140, 200}},
     {{200, 100}, {200, 150}, {200, 200}}
   };
 
+  // Spielfeldbegrenzungen
   int maxXPosition = 315;                                      
   int maxYPosition = 405;                                      
   int minXPosition = 0;                                        

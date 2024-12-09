@@ -10,9 +10,12 @@
 #include <LiquidCrystal_I2C.h>
 
 // Einbinden der Header-Dateien
+#include "struct.h"
+#include "motor.h"
 #include "LED.h"
 #include "tictactoe.h"
 #include "tapatan.h"
+
 
 // Globale Variablen
 volatile int rotarySwitchValue = 0;                                                                       // Aktueller Wert des Encoders
