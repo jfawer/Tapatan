@@ -8,19 +8,39 @@
 // Einbinden der Header-Dateien
 #include "MotorController.h"
 
-MotorController motorController(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 315, 405, 0, 0);
+MotorController motorController(2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+
+// Konstanten für die Motorsteuerung
+MotorConfig config;
 
 void setup() {
   Serial.begin(9600);
+
+  // Initialisierung der Motorsteuerung
   motorController.initialize();
+  motorController.setConfig(config);
+
+  // Test der Motorsteuerung
+  motorController.enableMotors();
+  delay(3000);
+
+  // An einen Punkt fahren
+  motorController.moveToPosition(150, 200);
+  delay(3000);
+
+  // Motoren Nullen
   motorController.homeMotors();
+  delay(3000);
+
+  // Einen Stein bewegen
+  Move move = {20, 50, 140, 200};
+  motorController.moveStone(move);
+  delay(3000);
+
+  motorController.disableMotors();
 }
 
 void loop() {
-  motorController.enableMotors();
-  motorController.moveToPosition(150, 200);
-  delay(2000);
-  motorController.moveToPosition(100, 100);
-  motorController.disableMotors();
-  delay(5000);
+  Serial.println("Loop");
+  delay(3000);
 }

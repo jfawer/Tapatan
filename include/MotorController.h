@@ -3,6 +3,7 @@
 
 #include <AccelStepper.h>
 #include <MultiStepper.h>
+#include "struct.h"
 
 class MotorController {
 private:
@@ -22,9 +23,8 @@ private:
     // Aktuelle Positionen
     int currentXPosition, currentYPosition;
 
-    // Maximal- und Minimalpositionen
-    const int maxXPosition, maxYPosition;
-    const int minXPosition, minYPosition;
+    // Motor-Konfiguration
+    MotorConfig config;
 
     // Konstanten der Schrittmotoren
     const float stepsPerRevolution = 800.0; // Schritte pro Umdrehung
@@ -33,10 +33,13 @@ private:
     // Private Hilfsfunktionen
     float calculateSteps(float delta);
     void setPosition(int x, int y);
+    int determineShortestLane(int col, const int axisLane[2]) const;
+    bool isSameLane(int startCol, int targetCol, const int axisLane[2]) const;
+    bool isInGarage(int row, int col, const int garagePosition[5][2]) const;
 
 public:
     // Konstruktor
-    MotorController(int m1Step, int m1Dir, int m1Enable, int m2Step, int m2Dir, int m2Enable, int esX, int esY, int em, int emPolarity, int maxX, int maxY, int minX, int minY);
+    MotorController(int m1Step, int m1Dir, int m1Enable, int m2Step, int m2Dir, int m2Enable, int esX, int esY, int em, int emPolarity);
 
     // Setup-Funktion für Motoren
     void initialize();
@@ -46,6 +49,10 @@ public:
     void enableMotors();
     void disableMotors();
     void homeMotors();
+    void moveStone(Move move);
+
+    // Setter für die gesamte Konfiguration
+    void setConfig(const MotorConfig& newConfig);
 
     // Getter für aktuelle Position
     int getCurrentXPosition() const { return currentXPosition; }

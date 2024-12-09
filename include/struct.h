@@ -51,4 +51,36 @@ struct Move {
   int targetY;                                                                  // Ziel Y-Position des Motors
 };
 
+struct MotorConfig {
+  int verticalLanePositions[2] = {75, 225};                    
+  int horizontalLanePositions[2] = {120, 180};                 
+
+  int computerGaragePosition[5][2] = {                         
+    {20, 50},
+    {80, 50},
+    {140, 50},
+    {200, 50},
+    {260, 50}
+  };
+
+  int playerGaragePosition[5][2] = {                           
+    {20, 350},
+    {80, 350},
+    {140, 350},
+    {200, 350},
+    {260, 350}
+  };
+
+  int boardPosition[3][3][2] = {                               
+    {{80, 100}, {80, 150}, {80, 200}},
+    {{140, 100}, {140, 150}, {140, 200}},
+    {{200, 100}, {200, 150}, {200, 200}}
+  };
+
+  int maxXPosition = 315;                                      
+  int maxYPosition = 405;                                      
+  int minXPosition = 0;                                        
+  int minYPosition = 0;                                        
+};
+
 #endif
