@@ -43,6 +43,60 @@ float MotorController::calculateSteps(float delta) {
 }
 
 void MotorController::setPosition(int x, int y) {
+    // Überprüfen, ob die Zielposition innerhalb der Grenzen liegt
+    if (x > config.maxXPosition || x < config.minXPosition || y > config.maxYPosition || y < config.minYPosition) {
+        Serial.println("Position ausserhalb des erlaubten Bereichs!");
+        return; // Verlasse die Funktion
+    }
+
+    // Berechnung der Zielpositionen der Motoren (basierend auf H-Bot-Logik)
+    long motor1Target = calculateSteps(x + y);
+    long motor2Target = calculateSteps(x - y);
+
+    // Zielpositionen der Motoren setzen
+    Motor1.moveTo(motor1Target);
+    Motor2.moveTo(motor2Target);
+
+    Serial.print("Zielposition gesetzt: X = ");
+    Serial.print(x);
+    Serial.print(", Y = ");
+    Serial.println(y);
+}
+
+/*
+void MotorController::setPosition(int x, int y) {
+    // Überprüfen, ob die Zielposition innerhalb der Grenzen liegt
+    if (x > config.maxXPosition || x < config.minXPosition || 
+        y > config.maxYPosition || y < config.minYPosition) {
+        Serial.println("Position ausserhalb des erlaubten Bereichs!");
+        return; // Verlasse die Funktion
+    }
+
+    // Berechnung der Differenzen zur aktuellen Position
+    int deltaX = x - currentXPosition;
+    int deltaY = y - currentYPosition;
+
+    // Zielpositionen der Motoren berechnen (basierend auf H-Bot-Logik)
+    long motor1Target = calculateSteps(deltaX + deltaY);
+    long motor2Target = calculateSteps(deltaX - deltaY);
+
+    // Zielpositionen der Motoren setzen
+    Motor1.moveTo(Motor1.currentPosition() + motor1Target);
+    Motor2.moveTo(Motor2.currentPosition() + motor2Target);
+
+    // Aktualisieren der aktuellen Positionen
+    currentXPosition = x;
+    currentYPosition = y;
+
+    Serial.print("Zielposition gesetzt: X = ");
+    Serial.print(currentXPosition);
+    Serial.print(", Y = ");
+    Serial.println(currentYPosition);
+}
+*/
+
+/*
+void MotorController::setPosition(int x, int y) {
     if (x <= config.maxXPosition && x >= config.minXPosition && y <= config.maxYPosition && y >= config.minYPosition) {
         int deltaX = x - currentXPosition;
         int deltaY = y - currentYPosition;
@@ -62,6 +116,8 @@ void MotorController::setPosition(int x, int y) {
         Serial.println("Position ausserhalb des erlaubten Bereichs!");
     }
 }
+
+*/
 
 int MotorController::determineShortestLane(int col, const int axisLane[2]) const {
     int distance1 = abs(axisLane[0] - col);
@@ -97,8 +153,17 @@ bool MotorController::isInGarage(int row, int col, const int garagePosition[5][2
 // --------------------------------------------------------------------------------
 
 void MotorController::moveToPosition(int x, int y) {
+    // Motoren aktivieren
+    enableMotors();
+
+    // Setze die Zielposition
     setPosition(x, y);
+
+    // Bewegung der Motoren
     Motoren.runSpeedToPosition();
+
+    // Motoren deaktivieren
+    disableMotors();
 }
 
 void MotorController::enableMotors() {
@@ -111,6 +176,91 @@ void MotorController::disableMotors() {
     digitalWrite(motor2EnablePin, HIGH);
 }
 
+void MotorController::homeMotors() {
+    enableMotors();
+
+    // **Homing der Y-Achse**
+    // Zielposition auf maximale X-Position und minimale Y-Position setzen
+    long positions[2];
+    positions[0] = config.maxXPosition; // Maximale X-Position
+    positions[1] = config.minYPosition; // Minimale Y-Position
+
+    // Bewegung starten und warten, bis der Y-Endschalter ausgelöst wird
+    Motoren.moveTo(positions);
+    while (digitalRead(endstopYPin) != LOW) {
+        Motoren.run();
+        Serial.println("Homing Y-Axis...");
+    }
+
+    // Zielposition der Y-Achse auf 0 setzen
+    Motor1.setCurrentPosition(0);
+    Motor2.setCurrentPosition(0);
+
+    // **Homing der X-Achse**
+    // Zielposition auf minimale X-Position und aktuelle Y-Position setzen
+    positions[0] = config.minXPosition; // Minimale X-Position
+    positions[1] = 0; // Aktuelle Y-Position (bereits auf 0 gesetzt)
+
+    // Bewegung starten und warten, bis der X-Endschalter ausgelöst wird
+    Motoren.moveTo(positions);
+    while (digitalRead(endstopXPin) != LOW) {
+        Motoren.run();
+        Serial.println("Homing X-Axis...");
+    }
+
+    // Zielposition der X-Achse auf 0 setzen
+    Motor1.setCurrentPosition(0);
+    Motor2.setCurrentPosition(0);
+
+    // Motoren deaktivieren
+    disableMotors();
+
+    Serial.println("Homing abgeschlossen! System ist nun in der Home-Position.");
+}
+
+/*
+void MotorController::homeMotors() {
+    enableMotors();
+
+    // **Homing der Y-Achse**
+    // Zielposition auf maximale X-Position und minimale Y-Position setzen
+    
+    // Bewegung starten und warten, bis der Y-Endschalter ausgelöst wird
+    while (digitalRead(endstopYPin) != LOW) {
+        Motor1.run();
+        Motor2.run();
+        Serial.println("Homing Y-Axis...");
+    }
+    
+    // Zielposition der Y-Achse auf 0 setzen
+    currentYPosition = config.minYPosition;
+
+    // **Homing der X-Achse**
+    // Zielposition auf minimale X-Position und aktuelle Y-Position setzen
+    setPosition(config.minXPosition, currentYPosition);
+    
+    // Bewegung starten und warten, bis der X-Endschalter ausgelöst wird
+    while (digitalRead(endstopXPin) != LOW) {
+        Motor1.run();
+        Motor2.run();
+        Serial.println("Homing X-Axis...");
+    }
+    
+    // Zielposition der X-Achse auf 0 setzen
+    currentXPosition = config.minXPosition;
+
+    // Motorpositionen zurücksetzen
+    Motor1.setCurrentPosition(0);
+    Motor2.setCurrentPosition(0);
+
+    // Motoren deaktivieren
+    disableMotors();
+
+    Serial.println("Homing abgeschlossen! System ist nun in der Home-Position.");
+}
+*/
+
+/*
 void MotorController::homeMotors() {
     
     // Bewegung zur Home-Position
@@ -129,12 +279,17 @@ void MotorController::homeMotors() {
     Motor1.setCurrentPosition(0);
     Motor2.setCurrentPosition(0);
 }
+*/
 
 // --------------------------------------------------------------------------------
 // Funktion für die Bewegung des Motors je nach Spielzug (Platzierung, Verschieben, Aufräumen)
 // --------------------------------------------------------------------------------
 
 void MotorController::moveStone(Move move) {
+    // Motor aktivieren
+    enableMotors();
+
+    // Konstanten für die Bewegung
     int startdelay = 2000;
     int delayTime = 500;
 
@@ -192,6 +347,8 @@ void MotorController::moveStone(Move move) {
         moveToPosition(move.targetX, move.targetY);
         return;
     }
+    // Motor deaktivieren
+    disableMotors();
 }
 
 // --------------------------------------------------------------------------------
