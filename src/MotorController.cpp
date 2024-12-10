@@ -194,6 +194,15 @@ void MotorController::moveStone(Move move) {
 }
 
 // --------------------------------------------------------------------------------
+// Funktionen für den Elektromagneten
+// --------------------------------------------------------------------------------
+
+void MotorController::electromagnetControl(bool state, bool polarity) {
+    digitalWrite(electromagnetPolarityPin, polarity ? HIGH : LOW);
+    digitalWrite(electromagnetPin, state ? HIGH : LOW);
+}
+
+// --------------------------------------------------------------------------------
 // Setter für die gesamte Konfiguration
 // --------------------------------------------------------------------------------
 

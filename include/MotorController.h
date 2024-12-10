@@ -51,6 +51,9 @@ public:
     void homeMotors();
     void moveStone(Move move);
 
+    // Funktionen für den Elektromagneten
+    void electromagnetControl(bool state, bool polarity);
+
     // Setter für die gesamte Konfiguration
     void setConfig(const MotorConfig& newConfig);
 

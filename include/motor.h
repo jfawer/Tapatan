@@ -126,6 +126,7 @@ Move determineCleanUpMove(int Board[3][3], int BoardPosition[3][3][2], int compu
 }
 
 
+/*
 // ====================================================================================================
 // Funktionen für die Motorsteuerung
 // ====================================================================================================
@@ -212,7 +213,6 @@ void homeMotors(MultiStepper& Motoren, AccelStepper& Motor1, AccelStepper& Motor
   Motor1.setCurrentPosition(0);
   Motor2.setCurrentPosition(0);
 }
-
 
 // ====================================================================================================
 // Funktionen (Logik) für die Motorbewegung
@@ -314,7 +314,6 @@ void moveStone(Move move, int verticalLanePositions[2], int horizontalLanePositi
   }
 }
 
-
 // ====================================================================================================
 // Funktionen für die Elektromagnetsteuerung
 // ====================================================================================================
@@ -325,5 +324,7 @@ void electromagnetControl(int electromagnetPin, int electromagnetPolarityPin, bo
   digitalWrite(electromagnetPolarityPin, polarity);
   digitalWrite(electromagnetPin, state);
 }
+
+*/
 
 #endif

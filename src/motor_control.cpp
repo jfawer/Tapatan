@@ -35,6 +35,16 @@ void setup() {
   delay(3000);
 
   motorController.disableMotors();
+
+  // Elektromagnet testen
+  motorController.electromagnetControl(true, true);
+  delay(3000);
+  motorController.electromagnetControl(false, true);
+  delay(3000);
+  motorController.electromagnetControl(true, false);
+  delay(3000);
+  motorController.electromagnetControl(false, false);
+  delay(3000);
 }
 
 void loop() {
