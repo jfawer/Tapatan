@@ -112,6 +112,7 @@ void MotorController::disableMotors() {
 }
 
 void MotorController::homeMotors() {
+    
     // Bewegung zur Home-Position
     setPosition(config.maxXPosition, config.minYPosition);
     while (digitalRead(endstopYPin) != LOW) {

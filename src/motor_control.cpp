@@ -5,7 +5,7 @@
 // Einbinden der Header-Dateien
 #include "MotorController.h"
 
-MotorController motorController(2, 3, 4, 5, 6, 7, 8, 9, 10, 11);
+MotorController motorController(23, 3, 4, 5, 6, 7, 8, 9, 10, 11);
 
 // Konstanten für die Motorsteuerung
 MotorConfig config;
@@ -21,21 +21,26 @@ void setup() {
   motorController.enableMotors();
   delay(3000);
 
+  /*
   // An einen Punkt fahren
   motorController.moveToPosition(150, 200);
   delay(3000);
+  */
 
   // Motoren Nullen
   motorController.homeMotors();
   delay(3000);
 
+  /*
   // Einen Stein bewegen
   Move move = {20, 50, 140, 200};
   motorController.moveStone(move);
   delay(3000);
+  */
 
   motorController.disableMotors();
 
+  /*
   // Elektromagnet testen
   motorController.electromagnetControl(true, true);
   delay(3000);
@@ -45,6 +50,8 @@ void setup() {
   delay(3000);
   motorController.electromagnetControl(false, false);
   delay(3000);
+
+  */  
 }
 
 void loop() {
