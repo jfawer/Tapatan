@@ -4,8 +4,7 @@ MotorController::MotorController(int m1Step, int m1Dir, int m1Enable, int m2Step
     : motor1StepPin(m1Step), motor1DirPin(m1Dir), motor1EnablePin(m1Enable),
       motor2StepPin(m2Step), motor2DirPin(m2Dir), motor2EnablePin(m2Enable),
       endstopXPin(esX), endstopYPin(esY), electromagnetPin(em), electromagnetPolarityPin(emPolarity),
-      Motor1(AccelStepper::DRIVER, m1Step, m1Dir), Motor2(AccelStepper::DRIVER, m2Step, m2Dir), Motoren(),
-      currentXPosition(0), currentYPosition(0) {
+      Motor1(AccelStepper::DRIVER, m1Step, m1Dir), Motor2(AccelStepper::DRIVER, m2Step, m2Dir), Motoren() {
 }
 
 // --------------------------------------------------------------------------------
@@ -59,62 +58,6 @@ void MotorController::setPosition(int x, int y) {
     long positions[2] = {(int)m1StepsToDo, (int)m2StepsToDo};
     Motoren.moveTo(positions);
 }
-
-/*
-void MotorController::setPosition(int x, int y) {
-    // Überprüfen, ob die Zielposition innerhalb der Grenzen liegt
-    if (x > config.maxXPosition || x < config.minXPosition || 
-        y > config.maxYPosition || y < config.minYPosition) {
-        Serial.println("Position ausserhalb des erlaubten Bereichs!");
-        return; // Verlasse die Funktion
-    }
-
-    // Berechnung der Differenzen zur aktuellen Position
-    int deltaX = x - currentXPosition;
-    int deltaY = y - currentYPosition;
-
-    // Zielpositionen der Motoren berechnen (basierend auf H-Bot-Logik)
-    long motor1Target = calculateSteps(deltaX + deltaY);
-    long motor2Target = calculateSteps(deltaX - deltaY);
-
-    // Zielpositionen der Motoren setzen
-    Motor1.moveTo(Motor1.currentPosition() + motor1Target);
-    Motor2.moveTo(Motor2.currentPosition() + motor2Target);
-
-    // Aktualisieren der aktuellen Positionen
-    currentXPosition = x;
-    currentYPosition = y;
-
-    Serial.print("Zielposition gesetzt: X = ");
-    Serial.print(currentXPosition);
-    Serial.print(", Y = ");
-    Serial.println(currentYPosition);
-}
-*/
-
-/*
-void MotorController::setPosition(int x, int y) {
-    if (x <= config.maxXPosition && x >= config.minXPosition && y <= config.maxYPosition && y >= config.minYPosition) {
-        int deltaX = x - currentXPosition;
-        int deltaY = y - currentYPosition;
-
-        Motor1.setCurrentPosition(0);
-        Motor2.setCurrentPosition(0);
-
-        float m1Steps = calculateSteps(deltaX + deltaY);
-        float m2Steps = calculateSteps(deltaX - deltaY);
-
-        long positions[2] = {static_cast<int>(m1Steps), static_cast<int>(m2Steps)};
-        Motoren.moveTo(positions);
-
-        currentXPosition = x;
-        currentYPosition = y;
-    } else {
-        Serial.println("Position ausserhalb des erlaubten Bereichs!");
-    }
-}
-
-*/
 
 int MotorController::determineShortestLane(int col, const int axisLane[2]) const {
     int distance1 = abs(axisLane[0] - col);
@@ -220,13 +163,15 @@ void MotorController::moveStone(Move move) {
     int delayTime = 500;
 
     // Überprüfen, ob sich die Startposition in einer Garage befindet
-    if (isInGarage(move.startX, move.startY, config.computerGaragePosition) || isInGarage(move.startX, move.startY, config.playerGaragePosition)) {
+    if (isInGarage(move.startX, move.startY, config.computerGaragePosition)) {
         // Bestimmen der Fahrbahnen für die Bewegung
-        int lane = determineShortestLane(move.startY, config.verticalLanePositions);               // Vertikale Fahrbahn
-        int horizontalLane = determineShortestLane(move.targetX, config.horizontalLanePositions);  // Horizontale Fahrbahn
+        int lane = determineShortestLane(move.startY, config.verticalLanePositions);                    // Vertikale Fahrbahn
+        int horizontalLane = determineShortestLane(move.targetX, config.horizontalLanePositions);       // Horizontale Fahrbahn
         
         // Bewegung des Motors
         moveToPosition(move.startX, move.startY);
+        turnElectromagnetOn();                                                                          // Elektromagnet einschalten
+        setElectromagnetPolarityPositive();                                                             // Positive Polarität einstellen
         delay(startdelay);
         moveToPosition(move.startX, config.verticalLanePositions[lane]);
         delay(delayTime);
@@ -235,32 +180,69 @@ void MotorController::moveStone(Move move) {
         moveToPosition(config.horizontalLanePositions[horizontalLane], move.targetY);
         delay(delayTime);
         moveToPosition(move.targetX, move.targetY);
+        delay(delayTime);
+        turnElectromagnetOff();                                                                         // Elektromagnet ausschalten
+        return;
+    }
+
+    // Überprüfen ob sich die Zielposition in einer Garage befindet
+    if (isInGarage(move.targetX, move.targetY, config.computerGaragePosition) || isInGarage(move.targetX, move.targetY, config.playerGaragePosition)) {
+        // Bestimmen der Fahrbahnen für die Bewegung
+        int lane = determineShortestLane(move.targetY, config.verticalLanePositions);                    // Vertikale Fahrbahn
+        int horizontalLane = determineShortestLane(move.startX, config.horizontalLanePositions);         // Horizontale Fahrbahn
+
+        // Bewegung des Motors
+        moveToPosition(move.startX, move.startY);
+
+        if (isInGarage(move.targetX, move.targetY, config.computerGaragePosition)) {
+            turnElectromagnetOn();                                                                      // Elektromagnet einschalten
+            setElectromagnetPolarityPositive();                                                         // Positive Polarität einstellen
+        } else {
+            turnElectromagnetOn();                                                                      // Elektromagnet einschalten
+            setElectromagnetPolarityNegative();                                                         // Negative Polarität einstellen
+        }
+
+        delay(startdelay);
+        moveToPosition(config.horizontalLanePositions[horizontalLane], move.startY);
+        delay(delayTime);
+        moveToPosition(config.horizontalLanePositions[horizontalLane], config.verticalLanePositions[lane]);
+        delay(delayTime);
+        moveToPosition(move.targetX, config.verticalLanePositions[lane]);
+        delay(delayTime);
+        moveToPosition(move.targetX, move.targetY);
+        delay(delayTime);
+        turnElectromagnetOff();                                                                         // Elektromagnet ausschalten
         return;
     }
 
     // Überprüfen, ob sich die Start- und Zielposition auf der gleichen Fahrbahn befinden
     if (isSameLane(move.startX, move.targetX, config.horizontalLanePositions)) {
         // Bestimmen der gemeinsamen Fahrbahn
-        int lane = determineShortestLane(move.startX, config.horizontalLanePositions);              // Gemeinsame Fahrbahn
+        int lane = determineShortestLane(move.startX, config.horizontalLanePositions);                  // Gemeinsame Fahrbahn
 
         // Bewegung des Motors
         moveToPosition(move.startX, move.startY);
+        turnElectromagnetOn();                                                                          // Elektromagnet einschalten
+        setElectromagnetPolarityPositive();                                                             // Positive Polarität einstellen
         delay(startdelay);
         moveToPosition(config.horizontalLanePositions[lane], move.startY);
         delay(delayTime);
         moveToPosition(config.horizontalLanePositions[lane], move.targetY);
         delay(delayTime);
         moveToPosition(move.targetX, move.targetY);
+        turnElectromagnetOff();                                                                         // Elektromagnet ausschalten
         return;
 
     } else {
         // Bestimmen der kürzesten Fahrbahn für Start- und Zielposition
-        int startLane = determineShortestLane(move.startX, config.horizontalLanePositions);          // Startfahrbahn (Horizontale Fahrbahn)
-        int targetLane = determineShortestLane(move.targetX, config.horizontalLanePositions);        // Zielfahrbahn  (Horizontale Fahrbahn)
-        int verticalLane = determineShortestLane(move.targetY, config.verticalLanePositions);        // Vertikale Fahrbahn
+        int startLane = determineShortestLane(move.startX, config.horizontalLanePositions);             // Startfahrbahn (Horizontale Fahrbahn)
+        int targetLane = determineShortestLane(move.targetX, config.horizontalLanePositions);           // Zielfahrbahn  (Horizontale Fahrbahn)
+        int verticalLane = determineShortestLane(move.targetY, config.verticalLanePositions);           // Vertikale Fahrbahn
 
         // Bewegung des Motors
         moveToPosition(move.startX, move.startY);
+        turnElectromagnetOn();                                                                          // Elektromagnet einschalten
+        setElectromagnetPolarityPositive();                                                             // Positive Polarität einstellen
         delay(startdelay);
         moveToPosition(config.horizontalLanePositions[startLane], move.startY);
         delay(delayTime);
@@ -271,6 +253,7 @@ void MotorController::moveStone(Move move) {
         moveToPosition(config.horizontalLanePositions[targetLane], move.targetY);
         delay(delayTime);
         moveToPosition(move.targetX, move.targetY);
+        turnElectromagnetOff();                                                                         // Elektromagnet ausschalten
         return;
     }
     // Motor deaktivieren

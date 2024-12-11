@@ -20,9 +20,6 @@ private:
     AccelStepper Motor2;
     MultiStepper Motoren;
 
-    // Aktuelle Positionen
-    int currentXPosition, currentYPosition;
-
     // Motor-Konfiguration
     MotorConfig config;
 
@@ -59,10 +56,6 @@ public:
 
     // Setter für die gesamte Konfiguration
     void setConfig(const MotorConfig& newConfig);
-
-    // Getter für aktuelle Position
-    int getCurrentXPosition() const { return currentXPosition; }
-    int getCurrentYPosition() const { return currentYPosition; }
 };
 
 #endif

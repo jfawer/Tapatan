@@ -1,5 +1,4 @@
 // Struktur für den Spielzustand und die Felder des Spielfelds
-
 #ifndef STRUCT_H
 #define STRUCT_H
 
@@ -38,10 +37,10 @@ struct BoardField {
 
 // Struktur für die Bewegung des Motors
 struct Move {
-  int startX;                                                                   // Start X-Position des Motors
-  int startY;                                                                   // Start Y-Position des Motors
-  int targetX;                                                                  // Ziel X-Position des Motors
-  int targetY;                                                                  // Ziel Y-Position des Motors
+  int startX;                                                                     // Start X-Position des Motors
+  int startY;                                                                     // Start Y-Position des Motors
+  int targetX;                                                                    // Ziel X-Position des Motors
+  int targetY;                                                                    // Ziel Y-Position des Motors
 };
 
 // Struktur für die Konfiguration der Motorsteuerung

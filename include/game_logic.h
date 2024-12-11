@@ -11,7 +11,6 @@
 #include "struct.h"
 #include "input.h"
 #include "display.h"
-#include "motor.h"
 
 // ====================================================================================================
 // Hilfsfunktionen für die Spiellogik
@@ -43,6 +42,18 @@ BoardField getChangedField(int currentBoard[3][3], int savedBoard[3][3]) {
   return {-1, -1}; // Rückgabe von (-1, -1), wenn kein Feld geändert wurde
 }
 
+// Funktion für das Überlagern zweier Spielfelder (Board und BoardMemory) und speichern des Ergebnisses in einem dritten Spielfeld (BoardOverlay)
+void overlayBoard(int Board[3][3], int BoardMemory[3][3], int BoardOverlay[3][3]) {
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      if (Board[i][j] != 0) {
+        BoardOverlay[i][j] = Board[i][j];
+      } else {
+        BoardOverlay[i][j] = BoardMemory[i][j];
+      }
+    }
+  }
+}
 
 // ====================================================================================================
 // Tic-Tac-Toe: Funktionen für die Spiellogik des Spielers
@@ -530,5 +541,100 @@ void resetGameSettings(GameSettings &gameSettings) {
   gameSettings.difficulty = 0;
 }
 
+
+// ====================================================================================================
+// Funktionen für das Ermitteln der Bewegung des Motors
+// ====================================================================================================
+
+// Funktion für das Ermitteln eines Garagenzustands (belegt oder leer)
+int findGaragestate(int garagestate[4], int value) {  
+  for (int i = 0; i < 4; i++) {
+    if (garagestate[i] == value) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+// Funktion für das Ermitteln der Start und Zielposition der Motorbewegung (Platzierung der Spielsteine)
+Move determineMoveToPlace(int Board[3][3], int BoardMemory[3][3], int garageState[2][5], MotorConfig config) {
+  Move move;
+
+  // Ermitteln der Startposition / Besetzer Stein in der Garage
+  int garagePosition = findGaragestate(garageState[0], 1);
+  move.startX = garageState[1][garagePosition];
+  move.startY = garageState[2][garagePosition];
+
+  // Leeren der Garage
+  garageState[0][garagePosition] = 0;
+  
+  // Ermitteln der Zielposition
+  BoardField targetField = getChangedField(Board, BoardMemory);
+  move.targetX = config.boardPosition[targetField.row][targetField.col][0];
+  move.targetY = config.boardPosition[targetField.row][targetField.col][1];
+
+  return move;
+}
+
+// Funktion für das Ermitteln der Start und Zielposition der Motorbewegung (Verschieben der Spielsteine)
+Move determineMoveToMove(int Board[3][3], int BoardMemory[3][3], MotorConfig config) {
+  Move move;
+  int BoardOverlay[3][3];
+
+  // Überlagern der beiden Boards
+  overlayBoard(Board, BoardMemory, BoardOverlay);
+  
+  // Ermitteln der Startposition
+  BoardField startField = getChangedField(BoardOverlay, BoardMemory);
+  move.startX = config.boardPosition[startField.row][startField.col][0];
+  move.startY = config.boardPosition[startField.row][startField.col][1];
+
+  // Ermitteln der Zielposition
+  BoardField targetField = getChangedField(BoardOverlay, Board);
+  move.targetX = config.boardPosition[targetField.row][targetField.col][0];
+  move.targetY = config.boardPosition[targetField.row][targetField.col][1];
+
+  return move;
+}
+
+// Funktion für das Ermitteln der Start und Zielpostition der Motorbewegung (Aufräumen der Spielsteine)
+Move determineCleanUpMove(int Board[3][3], int garageState[2][5], MotorConfig config) {
+  Move move;
+
+  // Finde die Position eines Spielsteins auf dem Spielfeld
+  BoardField boardField;
+  int stoneType;
+  bool found = false;
+
+  for (int i = 0; i < 3 && !found; i++) {
+    for (int j = 0; j < 3; j++) {
+      if (Board[i][j] != 0) {
+        boardField.row = i;
+        boardField.col = j;
+        stoneType = Board[i][j];
+        found = true;  // Markiere als gefunden
+        break;         // Innere Schleife verlassen
+      }
+    }
+  }
+
+  // Ermitteln der Startposition
+  move.startX = config.boardPosition[boardField.row][boardField.col][0];
+  move.startY = config.boardPosition[boardField.row][boardField.col][1];
+
+  // Ermitteln eines freien Platzes und setzen der Zielposition
+  if (stoneType == Player1) {
+    int garagePosition = findGaragestate(garageState[0], 0);
+    move.targetX = garageState[1][garagePosition];
+    move.targetY = garageState[2][garagePosition];
+    garageState[0][garagePosition] = 1;
+  } else {
+    int garagePosition = findGaragestate(garageState[1], 0);
+    move.targetX = garageState[3][garagePosition];
+    move.targetY = garageState[4][garagePosition];
+    garageState[1][garagePosition] = 1;
+  }
+  return move;
+}
 
 #endif

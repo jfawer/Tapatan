@@ -18,23 +18,23 @@ void setup() {
   motorController.initialize();
   motorController.setConfig(config);
   
-  /*
   delay(2000);
 
   // Motoren Nullen
   motorController.homeMotors();
   delay(3000);
-  
+
+  // Einen Stein bewegen
+  Move move = {80, 100, 260, 350};
+  motorController.moveStone(move);
+  delay(3000);
+
+  /*
   // An einen Punkt fahren
   motorController.moveToPosition(100, 150);
   delay(3000);
-  
-  // Einen Stein bewegen
-  Move move = {20, 50, 140, 200};
-  motorController.moveStone(move);
-  delay(3000);
   */
-
+  
   /*
   motorController.turnElectromagnetOn();
   delay(2000);
