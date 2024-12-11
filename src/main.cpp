@@ -60,7 +60,9 @@ MotorConfig config;                                                             
 // --------------------------------------------------------------------------------
 
 // Pins für die Potentiometer / Eingabesensoren
-const int potPins[] = {A0, A1, A2, A3, A4, A5, A6, A7, A8}; 
+// const int potPins[] = {A1, A2, A3, A4, A5, A6, A7, A8, A9};
+const int potPins[] = {A3, A2, A1, A6, A5, A4, A9, A8, A7}; 
+
 
 // --------------------------------------------------------------------------------
 // Konstanten und Variablen
@@ -81,7 +83,7 @@ int Board [3][3];                                                               
 int BoardMemory [3][3];                                                                                   // Array für das den Spielfeldspeicher (0 = Leeres Feld, 1 = X, 2 = O)
 int ResetBoard[3][3] = {{0,0,0},{0,0,0},{0,0,0}};                                                         // Array für das Zurücksetzen des Spielfelds
 int currentPlayer;                                                                                        // Variable für den Spieler der am Zug ist 1 = Spieler 1, 2 = Spieler 2 / Computer
-int garageState[2][5] = {{1,1,1,1,1},{0,0,0,0,0}};                                                        // Array für die Garagen (0 = Leer, 1 = Belegt)
+int garageState[2][5] = {{1,1,1,1,1},{1,1,1,1,1}};                                                        // Array für die Garagen (0 = Leer, 1 = Belegt) / Computer, Spieler
 
 // Leerer Pin für die Zufallsfunktion
 const int emptyAnalogPin = A10;                                                                           // Pin für den Seed der Zufallsfunktion
@@ -104,10 +106,12 @@ void setup() {
   led.setColor("Blau");                                                                                   // LED Streifen auf blau setzen
   */
 
+  /*
   // Initialisierung des Motorcontrollers
   motorController.initialize();                                                                           // Motorcontroller initialisieren
   motorController.setConfig(config);                                                                      // Konfiguration des Motorcontrollers setzen
   motorController.homeMotors();                                                                           // Motoren in die Home-Position fahren
+  */
 
   /*
   // Initialisierung des LCD-Displays
@@ -141,10 +145,25 @@ void setup() {
 
 void loop() {
 
+  updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
+
+  Serial.println("Board:");
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      Serial.print(Board[i][j]);
+      Serial.print(" ");
+    }
+    Serial.println();
+  }
+  Serial.println("-----------------");
+  delay(1000);
+
+  /*
   // Einen Stein bewegen
   Move move = {80, 100, 260, 350};
   motorController.moveStone(move);
   delay(3000);
+  */
 
   /*
   updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen

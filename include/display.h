@@ -114,7 +114,6 @@ void displayReset(LiquidCrystal_I2C lcd) {
 // Funktionen für die Spielauswahl
 // ====================================================================================================
 
-
 // Funktion zur Anzeige des Auswahlsymbols
 void displaySelectionSymbol(LiquidCrystal_I2C &lcd, int bereich) {                                                                                   
   for (int i = 1; i <= 3; i++) {                                                                                  // Auswahl anzeigen
@@ -236,6 +235,5 @@ void choseGameSettings(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int g
   }
   setupvariable = false;                                                                                          // Encoder deaktivieren
 }
-
 
 #endif

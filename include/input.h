@@ -13,11 +13,11 @@ void updateBoard(int Board[3][3], const int potPins[]) {
     int row = i / 3;                                                                            
     int col = i % 3;
 
-    if (value >= 0 && value <= 350) {                                                           // Überprüfen, in welchem Bereich der Wert liegt
+    if (value >= 0 && value <= 400) {                                                           // Überprüfen, in welchem Bereich der Wert liegt
       Board[row][col] = 1;                                                                      // Wert 1 für Spieler 1
-    } else if (value >= 351 && value <= 700) {    
+    } else if (value >= 401 && value <= 599) {    
       Board[row][col] = 0;                                                                      // Wert 0 für leeres Feld
-    } else if (value >= 701 && value <= 1023) {
+    } else if (value >= 600 && value <= 1023) {
       Board[row][col] = 2;                                                                      // Wert 2 für Spieler 2
     } else {
       Board[row][col] = -1;                                                                     // Wert -1 für Fehler
