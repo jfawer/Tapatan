@@ -52,7 +52,10 @@ public:
     void moveStone(Move move);
 
     // Funktionen für den Elektromagneten
-    void electromagnetControl(bool state, bool polarity);
+    void turnElectromagnetOn();
+    void turnElectromagnetOff();
+    void setElectromagnetPolarityPositive();
+    void setElectromagnetPolarityNegative();
 
     // Setter für die gesamte Konfiguration
     void setConfig(const MotorConfig& newConfig);

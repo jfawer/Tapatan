@@ -22,6 +22,8 @@ void MotorController::initialize() {
     pinMode(motor2EnablePin, OUTPUT);
     pinMode(endstopXPin, INPUT_PULLUP);
     pinMode(endstopYPin, INPUT_PULLUP);
+    pinMode(electromagnetPin, OUTPUT);
+    pinMode(electromagnetPolarityPin, OUTPUT);
 
     // Konfiguration der Motoren
     Motor1.setMaxSpeed(4000.0);
@@ -43,24 +45,19 @@ float MotorController::calculateSteps(float delta) {
 }
 
 void MotorController::setPosition(int x, int y) {
-    // Überprüfen, ob die Zielposition innerhalb der Grenzen liegt
+    // Grenzen überprüfen
     if (x > config.maxXPosition || x < config.minXPosition || y > config.maxYPosition || y < config.minYPosition) {
         Serial.println("Position ausserhalb des erlaubten Bereichs!");
-        return; // Verlasse die Funktion
+        return;
     }
 
-    // Berechnung der Zielpositionen der Motoren (basierend auf H-Bot-Logik)
-    long motor1Target = calculateSteps(x + y);
-    long motor2Target = calculateSteps(x - y);
+    // Schritte berechnen
+    long m1StepsToDo = calculateSteps(-x) + calculateSteps(y);
+    long m2StepsToDo = calculateSteps(-x) - calculateSteps(y);
 
-    // Zielpositionen der Motoren setzen
-    Motor1.moveTo(motor1Target);
-    Motor2.moveTo(motor2Target);
-
-    Serial.print("Zielposition gesetzt: X = ");
-    Serial.print(x);
-    Serial.print(", Y = ");
-    Serial.println(y);
+    // Setze die Schritte für die Motoren
+    long positions[2] = {(int)m1StepsToDo, (int)m2StepsToDo};
+    Motoren.moveTo(positions);
 }
 
 /*
@@ -178,34 +175,26 @@ void MotorController::disableMotors() {
 
 void MotorController::homeMotors() {
     enableMotors();
+    int homingSpeed = 2000;
 
-    // **Homing der Y-Achse**
-    // Zielposition auf maximale X-Position und minimale Y-Position setzen
-    long positions[2];
-    positions[0] = config.maxXPosition; // Maximale X-Position
-    positions[1] = config.minYPosition; // Minimale Y-Position
-
-    // Bewegung starten und warten, bis der Y-Endschalter ausgelöst wird
-    Motoren.moveTo(positions);
+    // **Schritt 1: Y-Endschalter erreichen (diagonale Bewegung)**
     while (digitalRead(endstopYPin) != LOW) {
-        Motoren.run();
-        Serial.println("Homing Y-Axis...");
+        Motor1.setSpeed(-homingSpeed); // Motor 1 gegen den Uhrzeigersinn
+        Motor2.setSpeed(homingSpeed);  // Motor 2 im Uhrzeigersinn
+        Motor1.run();
+        Motor2.run();
     }
 
     // Zielposition der Y-Achse auf 0 setzen
     Motor1.setCurrentPosition(0);
     Motor2.setCurrentPosition(0);
 
-    // **Homing der X-Achse**
-    // Zielposition auf minimale X-Position und aktuelle Y-Position setzen
-    positions[0] = config.minXPosition; // Minimale X-Position
-    positions[1] = 0; // Aktuelle Y-Position (bereits auf 0 gesetzt)
-
-    // Bewegung starten und warten, bis der X-Endschalter ausgelöst wird
-    Motoren.moveTo(positions);
+    // **Schritt 2: X-Endschalter erreichen (lineare Bewegung)**
     while (digitalRead(endstopXPin) != LOW) {
-        Motoren.run();
-        Serial.println("Homing X-Axis...");
+        Motor1.setSpeed(homingSpeed); // Beide Motoren gegen den Uhrzeigersinn
+        Motor2.setSpeed(homingSpeed);
+        Motor1.run();
+        Motor2.run();
     }
 
     // Zielposition der X-Achse auf 0 setzen
@@ -217,69 +206,6 @@ void MotorController::homeMotors() {
 
     Serial.println("Homing abgeschlossen! System ist nun in der Home-Position.");
 }
-
-/*
-void MotorController::homeMotors() {
-    enableMotors();
-
-    // **Homing der Y-Achse**
-    // Zielposition auf maximale X-Position und minimale Y-Position setzen
-    
-    // Bewegung starten und warten, bis der Y-Endschalter ausgelöst wird
-    while (digitalRead(endstopYPin) != LOW) {
-        Motor1.run();
-        Motor2.run();
-        Serial.println("Homing Y-Axis...");
-    }
-    
-    // Zielposition der Y-Achse auf 0 setzen
-    currentYPosition = config.minYPosition;
-
-    // **Homing der X-Achse**
-    // Zielposition auf minimale X-Position und aktuelle Y-Position setzen
-    setPosition(config.minXPosition, currentYPosition);
-    
-    // Bewegung starten und warten, bis der X-Endschalter ausgelöst wird
-    while (digitalRead(endstopXPin) != LOW) {
-        Motor1.run();
-        Motor2.run();
-        Serial.println("Homing X-Axis...");
-    }
-    
-    // Zielposition der X-Achse auf 0 setzen
-    currentXPosition = config.minXPosition;
-
-    // Motorpositionen zurücksetzen
-    Motor1.setCurrentPosition(0);
-    Motor2.setCurrentPosition(0);
-
-    // Motoren deaktivieren
-    disableMotors();
-
-    Serial.println("Homing abgeschlossen! System ist nun in der Home-Position.");
-}
-*/
-
-/*
-void MotorController::homeMotors() {
-    
-    // Bewegung zur Home-Position
-    setPosition(config.maxXPosition, config.minYPosition);
-    while (digitalRead(endstopYPin) != LOW) {
-        Motoren.run();
-    }
-
-    setPosition(config.minXPosition, config.minYPosition);
-    while (digitalRead(endstopXPin) != LOW) {
-        Motoren.run();
-    }
-
-    currentXPosition = config.minXPosition;
-    currentYPosition = config.minYPosition;
-    Motor1.setCurrentPosition(0);
-    Motor2.setCurrentPosition(0);
-}
-*/
 
 // --------------------------------------------------------------------------------
 // Funktion für die Bewegung des Motors je nach Spielzug (Platzierung, Verschieben, Aufräumen)
@@ -355,9 +281,24 @@ void MotorController::moveStone(Move move) {
 // Funktionen für den Elektromagneten
 // --------------------------------------------------------------------------------
 
-void MotorController::electromagnetControl(bool state, bool polarity) {
-    digitalWrite(electromagnetPolarityPin, polarity ? HIGH : LOW);
-    digitalWrite(electromagnetPin, state ? HIGH : LOW);
+// Funktion zum Einschalten des Elektromagneten
+void MotorController::turnElectromagnetOn() {
+    digitalWrite(electromagnetPin, HIGH);                           // Elektromagnet einschalten
+}
+
+// Funktion zum Ausschalten des Elektromagneten
+void MotorController::turnElectromagnetOff() {
+    digitalWrite(electromagnetPin, LOW);                            // Elektromagnet ausschalten
+}
+
+// Funktion für die Positive Polarität des Elektromagneten
+void MotorController::setElectromagnetPolarityPositive() {
+    digitalWrite(electromagnetPolarityPin, HIGH);                   // Positive Polarität einstellen
+}
+
+// Funktion für die Negative Polarität des Elektromagneten
+void MotorController::setElectromagnetPolarityNegative() {
+    digitalWrite(electromagnetPolarityPin, LOW);                    // Negative Polarität einstellen
 }
 
 // --------------------------------------------------------------------------------

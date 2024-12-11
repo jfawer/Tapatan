@@ -13,27 +13,21 @@ MotorConfig config;
 void setup() {
   Serial.begin(9600);
 
+  
   // Initialisierung der Motorsteuerung
   motorController.initialize();
   motorController.setConfig(config);
-
-  // Test der Motorsteuerung
   
-  delay(3000);
-
-  
-  // An einen Punkt fahren
   /*
-  motorController.moveToPosition(150, 200);
-  delay(3000);
-  */
-  
+  delay(2000);
+
   // Motoren Nullen
   motorController.homeMotors();
   delay(3000);
   
-
- /*
+  // An einen Punkt fahren
+  motorController.moveToPosition(100, 150);
+  delay(3000);
   
   // Einen Stein bewegen
   Move move = {20, 50, 140, 200};
@@ -42,20 +36,18 @@ void setup() {
   */
 
   /*
-  // Elektromagnet testen
-  motorController.electromagnetControl(true, true);
-  delay(3000);
-  motorController.electromagnetControl(false, true);
-  delay(3000);
-  motorController.electromagnetControl(true, false);
-  delay(3000);
-  motorController.electromagnetControl(false, false);
-  delay(3000);
+  motorController.turnElectromagnetOn();
+  delay(2000);
+  motorController.turnElectromagnetOff();
+  delay(2000);
+  motorController.setElectromagnetPolarityPositive();
+  delay(2000);
+  motorController.setElectromagnetPolarityNegative();
+  delay(2000);
+  */
 
-  */  
 }
 
 void loop() {
-  Serial.println("Loop");
-  delay(3000);
+
 }
