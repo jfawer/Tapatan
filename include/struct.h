@@ -46,32 +46,32 @@ struct Move {
 // Struktur für die Konfiguration der Motorsteuerung
 struct MotorConfig {
   // Positionen der Fahrbahnen
-  int verticalLanePositions[2] = {75, 225};                                     
-  int horizontalLanePositions[2] = {120, 180};                                 
+  int verticalLanePositions[2] = {50, 320};                                     
+  int horizontalLanePositions[2] = {99, 208};                                 
 
   // Positionen der Computer-Garagen
-  int computerGaragePosition[5][2] = {                                         
-    {20, 50},
-    {80, 50},
-    {140, 50},
-    {200, 50},
-    {260, 50}
+  int computerGaragePosition[5][2] = {
+    {263, 370},
+    {208, 370},
+    {154, 370},
+    {99, 370},
+    {45, 370}
   };
 
   // Positionen der Spieler-Garagen
-  int playerGaragePosition[5][2] = {                           
-    {20, 350},
-    {80, 350},
-    {140, 350},
-    {200, 350},
-    {260, 350}
+  int playerGaragePosition[5][2] = { 
+    {263, 20},
+    {208, 20},
+    {154, 20},
+    {99, 20},
+    {45, 20}
   };
 
   // Positionen der Spielfelder
-  int boardPosition[3][3][2] = {                               
-    {{80, 100}, {80, 150}, {80, 200}},
-    {{140, 100}, {140, 150}, {140, 200}},
-    {{200, 100}, {200, 150}, {200, 200}}
+  int boardPosition[3][3][2] = {              
+    {{243, 290}, {243, 190}, {243, 90}},
+    {{143, 290}, {143, 190}, {143, 90}},
+    {{43, 290}, {43, 190}, {43, 90}}
   };
 
   // Spielfeldbegrenzungen

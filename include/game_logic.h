@@ -562,8 +562,8 @@ Move determineMoveToPlace(int Board[3][3], int BoardMemory[3][3], int garageStat
 
   // Ermitteln der Startposition / Besetzer Stein in der Garage
   int garagePosition = findGaragestate(garageState[0], 1);
-  move.startX = garageState[1][garagePosition];
-  move.startY = garageState[2][garagePosition];
+  move.startX = config.computerGaragePosition[garagePosition][0];
+  move.startY = config.computerGaragePosition[garagePosition][1];
 
   // Leeren der Garage
   garageState[0][garagePosition] = 0;
@@ -572,7 +572,6 @@ Move determineMoveToPlace(int Board[3][3], int BoardMemory[3][3], int garageStat
   BoardField targetField = getChangedField(Board, BoardMemory);
   move.targetX = config.boardPosition[targetField.row][targetField.col][0];
   move.targetY = config.boardPosition[targetField.row][targetField.col][1];
-
   return move;
 }
 

@@ -21,9 +21,9 @@
 // --------------------------------------------------------------------------------
 bool setupvariable;                                                                                       // Variable für das Aktivieren des Encoders
 volatile int rotarySwitchValue = 0;                                                                       // Aktueller Wert des Encoders
-const int rotarySwitchPin1 = 3;                                                                           // Pin für den Rotary-Encoder (CLK)
-const int rotarySwitchPin2 = 2;                                                                           // Pin für den Rotary-Encoder (DT)
-const int gameButtonPin = 4;                                                                              // Pin für den Bestätigungsknopf (SW)
+const int rotarySwitchPin1 = 2;                                                                           // Pin für den Rotary-Encoder (CLK)
+const int rotarySwitchPin2 = 25;                                                                           // Pin für den Rotary-Encoder (DT)
+const int gameButtonPin = 24;                                                                              // Pin für den Bestätigungsknopf (SW)
 
 // Interrupt Service Routine (ISR)
 void handleEncoder() {
@@ -42,7 +42,7 @@ LED led(13, 22, 12);                                                            
 // LCD Display
 // --------------------------------------------------------------------------------
 
-LiquidCrystal_I2C lcd(0x27, 20, 4);                                                                       // Setze die Adresse des LCD-Displays
+LiquidCrystal_I2C lcd(0x27, 20, 21);                                                                      // Setze die Adresse des LCD-Displays
 byte umlautU[8] = { B01010, B00000, B10001, B10001, B10001, B10011, B01101, B00000 };                     // Umlaut ü
 byte umlautO[8] = { B01010, B00000, B01110, B10001, B10001, B10001, B01110, B00000 };                     // Umlaut ö
 byte umlautA[8] = { B01010, B00000, B01110, B00001, B01111, B10001, B01111, B00000 };                     // Umlaut ä
@@ -95,7 +95,6 @@ const int emptyAnalogPin = A10;                                                 
 void setup() {
   Serial.begin(9600);                                                                                     // Serielle Kommunikation starten
   
-  /*
   // Initialisierung der Pins
   pinMode(rotarySwitchPin1, INPUT_PULLUP);                                                                // Pin für den Rotary-Encoder (CLK) als Eingang
   pinMode(rotarySwitchPin2, INPUT_PULLUP);                                                                // Pin für den Rotary-Encoder (DT) als Eingang
@@ -104,16 +103,7 @@ void setup() {
   // Initialisierung des LED Streifens
   led.begin();                                                                                            // LED Streifen initialisieren
   led.setColor("Blau");                                                                                   // LED Streifen auf blau setzen
-  */
 
-  /*
-  // Initialisierung des Motorcontrollers
-  motorController.initialize();                                                                           // Motorcontroller initialisieren
-  motorController.setConfig(config);                                                                      // Konfiguration des Motorcontrollers setzen
-  motorController.homeMotors();                                                                           // Motoren in die Home-Position fahren
-  */
-
-  /*
   // Initialisierung des LCD-Displays
   lcd.init();                                                                                             // LCD initialisieren
   lcd.createChar(0, umlautU);                                                                             // Umlaut Ü erstellen
@@ -123,10 +113,16 @@ void setup() {
   displayStart(lcd);                                                                                      // Startbildschirm anzeigen
   delay(2000);
 
+  // Initialisierung des Motorcontrollers
+  motorController.initialize();                                                                           // Motorcontroller initialisieren
+  motorController.setConfig(config);                                                                      // Konfiguration des Motorcontrollers setzen
+  motorController.homeMotors();                                                                           // Motoren in die Home-Position fahren
+
   // Initialisierung des Spiels
   setupvariable = false;                                                                                  // Setupvariable auf false setzen
   attachInterrupt(digitalPinToInterrupt(rotarySwitchPin1), handleEncoder, CHANGE);                        // Interrupt für den Rotary-Encoder einrichten
   randomSeed(analogRead(emptyAnalogPin));                                                                 // Seed für die Zufallsfunktion
+
 
   // Initialisierung des Spielfelds
   updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
@@ -136,6 +132,12 @@ void setup() {
     resetGameSettings(gameSettings);                                                                      // Spieleinstellungen zurücksetzen
     copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
   }
+  
+
+  /*
+  Move move = {45, 20, 143, 190};                                                                         // Spielzug
+  motorController.moveStone(move);                                                                        // Spielstein bewegen
+  delay(2000);
   */
 }
 
@@ -144,9 +146,19 @@ void setup() {
 // --------------------------------------------------------------------------------
 
 void loop() {
+  /*
+  motorController.setElectromagnetPolarityNegative();                                                     // Elektromagnetpolarität auf negativ setzen
+  motorController.turnElectromagnetOn();                                                                  // Elektromagnet einschalten
+  Serial.println("Elektromagnet eingeschaltet");
+  delay(5000);
+  motorController.turnElectromagnetOff();                                                                 // Elektromagnet ausschalten
+  Serial.println("Elektromagnet ausgeschaltet");
+  delay(5000);
+  */
 
+  /*
+  // Sensorwerte auslesen
   updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
-
   Serial.println("Board:");
   for (int i = 0; i < 3; i++) {
     for (int j = 0; j < 3; j++) {
@@ -157,15 +169,26 @@ void loop() {
   }
   Serial.println("-----------------");
   delay(1000);
-
+  */
   /*
-  // Einen Stein bewegen
-  Move move = {80, 100, 260, 350};
-  motorController.moveStone(move);
-  delay(3000);
+  // Serielle Eingabe einer X- und Y-Position
+  int x, y;
+  Serial.println("X-Position:");
+  while (Serial.available() == 0) {}
+  x = Serial.parseInt();
+  Serial.println("Y-Position:");
+  while (Serial.available() == 0) {}
+  y = Serial.parseInt();
+  Serial.print("X: ");
+  Serial.print(x);
+  Serial.print(" Y: ");
+  Serial.println(y);
+
+  // Motorsteuerung
+  motorController.moveToPosition(x, y);
+  delay(2000);
   */
 
-  /*
   updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
   if (isBoardEqual(Board, ResetBoard) && gameSettings.game == 0) {                                        // Überprüfen, ob das Spielfeld in der Ausgangsposition ist und kein Spiel ausgewählt wurde
     // Spiel auswählen
@@ -176,7 +199,7 @@ void loop() {
     // Spiel starten
     switch (gameSettings.game) {                                                                          // Auswahl des Spiels
       case TicTacToe:
-        playTicTacToe(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);                     // Spiel Tic Tac Toe starten
+        playTicTacToe(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, motorController, garageState, config); // Spiel Tic Tac Toe starten
         delay(5000);
         break;
       case Tapatan:
@@ -190,5 +213,4 @@ void loop() {
     resetGameSettings(gameSettings);                                                                      // Spieleinstellungen zurücksetzen
     copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
   }
-  */
 }

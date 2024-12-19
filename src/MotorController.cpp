@@ -146,8 +146,6 @@ void MotorController::homeMotors() {
 
     // Motoren deaktivieren
     disableMotors();
-
-    Serial.println("Homing abgeschlossen! System ist nun in der Home-Position.");
 }
 
 // --------------------------------------------------------------------------------
@@ -160,18 +158,27 @@ void MotorController::moveStone(Move move) {
 
     // Konstanten für die Bewegung
     int startdelay = 2000;
-    int delayTime = 500;
+    int delayTime = 2000;
 
     // Überprüfen, ob sich die Startposition in einer Garage befindet
-    if (isInGarage(move.startX, move.startY, config.computerGaragePosition)) {
+    if (isInGarage(move.startX, move.startY, config.computerGaragePosition) || isInGarage(move.startX, move.startY, config.playerGaragePosition)) {
         // Bestimmen der Fahrbahnen für die Bewegung
         int lane = determineShortestLane(move.startY, config.verticalLanePositions);                    // Vertikale Fahrbahn
+        Serial.println(lane);
+        Serial.println(config.verticalLanePositions[lane]);
         int horizontalLane = determineShortestLane(move.targetX, config.horizontalLanePositions);       // Horizontale Fahrbahn
         
         // Bewegung des Motors
         moveToPosition(move.startX, move.startY);
-        turnElectromagnetOn();                                                                          // Elektromagnet einschalten
-        setElectromagnetPolarityPositive();                                                             // Positive Polarität einstellen
+
+        if (isInGarage(move.startX, move.startY, config.computerGaragePosition)) {
+            turnElectromagnetOn();                                                                      // Elektromagnet einschalten
+            setElectromagnetPolarityNegative();                                                         // Positive Polarität einstellen
+        } else {
+            turnElectromagnetOn();                                                                      // Elektromagnet einschalten
+            setElectromagnetPolarityPositive();                                                         // Negative Polarität einstellen
+        }
+
         delay(startdelay);
         moveToPosition(move.startX, config.verticalLanePositions[lane]);
         delay(delayTime);
@@ -182,24 +189,38 @@ void MotorController::moveStone(Move move) {
         moveToPosition(move.targetX, move.targetY);
         delay(delayTime);
         turnElectromagnetOff();                                                                         // Elektromagnet ausschalten
+        
+        if (isInGarage(move.startX, move.startY, config.computerGaragePosition)) {
+            setElectromagnetPolarityPositive();                                                         // Negative Polarität einstellen
+        } else {
+            setElectromagnetPolarityNegative();                                                         // Positive Polarität einstellen
+        }
+
+        // Beweg zur Garage zurück
+        /*
+        moveToPosition(config.horizontalLanePositions[horizontalLane], move.targetY);
+        moveToPosition(config.horizontalLanePositions[horizontalLane], config.verticalLanePositions[lane]);
+        moveToPosition(move.startX, config.verticalLanePositions[lane]);
+        */
+        moveToPosition(move.startX, move.startY);        
         return;
     }
 
     // Überprüfen ob sich die Zielposition in einer Garage befindet
     if (isInGarage(move.targetX, move.targetY, config.computerGaragePosition) || isInGarage(move.targetX, move.targetY, config.playerGaragePosition)) {
         // Bestimmen der Fahrbahnen für die Bewegung
-        int lane = determineShortestLane(move.targetY, config.verticalLanePositions);                    // Vertikale Fahrbahn
-        int horizontalLane = determineShortestLane(move.startX, config.horizontalLanePositions);         // Horizontale Fahrbahn
+        int lane = determineShortestLane(move.targetY, config.verticalLanePositions);                   // Vertikale Fahrbahn
+        int horizontalLane = determineShortestLane(move.startX, config.horizontalLanePositions);        // Horizontale Fahrbahn
 
         // Bewegung des Motors
         moveToPosition(move.startX, move.startY);
 
-        if (isInGarage(move.targetX, move.targetY, config.computerGaragePosition)) {
+        if (isInGarage(move.startX, move.startY, config.computerGaragePosition)) {
             turnElectromagnetOn();                                                                      // Elektromagnet einschalten
-            setElectromagnetPolarityPositive();                                                         // Positive Polarität einstellen
+            setElectromagnetPolarityNegative();                                                         // Positive Polarität einstellen
         } else {
             turnElectromagnetOn();                                                                      // Elektromagnet einschalten
-            setElectromagnetPolarityNegative();                                                         // Negative Polarität einstellen
+            setElectromagnetPolarityPositive();                                                         // Negative Polarität einstellen
         }
 
         delay(startdelay);
@@ -223,7 +244,7 @@ void MotorController::moveStone(Move move) {
         // Bewegung des Motors
         moveToPosition(move.startX, move.startY);
         turnElectromagnetOn();                                                                          // Elektromagnet einschalten
-        setElectromagnetPolarityPositive();                                                             // Positive Polarität einstellen
+        setElectromagnetPolarityNegative();                                                             // Negative Polarität einstellen
         delay(startdelay);
         moveToPosition(config.horizontalLanePositions[lane], move.startY);
         delay(delayTime);
@@ -242,7 +263,7 @@ void MotorController::moveStone(Move move) {
         // Bewegung des Motors
         moveToPosition(move.startX, move.startY);
         turnElectromagnetOn();                                                                          // Elektromagnet einschalten
-        setElectromagnetPolarityPositive();                                                             // Positive Polarität einstellen
+        setElectromagnetPolarityNegative();                                                             // Negative Polarität einstellen
         delay(startdelay);
         moveToPosition(config.horizontalLanePositions[startLane], move.startY);
         delay(delayTime);
