@@ -522,27 +522,6 @@ void TapatanMakeBestMove(int Board[3][3]) {
 
 
 // ====================================================================================================
-// Funktionen für das Zurücksetzen der Spieleinstellungen / des Spielfelds
-// ====================================================================================================
-
-// Funktion zum Warten auf das Zurücksetzen des Spielfelds
-void awaitBoardReset (int Board[3][3], const int potPins[]) {
-  int ResetBoard[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
-  while (!isBoardEqual(Board, ResetBoard)) {
-    updateBoard(Board, potPins);
-    delay(100);
-  }
-}
-
-// Funktion zum resetten der Spieleinstellungen / GameSettings
-void resetGameSettings(GameSettings &gameSettings) {
-  gameSettings.game = 0;
-  gameSettings.mode = 0;
-  gameSettings.difficulty = 0;
-}
-
-
-// ====================================================================================================
 // Funktionen für das Ermitteln der Bewegung des Motors
 // ====================================================================================================
 
@@ -623,17 +602,58 @@ Move determineCleanUpMove(int Board[3][3], int garageState[2][5], MotorConfig co
 
   // Ermitteln eines freien Platzes und setzen der Zielposition
   if (stoneType == Player1) {
-    int garagePosition = findGaragestate(garageState[0], 0);
-    move.targetX = garageState[1][garagePosition];
-    move.targetY = garageState[2][garagePosition];
-    garageState[0][garagePosition] = 1;
-  } else {
+
+    // Ermitteln der Garageposition
     int garagePosition = findGaragestate(garageState[1], 0);
-    move.targetX = garageState[3][garagePosition];
-    move.targetY = garageState[4][garagePosition];
     garageState[1][garagePosition] = 1;
+
+    // Setzen der Zielposition
+    move.targetX = config.playerGaragePosition[garagePosition][0];
+    move.targetY = config.playerGaragePosition[garagePosition][1];
+  } else {
+
+    // Ermitteln der Garageposition
+    int garagePosition = findGaragestate(garageState[0], 0);
+    garageState[0][garagePosition] = 1;
+
+    // Setzen der Zielposition
+    move.targetX = config.computerGaragePosition[garagePosition][0];
+    move.targetY = config.computerGaragePosition[garagePosition][1];
   }
   return move;
+}
+
+
+// ====================================================================================================
+// Funktionen für das Zurücksetzen der Spieleinstellungen / des Spielfelds
+// ====================================================================================================
+
+// Funktion zum Warten auf das Zurücksetzen des Spielfelds
+void awaitBoardReset (int Board[3][3], const int potPins[]) {
+  int ResetBoard[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
+  while (!isBoardEqual(Board, ResetBoard)) {
+    updateBoard(Board, potPins);
+    delay(100);
+  }
+}
+
+// Funktion zum Warten auf das Zurücksetzen des Spielfelds
+void cleanBoard (int Board[3][3], const int potPins[], MotorController &motorController, int garageState[2][5], MotorConfig config) {
+  int ResetBoard[3][3] = {{0,0,0},{0,0,0},{0,0,0}};
+  while (!isBoardEqual(Board, ResetBoard)) {
+    // Stein aufräumen
+    Move move = determineCleanUpMove(Board, garageState, config);
+    motorController.moveStone(move);
+    updateBoard(Board, potPins);
+    delay(100);
+  }
+}
+
+// Funktion zum resetten der Spieleinstellungen / GameSettings
+void resetGameSettings(GameSettings &gameSettings) {
+  gameSettings.game = 0;
+  gameSettings.mode = 0;
+  gameSettings.difficulty = 0;
 }
 
 #endif

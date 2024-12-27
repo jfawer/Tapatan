@@ -116,13 +116,12 @@ void setup() {
   // Initialisierung des Motorcontrollers
   motorController.initialize();                                                                           // Motorcontroller initialisieren
   motorController.setConfig(config);                                                                      // Konfiguration des Motorcontrollers setzen
-  motorController.homeMotors();                                                                           // Motoren in die Home-Position fahren
+  // motorController.homeMotors();                                                                           // Motoren in die Home-Position fahren
 
   // Initialisierung des Spiels
   setupvariable = false;                                                                                  // Setupvariable auf false setzen
   attachInterrupt(digitalPinToInterrupt(rotarySwitchPin1), handleEncoder, CHANGE);                        // Interrupt für den Rotary-Encoder einrichten
   randomSeed(analogRead(emptyAnalogPin));                                                                 // Seed für die Zufallsfunktion
-
 
   // Initialisierung des Spielfelds
   updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
@@ -132,10 +131,8 @@ void setup() {
     resetGameSettings(gameSettings);                                                                      // Spieleinstellungen zurücksetzen
     copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
   }
-  
-
   /*
-  Move move = {45, 20, 143, 190};                                                                         // Spielzug
+  Move move = {263, 370, 150, 200};                                                                         // Spielzug
   motorController.moveStone(move);                                                                        // Spielstein bewegen
   delay(2000);
   */
@@ -155,7 +152,7 @@ void loop() {
   Serial.println("Elektromagnet ausgeschaltet");
   delay(5000);
   */
-
+  
   /*
   // Sensorwerte auslesen
   updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
@@ -168,9 +165,9 @@ void loop() {
     Serial.println();
   }
   Serial.println("-----------------");
-  delay(1000);
-  */
-  /*
+  delay(200);
+
+
   // Serielle Eingabe einer X- und Y-Position
   int x, y;
   Serial.println("X-Position:");
@@ -209,7 +206,22 @@ void loop() {
     }
   } else {
     displayReset(lcd);                                                                                    // Anzeige zum Zurücksetzen des Spielfelds
+    cleanBoard(Board, potPins, motorController, garageState, config);                                     // Spielfeld reinigen
     awaitBoardReset(Board, potPins);                                                                      // Warten auf das Zurücksetzen des Spielfelds
+
+    Serial.print("Player Garagen:");
+    for (int i = 0; i < 5; i++) {
+      Serial.print(garageState[0][i]);
+      Serial.print(" ");
+    }
+    Serial.println();
+    Serial.print("Computer Garagen:");
+    for (int i = 0; i < 5; i++) {
+      Serial.print(garageState[1][i]);
+      Serial.print(" ");
+    }
+    Serial.println();
+
     resetGameSettings(gameSettings);                                                                      // Spieleinstellungen zurücksetzen
     copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
   }

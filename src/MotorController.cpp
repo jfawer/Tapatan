@@ -157,15 +157,13 @@ void MotorController::moveStone(Move move) {
     enableMotors();
 
     // Konstanten für die Bewegung
-    int startdelay = 2000;
-    int delayTime = 2000;
+    int startdelay = 4000;
+    int delayTime = 500;
 
     // Überprüfen, ob sich die Startposition in einer Garage befindet
     if (isInGarage(move.startX, move.startY, config.computerGaragePosition) || isInGarage(move.startX, move.startY, config.playerGaragePosition)) {
         // Bestimmen der Fahrbahnen für die Bewegung
         int lane = determineShortestLane(move.startY, config.verticalLanePositions);                    // Vertikale Fahrbahn
-        Serial.println(lane);
-        Serial.println(config.verticalLanePositions[lane]);
         int horizontalLane = determineShortestLane(move.targetX, config.horizontalLanePositions);       // Horizontale Fahrbahn
         
         // Bewegung des Motors
@@ -197,11 +195,9 @@ void MotorController::moveStone(Move move) {
         }
 
         // Beweg zur Garage zurück
-        /*
         moveToPosition(config.horizontalLanePositions[horizontalLane], move.targetY);
         moveToPosition(config.horizontalLanePositions[horizontalLane], config.verticalLanePositions[lane]);
         moveToPosition(move.startX, config.verticalLanePositions[lane]);
-        */
         moveToPosition(move.startX, move.startY);        
         return;
     }
