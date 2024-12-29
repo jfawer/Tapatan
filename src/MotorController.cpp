@@ -351,6 +351,7 @@ void MotorController::turnElectromagnetOn() {
 // Funktion zum Ausschalten des Elektromagneten
 void MotorController::turnElectromagnetOff() {
     digitalWrite(electromagnetPin, LOW);                            // Elektromagnet ausschalten
+    delay(2000);                                                    // Wartezeit für das Ausschalten
 }
 
 // Funktion für die Positive Polarität des Elektromagneten
