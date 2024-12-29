@@ -36,22 +36,6 @@ void TicTacToePlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
         garageState[0][garagePosition] = 0;                                                                             // Garage leeren
       }
 
-      Serial.print("Spieler 1: Garage: ");
-      for (int i = 0; i < 5; i++) {
-        Serial.print(garageState[1][i]);
-        Serial.print(" ");
-      }
-      Serial.println();
-      Serial.print("Spieler 2: Garage: ");
-      for (int i = 0; i < 5; i++) {
-        Serial.print(garageState[0][i]);
-        Serial.print(" ");
-      }
-      Serial.println();
-
-
-
-      
       turnCount++;                                                                                                    // Zähler für die Spielzüge erhöhen
 
       int evaluation = evaluateBoard(Board);                                                                          // Bewertung des Spielfelds
@@ -108,15 +92,6 @@ void TicTacToePlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings
       // Stein bewegen und platzieren
       displayGameScreen(lcd, gameSettings, BoardDisplay, currentPlayer);                                              // Spielfeld anzeigen
       Move move = determineMoveToPlace(Board, BoardDisplay, garageState, config);                                     // Bewegung des Motors bestimmen
-      Serial.println("Computerzug:");
-      Serial.print("Start: ");
-      Serial.print(move.startX);
-      Serial.print(" ");
-      Serial.print(move.startY);
-      Serial.print(" Ziel: ");
-      Serial.print(move.targetX);
-      Serial.print(" ");
-      Serial.println(move.targetY);
       motorController.moveStone(move);                                                                                // Spielstein platzieren
       delay(2000);
       awaitBoardIsEqual(Board, BoardDisplay, potPins);                                                                // Warten, bis der Computerzug gemacht wurde

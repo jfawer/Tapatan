@@ -107,6 +107,14 @@ bool isBoardEqual(int currentBoard[3][3], int savedBoard[3][3]) {
 void awaitBoardIsEqual(int currentBoard[3][3], int savedBoard[3][3], const int potPins[]) {
   while (!isBoardEqual(currentBoard, savedBoard)) {
     updateBoard(currentBoard, potPins);
+    Serial.println("Board: ");
+    for (int i = 0; i < 3; i++) {
+      for (int j = 0; j < 3; j++) {
+        Serial.print(currentBoard[i][j]);
+        Serial.print(" ");
+      }
+      Serial.println();
+    }
     delay(100);
   }
 }
@@ -526,8 +534,8 @@ void TapatanMakeBestMove(int Board[3][3]) {
 // ====================================================================================================
 
 // Funktion für das Ermitteln eines Garagenzustands (belegt oder leer)
-int findGaragestate(int garagestate[4], int value) {  
-  for (int i = 0; i < 4; i++) {
+int findGaragestate(int garagestate[5], int value) {  
+  for (int i = 0; i <= 4; i++) {
     if (garagestate[i] == value) {
       return i;
     }
@@ -644,6 +652,7 @@ void cleanBoard (int Board[3][3], const int potPins[], MotorController &motorCon
     // Stein aufräumen
     Move move = determineCleanUpMove(Board, garageState, config);
     motorController.moveStone(move);
+    delay(2000);
     updateBoard(Board, potPins);
     delay(100);
   }

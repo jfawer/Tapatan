@@ -25,9 +25,9 @@ void MotorController::initialize() {
     pinMode(electromagnetPolarityPin, OUTPUT);
 
     // Konfiguration der Motoren
-    Motor1.setMaxSpeed(4000.0);
+    Motor1.setMaxSpeed(2000.0);
     Motor1.setAcceleration(2000.0);
-    Motor2.setMaxSpeed(4000.0);
+    Motor2.setMaxSpeed(2000.0);
     Motor2.setAcceleration(2000.0);
 
     // Motoren zum MultiStepper hinzufügen
@@ -157,8 +157,11 @@ void MotorController::moveStone(Move move) {
     enableMotors();
 
     // Konstanten für die Bewegung
-    int startdelay = 4000;
-    int delayTime = 500;
+    int delayTime = 100;
+    float speedSlow = 1000.0;
+    float speedFast = 2000.0;
+    float accelerationSlow = 500.0;
+    float accelerationFast = 2000.0;
 
     // Überprüfen, ob sich die Startposition in einer Garage befindet
     if (isInGarage(move.startX, move.startY, config.computerGaragePosition) || isInGarage(move.startX, move.startY, config.playerGaragePosition)) {
@@ -166,9 +169,16 @@ void MotorController::moveStone(Move move) {
         int lane = determineShortestLane(move.startY, config.verticalLanePositions);                    // Vertikale Fahrbahn
         int horizontalLane = determineShortestLane(move.targetX, config.horizontalLanePositions);       // Horizontale Fahrbahn
         
-        // Bewegung des Motors
+        // Setzen der Geschwindigkeit und Beschleunigung
+        Motor1.setMaxSpeed(speedFast);
+        Motor1.setAcceleration(accelerationFast);
+        Motor2.setMaxSpeed(speedFast);
+        Motor2.setAcceleration(accelerationFast);
+
+        // Bewegung zur Startposition
         moveToPosition(move.startX, move.startY);
 
+        // Elektromagnet einschalten und Polarität einstellen
         if (isInGarage(move.startX, move.startY, config.computerGaragePosition)) {
             turnElectromagnetOn();                                                                      // Elektromagnet einschalten
             setElectromagnetPolarityNegative();                                                         // Positive Polarität einstellen
@@ -177,7 +187,13 @@ void MotorController::moveStone(Move move) {
             setElectromagnetPolarityPositive();                                                         // Negative Polarität einstellen
         }
 
-        delay(startdelay);
+        // Geschwindigkeit und Beschleunigung einstellen
+        Motor1.setMaxSpeed(speedSlow);
+        Motor1.setAcceleration(accelerationSlow);
+        Motor2.setMaxSpeed(speedSlow);
+        Motor2.setAcceleration(accelerationSlow);
+
+        // Bewegung des Steins
         moveToPosition(move.startX, config.verticalLanePositions[lane]);
         delay(delayTime);
         moveToPosition(config.horizontalLanePositions[horizontalLane], config.verticalLanePositions[lane]);
@@ -186,18 +202,24 @@ void MotorController::moveStone(Move move) {
         delay(delayTime);
         moveToPosition(move.targetX, move.targetY);
         delay(delayTime);
-        turnElectromagnetOff();                                                                         // Elektromagnet ausschalten
         
+        // Elektromanget ausschalten und Polarität wechseln
         if (isInGarage(move.startX, move.startY, config.computerGaragePosition)) {
+            turnElectromagnetOff();                                                                     // Elektromagnet ausschalten
             setElectromagnetPolarityPositive();                                                         // Negative Polarität einstellen
         } else {
+            turnElectromagnetOff();                                                                     // Elektromagnet ausschalten
             setElectromagnetPolarityNegative();                                                         // Positive Polarität einstellen
         }
+        delay(500);
 
-        // Beweg zur Garage zurück
-        moveToPosition(config.horizontalLanePositions[horizontalLane], move.targetY);
-        moveToPosition(config.horizontalLanePositions[horizontalLane], config.verticalLanePositions[lane]);
-        moveToPosition(move.startX, config.verticalLanePositions[lane]);
+        // Geschwindigkeit und Beschleunigung einstellen
+        Motor1.setMaxSpeed(speedFast);
+        Motor1.setAcceleration(accelerationFast);
+        Motor2.setMaxSpeed(speedFast);
+        Motor2.setAcceleration(accelerationFast);
+
+        // Bewege zur Garage zurück
         moveToPosition(move.startX, move.startY);        
         return;
     }
@@ -208,18 +230,31 @@ void MotorController::moveStone(Move move) {
         int lane = determineShortestLane(move.targetY, config.verticalLanePositions);                   // Vertikale Fahrbahn
         int horizontalLane = determineShortestLane(move.startX, config.horizontalLanePositions);        // Horizontale Fahrbahn
 
-        // Bewegung des Motors
-        moveToPosition(move.startX, move.startY);
+        // Setzen der Geschwindigkeit und Beschleunigung
+        Motor1.setMaxSpeed(speedFast);
+        Motor1.setAcceleration(accelerationFast);
+        Motor2.setMaxSpeed(speedFast);
+        Motor2.setAcceleration(accelerationFast);
 
-        if (isInGarage(move.startX, move.startY, config.computerGaragePosition)) {
-            turnElectromagnetOn();                                                                      // Elektromagnet einschalten
+        // Polarität des Elektromagneten einstellen
+        if (isInGarage(move.targetX, move.targetY, config.computerGaragePosition)) {
             setElectromagnetPolarityNegative();                                                         // Positive Polarität einstellen
         } else {
-            turnElectromagnetOn();                                                                      // Elektromagnet einschalten
             setElectromagnetPolarityPositive();                                                         // Negative Polarität einstellen
         }
 
-        delay(startdelay);
+        // Bewegung zur Startposition
+        moveToPosition(move.startX, move.startY);
+
+        // Elektromagnet einschalten
+        turnElectromagnetOn();
+
+        // Geschwindigkeit und Beschleunigung einstellen
+        Motor1.setMaxSpeed(speedSlow);
+        Motor1.setAcceleration(accelerationSlow);
+        Motor2.setMaxSpeed(speedSlow);
+        Motor2.setAcceleration(accelerationSlow);
+
         moveToPosition(config.horizontalLanePositions[horizontalLane], move.startY);
         delay(delayTime);
         moveToPosition(config.horizontalLanePositions[horizontalLane], config.verticalLanePositions[lane]);
@@ -237,11 +272,24 @@ void MotorController::moveStone(Move move) {
         // Bestimmen der gemeinsamen Fahrbahn
         int lane = determineShortestLane(move.startX, config.horizontalLanePositions);                  // Gemeinsame Fahrbahn
 
-        // Bewegung des Motors
+        // Setzen der Geschwindigkeit und Beschleunigung
+        Motor1.setMaxSpeed(speedFast);
+        Motor1.setAcceleration(accelerationFast);
+        Motor2.setMaxSpeed(speedFast);
+        Motor2.setAcceleration(accelerationFast);
+
+        // Bewegung zur Startposition
         moveToPosition(move.startX, move.startY);
+
         turnElectromagnetOn();                                                                          // Elektromagnet einschalten
         setElectromagnetPolarityNegative();                                                             // Negative Polarität einstellen
-        delay(startdelay);
+
+        // Geschwindigkeit und Beschleunigung einstellen
+        Motor1.setMaxSpeed(speedSlow);
+        Motor1.setAcceleration(accelerationSlow);
+        Motor2.setMaxSpeed(speedSlow);
+        Motor2.setAcceleration(accelerationSlow);
+
         moveToPosition(config.horizontalLanePositions[lane], move.startY);
         delay(delayTime);
         moveToPosition(config.horizontalLanePositions[lane], move.targetY);
@@ -256,11 +304,24 @@ void MotorController::moveStone(Move move) {
         int targetLane = determineShortestLane(move.targetX, config.horizontalLanePositions);           // Zielfahrbahn  (Horizontale Fahrbahn)
         int verticalLane = determineShortestLane(move.targetY, config.verticalLanePositions);           // Vertikale Fahrbahn
 
-        // Bewegung des Motors
+        // Setzen der Geschwindigkeit und Beschleunigung
+        Motor1.setMaxSpeed(speedFast);
+        Motor1.setAcceleration(accelerationFast);
+        Motor2.setMaxSpeed(speedFast);
+        Motor2.setAcceleration(accelerationFast);
+
+        // Bewegung zur Startposition
         moveToPosition(move.startX, move.startY);
+
         turnElectromagnetOn();                                                                          // Elektromagnet einschalten
         setElectromagnetPolarityNegative();                                                             // Negative Polarität einstellen
-        delay(startdelay);
+        
+        // Geschwindigkeit und Beschleunigung einstellen
+        Motor1.setMaxSpeed(speedSlow);
+        Motor1.setAcceleration(accelerationSlow);
+        Motor2.setMaxSpeed(speedSlow);
+        Motor2.setAcceleration(accelerationSlow);
+
         moveToPosition(config.horizontalLanePositions[startLane], move.startY);
         delay(delayTime);
         moveToPosition(config.horizontalLanePositions[startLane], config.verticalLanePositions[verticalLane]);
@@ -284,6 +345,7 @@ void MotorController::moveStone(Move move) {
 // Funktion zum Einschalten des Elektromagneten
 void MotorController::turnElectromagnetOn() {
     digitalWrite(electromagnetPin, HIGH);                           // Elektromagnet einschalten
+    delay(2000);                                                    // Wartezeit für das Einschalten
 }
 
 // Funktion zum Ausschalten des Elektromagneten
