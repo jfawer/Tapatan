@@ -1,9 +1,19 @@
 # Tapatan
 
 ## Inhaltsverzeichnis
+- [Über das Projekt](#über-das-projekt)
+- [Ziele](#ziele)
+- [Verwendung / Anleitung](#verwendung)
+- [Technische Umsetzung](#technische-umsetzung)
+- [Mitwirkende](#mitwirkende)
+- [Kontakt](#kontakt)
+
+<a name="über-das-projekt"/>
 
 ## Über das Projekt
 Im Rahmen des Projekts im 5. Semester des trinationalen Studiengangs Mechatronik bestand unsere Aufgabe darin, ein bestehendes Projekt unserer Vorgänger zu analysieren und zu verbessern. Dabei haben wir die Spiele Tapatan und Tic-Tac-Toe mechatronisch umgesetzt.
+
+<a name="ziele"/>
 
 ## Ziele
 Unser Ziel war es, den bestehenden Programmcode und die Mechanik grundlegend zu überarbeiten und zu optimieren. Die wichtigsten Änderungen und Erweiterungen umfassen:
@@ -24,6 +34,8 @@ Unser Ziel war es, den bestehenden Programmcode und die Mechanik grundlegend zu 
 ### Elektronik-Ziele:
 - Entwicklung einer Platine (PCB), um die Anzahl der Kabel zu reduzieren und die Übersichtlichkeit zu erhöhen.
 - Integration der Verkabelung in die Mechanik, um eine saubere und geordnete Kabelführung zu gewährleisten.
+
+<a name="verwendung"/>
 
 ## Verwendung / Anleitung
 
@@ -68,6 +80,8 @@ Hinweis: Das Spiel zeigt automatisch den Gewinner oder ein Unentschieden an
    <figurecaption><p><i>Abbildung 4: Spielfeld Tapatan</i></p></figurecaption>
 </figure>
 
+<a name="technische-umsetzung"/>
+
 ## Technische Umsetzung
 Im flogenden Abschnitt werden die Mechanik, Elektronik, und der Programmcode beschrieben
 
@@ -85,6 +99,8 @@ Im flogenden Abschnitt werden die Mechanik, Elektronik, und der Programmcode bes
 3. Simeon Yasmin  
 4. Liam Mahieu  
 5. Jan Fawer  
+
+<a name="kontakt"/>
 
 ## Kontakt
 
