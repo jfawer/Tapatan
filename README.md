@@ -111,6 +111,133 @@ Das Gantry-System basiert auf dem Prinzip eines H-Gantry (siehe Abbildung 6). Be
    <figurecaption><p><i>Abbildung 7: H-Gantry Tapatan</i></p></figurecaption>
 </figure>
 
+### Elektronik
+#### Beschreibung des Schaltplans
+ERGÄNZEN!!!!!!!!!!!!!
+
+#### Farbcode Verkabelung
+| Farbe | Signal |
+| ----- | ------ |
+| Rot | 5V |
+| Schwarz | Ground |
+| Grün |  |
+
+ERGÄNZEN!!!!!
+
+### Programmcode
+Beschreibung der Einzelnen h-Files, Funktion von main und motorcontrol
+
+### Stückliste
+Gesamtbaugruppe:
+| Teileart  | Teilename       | Herstellung | Material | Anzahl |
+| :-------  | :---------      | :---------- | -------: | -----: |
+| Baugruppe | HGantry         |             |          | 1      |
+| Baugruppe | ElectronicPlate |             |          | 1      |
+| Baugruppe | Steinehalterung |             |          | 1      |
+| Baugruppe | Gehäuse         |             |          | 1      |
+
+HGantry:
+| Teileart  | Teilename        | Herstellung | Material | Anzahl |
+| :-------  | :---------       | :---------- | -------: | -----: |
+| Mechanik  | Schiene_lang     | Einkaufen   |          | 1      |
+| Mechanik  | Wagen_Gross      | Einkaufen   |          | 1      |
+| Mechanik  | Schiene          | Einkaufen   |          | 1      |
+| Mechanik  | Alu-Profil_20x20 | Einkaufen   | l=600    | 1      |
+| Baugruppe | Umlenkrolle      |             |          | 2      |
+| Baugruppe | Umlenturm        |             |          | 2      |
+| Mechanik  | Standoff_M3x13   | Einkaufen   |          | 2      |
+| Baugruppe | StepperAssm      |             |          | 1      |
+| Baugruppe | EndStop_500      |             |          | 1      |
+| Mechanik  | Tail             | 3D-Druck    | PLA      | 1      |
+| Mechanik  | Verbin_Step      | 3D-Druck    | PLA      | 1      |
+| Mechanik  | RailAllign       | 3D-Druck    | PLA      | 1      |
+| Baugruppe | Spanneinheit     |             |          | 1      |
+| Mechanik  | Ecke_Profil      |             |          | 1      |
+| Baugruppe | EndStop_400      |             |          | 1      |
+| Baugruppe | MagnetAssm       |             |          | 1      |
+| Baugruppe | Chain            |             |          | 1      |
+| Baugruppe | Chain2           |             |          | 1      |
+
+HGantry-(StepperAssm)-Umlenkrolle :
+| Teileart  | Teilename             | Herstellung | Material | Anzahl |
+| :-------  | :---------            | :---------- | -------: | -----: |
+| Mechanik  | Kugellager_Da9xDi3xh5 | Einkaufen   |          | 1      |
+| Mechanik  | Rolle                 | 3D-Druck    |          | 1      |
+| Mechanik  | Unterlegscheibe       | 3D-Druck    |          | 1      |
+| Mechanik  | Zylschr. M3x12        | Einkaufen   |          | 1      |
+
+HGantry-Umlenkturm:
+| Teileart  | Teilename             | Herstellung | Material | Anzahl |
+| :-------  | :---------            | :---------- | -------: | -----: |
+| Mechanik  | Kugellager_Da9xDi3xh5 | Einkaufen   |          | 2      |
+| Mechanik  | Rolle                 | 3D-Druck    |          | 2      |
+| Mechanik  | Unterlegscheibe       | 3D-Druck    |          | 1      |
+| Mechanik  | Zylschr. M3x14        | Einkaufen   |          | 1      |
+| Mechanik  | Distanzzylinder       | 3D-Druck    |          | 1      |
+
+HGantry-StepperAssm:
+| Teileart   | Teilename         | Herstellung | Material | Anzahl |
+| :-------   | :---------        | :---------- | -------: | -----: |
+| Mechanik   | StH_Left          | 3D-Druck    | PLA      | 1      |
+| Mechanik   | StH_Right         | 3D-Druck    | PLA      | 1      |
+| Elektronik | NEMA17_Motor      | Einkaufen   |          | 2      |
+| Baugruppe  | Umlenkrolle       |             |          | 4      |
+| Mechanik   | Riemenzahnrad_GT2 | Einkaufen   |          | 2      |
+
+HGantry-EndStop_500:
+| Teileart   | Teilename   | Herstellung | Material | Anzahl |
+| :-------   | :---------  | :---------- | -------: | -----: |
+| Elektronik | microswitch | Einkaufen   |          | 1      |
+| Mechanik   | EndH_500    | 3D-Druck    | PLA      | 1      |
+
+HGantry-Spanneinheit:
+| Teileart   | Teilename       | Herstellung | Material | Anzahl |
+| :-------   | :---------      | :---------- | -------: | -----: |
+| Mechanik   | Spannhalterung  | 3D-Druck    | PLA      | 1      |
+| Baugruppe  | Winkelrolle     |             |          | 2      |
+| Mechanik   | Tensioner       | 3D-Druck    | PLA      | 1      |
+| Mechanik   | 6kt-Schr. M4x40 | Einkaufen   |          | 1      |
+| Mechanik   | 6kt-Mutter. M4  | Einkaufen   |          | 1      |
+| Mechanik   | Knob            | 3D-Druck    | PLA      | 1      |
+
+HGantry-Spanneinheit-Winkelrolle:
+| Teileart  | Teilename             | Herstellung | Material | Anzahl |
+| :-------  | :---------            | :---------- | -------: | -----: |
+| Mechanik  | Kugellager_Da9xDi3xh5 | Einkaufen   |          | 1      |
+| Mechanik  | Rolle                 | 3D-Druck    |          | 1      |
+| Mechanik  | Unterlegscheibe       | 3D-Druck    |          | 1      |
+| Mechanik  | Zylschr. M3x12        | Einkaufen   |          | 1      |
+
+HGantry-EndStop_400:
+| Teileart   | Teilename        | Herstellung | Material | Anzahl |
+| :-------   | :---------       | :---------- | -------: | -----: |
+| Mechanik   | Alu-Profil_20x20 | Einkaufen   | l=200    | 1      |
+| Elektronik | microswitch      | Einkaufen   |          | 1      |
+| Mechanik   | StopHalt_400     | 3D-Druck    | PLA      | 1      |
+| Mechanik   | Stuetze          | 3D-Druck    | PLA      | 1      |
+| Mechanik   | Stuetz_Con       | 3D-Druck    | PLA      | 1      |
+
+HGantry-MagnetAssm:
+| Teileart   | Teilename        | Herstellung | Material | Anzahl |
+| :-------   | :---------       | :---------- | -------: | -----: |
+| Mechanik   | MagnetHalter     | 3D-Druck    | PLA      | 1      |
+| Mechanik   | 6kt-Schr. M3x10  |             |          | 2      |
+| Elektronik | Elektromagnet    | Einkaufen   |          | 1      |
+
+HGantry-Chain:
+| Teileart   | Teilename        | Herstellung | Material | Anzahl |
+| :-------   | :---------       | :---------- | -------: | -----: |
+| Mechanik   | ChainStart       | 3D-Druck    | PLA      | 1      |
+| Mechanik   | Link             | 3D-Druck    | PLA      | 21     |
+| Mechanik   | ChainEnd         | 3D-Druck    | PLA      | 1      |
+
+HGantry-Chain:
+| Teileart   | Teilename        | Herstellung | Material | Anzahl |
+| :-------   | :---------       | :---------- | -------: | -----: |
+| Mechanik   | Link Start       | 3D-Druck    | PLA      | 1      |
+| Mechanik   | Link             | 3D-Druck    | PLA      | 35     |
+| Mechanik   | Link End         | 3D-Druck    | PLA      | 1      |
+
 ## Mitwirkende
 
 1. Eliane Hess  
