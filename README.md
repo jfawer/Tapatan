@@ -3,7 +3,7 @@
 ## Inhaltsverzeichnis
 - [Über das Projekt](#über-das-projekt)
 - [Ziele](#ziele)
-- [Verwendung / Anleitung](#verwendung)
+- [Verwendung / Anleitung](#verwendung-anleitung)
 - [Technische Umsetzung](#technische-umsetzung)
 - [Mitwirkende](#mitwirkende)
 - [Kontakt](#kontakt)
@@ -11,7 +11,7 @@
 <a name="über-das-projekt"/>
 
 ## Über das Projekt
-Im Rahmen des Projekts im 5. Semester des trinationalen Studiengangs Mechatronik bestand unsere Aufgabe darin, ein bestehendes Projekt unserer Vorgänger zu analysieren und zu verbessern. Dabei haben wir die Spiele Tapatan und Tic-Tac-Toe mechatronisch umgesetzt.
+Im Rahmen eines Projekts im 5. Semester des trinationalen Studiengangs Mechatronik bestand unsere Aufgabe darin, ein bestehendes Projekt unserer Vorgänger zu analysieren und zu verbessern. Dabei haben wir die Spiele Tapatan und Tic-Tac-Toe mechatronisch umgesetzt.
 
 <a name="ziele"/>
 
@@ -35,17 +35,17 @@ Unser Ziel war es, den bestehenden Programmcode und die Mechanik grundlegend zu 
 - Entwicklung einer Platine (PCB), um die Anzahl der Kabel zu reduzieren und die Übersichtlichkeit zu erhöhen.
 - Integration der Verkabelung in die Mechanik, um eine saubere und geordnete Kabelführung zu gewährleisten.
 
-<a name="verwendung"/>
+<a name="verwendung-anleitung"/>
 
 ## Verwendung / Anleitung
 
 ### Spielvorbereitung
-1. Stelle die Spielfiguren auf ihre Plätze
-2. Ziehe die Schublade mit den Spielfiguren heraus um an das Rote Teil zu kommen (siehe Abbildung 1 / Abbildung 2)
-3. Spanne den Riemen in dem du am Roten Teil drehst (siehe Abbildung 1/Abbildung 2) <br>
-   Hinweis: Entspanne nach dem Spielen den Riemen wieder
-5. Stecke das Netzteilkabel ein
-6. Schalte den Schalter auf der Rückseite des Spielfeldes auf ein
+1. Stelle die Spielfiguren auf ihre Plätze.
+2. Ziehe die Schublade mit den Spielfiguren heraus um an das rote Teil zu gelangen (siehe Abbildung 1 / Abbildung 2).
+3. Spanne den Riemen in dem du am roten Teil drehst (siehe Abbildung 1/Abbildung 2). <br>
+   Hinweis: Entspanne nach dem Spielen den Riemen wieder, um die Lebensdauer des Mechanismus zu verlängern und Schäden durch anhaltende Spannung zu vermeiden.
+5. Stecke das Netzteilkabel ein.
+6. Schalte den Schalter auf der Rückseite des Spieles ein.
 
 <figure>
    <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Riemen-Spannen.png" width="600" />
@@ -66,15 +66,15 @@ Folgende Spielmodis können ausgewählt werden:
 
 
 ### Tic-Tac-Toe
-Die Spieler setzen abwechselnd ihre Figuren auf das Spielfeld (Es wird jeweils angezeigt wer am Zug ist). <br>
-Das Spiel endet, wenn ein Spieler drei Figuren in einer horizontalen, vertikalen oder diagonalen Reihe plaziert hat. Ebenso endet das Spiel wenn alle Felder belegt sind (Unentschieden). <br>
-Hinweis: Das Spiel zeigt automatisch den Gewinner oder ein Unentschieden an
+Die Spieler setzen abwechselnd ihre Figuren auf das Spielfeld (es wird jeweils angezeigt, wer am Zug ist). <br>
+Das Spiel endet, wenn ein Spieler drei Figuren in einer horizontalen, vertikalen oder diagonalen Reihe platziert hat. Ebenso endet das Spiel, wenn alle Felder belegt sind (Unentschieden). <br>
+Hinweis: Das Spiel zeigt automatisch den Gewinner oder ein Unentschieden an. <br>
 
 ### Tapatan
-Die Spieler setzen abwechselnd ihre Figuren auf das Spielfeld, bis beide Spieler jeweils drei Figuren platziert haben. (Es wird angezeigt, welcher Spieler am Zug ist.) <br>
-Sobald alle Figuren gesetzt sind, können diese bewegt werden. Die Figuren dürfen horizontal, vertikal oder diagonal verschoben werden. Hinweis: In dieser Version können die Figuren in alle diagonalen Richtungen bewegt werden, was die Komplexität des Spiels erhöht (siehe Bild 4). <br>
-Das Spiel endet, wenn ein Spieler drei Figuren in einer horizontalen, vertikalen oder diagonalen Reihe plaziert hat. <br>
-Hinweis: Das Spiel zeigt automatisch den Gewinner oder ein Unentschieden an
+Die Spieler setzen abwechselnd ihre Figuren auf das Spielfeld, bis beide Spieler jeweils drei Figuren platziert haben (es wird angezeigt, welcher Spieler am Zug ist). <br>
+Sobald alle Figuren gesetzt sind, können diese bewegt werden. Die Figuren dürfen horizontal, vertikal oder diagonal verschoben werden. Hinweis: In dieser Version können die Figuren in alle diagonalen Richtungen bewegt werden, was die Komplexität des Spiels erhöht (siehe Abbildung 4). <br>
+Das Spiel endet, wenn ein Spieler drei Figuren in einer horizontalen, vertikalen oder diagonalen Reihe platziert hat. <br>
+Hinweis: Das Spiel zeigt automatisch den Gewinner oder ein Unentschieden an.<br>
 <figure>
    <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Verfahrwege.png" width="150" />
    <figurecaption><p><i>Abbildung 4: Spielfeld Tapatan</i></p></figurecaption>
@@ -83,14 +83,33 @@ Hinweis: Das Spiel zeigt automatisch den Gewinner oder ein Unentschieden an
 <a name="technische-umsetzung"/>
 
 ## Technische Umsetzung
-Im flogenden Abschnitt werden die Mechanik, Elektronik, und der Programmcode beschrieben
 
-### Mechanik
+### Funktionsweise
 
+#### Erkennen der Spielfiguren
+Um auszuwerten, welche Spielfiguren auf welchem Feld stehen, wurde in jede Spielfigur ein Magnet integriert. Die beiden unterschiedlichen Farben (Rot und Blau) besitzen jeweils entgegengesetzt ausgerichtete Magnete. Dadurch erzeugen die verschiedenen Spielsteine unterschiedliche Magnetfelder an ihrer Unterseite. Mithilfe bipolarer Hallsensoren können diese Magnetfelder erkannt werden. Die Hallsensoren sind direkt unter der Spielplatte angebracht, sodass für jedes Feld ermittelt werden kann, ob es leer ist oder ein blauer bzw. roter Spielstein darauf platziert wurde. <br>
 
-### Elektronik
+Um zu verhindern, dass sich die Spielsteine gegenseitig anziehen oder abstoßen, wurde zusätzlich ein Stahlring um den Magneten in den Figuren integriert. Dieser beeinflusst das Magnetfeld so, dass es in radialer Richtung abgeschirmt wird und hauptsächlich in axialer Richtung wirkt.<br>
 
-### Informatik
+#### Verschieben der Spielfiguren
+Die Spielfiguren werden mithilfe eines Elektromagneten bewegt, der sich unterhalb der Spielplatte befindet und durch das Gantry-System positioniert wird. Die Magnete in den Spielfiguren werden vom Elektromagneten angezogen, sodass die Figuren präzise und kontrolliert über das Spielfeld verschoben werden können.
+
+<figure>
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Funktionsbeschreibung.png" width="600" />
+   <figurecaption><p><i>Abbildung 7: Aufbau</i></p></figurecaption>
+</figure>
+
+#### Gantry
+Das Gantry-System basiert auf dem Prinzip eines H-Gantry (siehe Abbildung 6). Bewegen sich die beiden Motoren in die gleiche Richtung, verschiebt sich der Wagen, auf dem sich der Elektromagnet befindet, entlang der Y-Achse. Drehen sich die Motoren hingegen in entgegengesetzte Richtungen, bewegt sich der Wagen entlang der X-Achse. Dieses System ermöglicht eine präzise und stabile Positionierung der Spielfiguren.
+<figure>
+   <img src="https://www.galil.com/sites/default/files/pictures/H-Bot_diagram_600x339.jpg" width="600" />
+   <figurecaption><p><i>Abbildung 6: H-Gantry, Quelle: https://www.galil.com/news/whats-new-galil/white-paper-introducing-galils-new-h-bot-firmware </i></p></figurecaption>
+</figure>
+
+<figure>
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Gantry.jpg" width="600" />
+   <figurecaption><p><i>Abbildung 7: H-Gantry Tapatan</i></p></figurecaption>
+</figure>
 
 ## Mitwirkende
 
