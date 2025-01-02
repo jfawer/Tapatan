@@ -231,7 +231,7 @@ HGantry-Chain:
 | Mechanik   | Link             | 3D-Druck    | PLA      | 21     |
 | Mechanik   | ChainEnd         | 3D-Druck    | PLA      | 1      |
 
-HGantry-Chain:
+HGantry-Chain2:
 | Teileart   | Teilename        | Herstellung | Material | Anzahl |
 | :-------   | :---------       | :---------- | -------: | -----: |
 | Mechanik   | Link Start       | 3D-Druck    | PLA      | 1      |
