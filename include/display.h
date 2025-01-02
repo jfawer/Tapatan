@@ -10,8 +10,10 @@
 // Einbinden der Header-Dateien
 #include "input.h"
 #include "struct.h"
+#include "led.h"
 
 extern volatile int rotarySwitchValue;
+extern LED led;
 
 // ====================================================================================================
 // Funktionen für die Anzeige des Tic Tac Toe Spielfelds
@@ -70,16 +72,19 @@ void displayWinner(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int curren
   lcd.print("Gewonnen: ");                                                                                       
   lcd.setCursor(0, 3);
   if (gameSettings.mode == 1) {                                                                                   // Überprüfen, ob der Spieler gegen den Computer spielt
+    led.setColor(currentPlayer == 1 ? "Blau" : "Rot");                                                            // LED Streifen auf die Farbe des Gewinners setzen
     lcd.print(currentPlayer == 1 ? "Spieler" : "Computer");
   } else {
+    led.setColor(currentPlayer == 1 ? "Blau" : "Rot");                                                            // LED Streifen auf die Farbe des Gewinners setzen
     lcd.print(currentPlayer == 1 ? "Spieler 1" : "Spieler 2");
   }
 }
 
 // Funktion zur Anzeige eines Unentschieden
 void displayDraw(LiquidCrystal_I2C &lcd) {
+  led.setColor("lila");                                                                                           // LED Streifen auf lila setzen
   lcd.setCursor(0, 2);
-  lcd.print("Unentschieden!");                                                                                    // Text auf dem LCD anzeigen 
+  lcd.print("Unentschieden!");                                                                                   // Text auf dem LCD anzeigen 
   lcd.setCursor(0, 3);
   lcd.print("              ");
 }
@@ -113,7 +118,6 @@ void displayReset(LiquidCrystal_I2C lcd) {
 // ====================================================================================================
 // Funktionen für die Spielauswahl
 // ====================================================================================================
-
 
 // Funktion zur Anzeige des Auswahlsymbols
 void displaySelectionSymbol(LiquidCrystal_I2C &lcd, int bereich) {                                                                                   
@@ -236,6 +240,5 @@ void choseGameSettings(LiquidCrystal_I2C &lcd, GameSettings &gameSettings, int g
   }
   setupvariable = false;                                                                                          // Encoder deaktivieren
 }
-
 
 #endif

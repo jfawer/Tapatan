@@ -1,5 +1,4 @@
 // Struktur für den Spielzustand und die Felder des Spielfelds
-
 #ifndef STRUCT_H
 #define STRUCT_H
 
@@ -18,13 +17,6 @@ const int Computer = 2;                                                         
 const int Einfach = 1;                                                            // Konstante für den Schwierigkeitsgrad Einfach
 const int Mittel = 2;                                                             // Konstante für den Schwierigkeitsgrad Mittel
 const int Schwer = 3;                                                             // Konstante für den Schwierigkeitsgrad Schwer
-
-// Konstanten für die Farben
-const int Aus = 0;                                                                // Konstante für die Farbe aus
-const int Rot = 1;                                                                // Konstante für die Farbe rot
-const int Gruen = 2;                                                              // Konstante für die Farbe grün
-const int Blau = 3;                                                               // Konstante für die Farbe blau
-const int Weiss = 4;                                                              // Konstante für die Farbe weiss
 
 // Konstanten für die Garage
 const int Leer = 0;                                                               // Konstante für die Garage leer
@@ -45,10 +37,48 @@ struct BoardField {
 
 // Struktur für die Bewegung des Motors
 struct Move {
-  int startX;                                                                   // Start X-Position des Motors
-  int startY;                                                                   // Start Y-Position des Motors
-  int targetX;                                                                  // Ziel X-Position des Motors
-  int targetY;                                                                  // Ziel Y-Position des Motors
+  int startX;                                                                     // Start X-Position des Motors
+  int startY;                                                                     // Start Y-Position des Motors
+  int targetX;                                                                    // Ziel X-Position des Motors
+  int targetY;                                                                    // Ziel Y-Position des Motors
+};
+
+// Struktur für die Konfiguration der Motorsteuerung
+struct MotorConfig {
+  // Positionen der Fahrbahnen
+  int verticalLanePositions[2] = {73, 333};                                     
+  int horizontalLanePositions[2] = {99, 208};                                 
+
+  // Positionen der Computer-Garagen
+  int computerGaragePosition[5][2] = {
+    {263, 390},
+    {208, 390},
+    {154, 390},
+    {99, 390},
+    {45, 390}
+  };
+
+  // Positionen der Spieler-Garagen
+  int playerGaragePosition[5][2] = { 
+    {263, 10},
+    {208, 10},
+    {154, 10},
+    {99, 10},
+    {45, 10}
+  };
+
+  // Positionen der Spielfelder
+  int boardPosition[3][3][2] = {              
+    {{253, 300}, {253, 200}, {253, 110}},
+    {{158, 300}, {158, 200}, {158, 110}},
+    {{53, 300}, {53, 200}, {50, 110}}
+  };
+
+  // Spielfeldbegrenzungen
+  int maxXPosition = 315;                                      
+  int maxYPosition = 405;                                      
+  int minXPosition = 0;                                        
+  int minYPosition = 0;                                        
 };
 
 #endif

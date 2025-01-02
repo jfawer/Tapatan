@@ -13,7 +13,7 @@
 
 
 // Funktion für den Spielmodus Tapatan Spieler gegen Spieler
-void TapatanPlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[]) {
+void TapatanPlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[], int garageState[2][5]) {
     bool isInitialDisplay = true;                                                                                               // Flag für die anfängliche Anzeige des Spiels
     bool isTurnOver = false;                                                                                                    // Flag, um den Zug zu überprüfen
     int turnCount = 0;                                                                                                          // Zähler für die Anzahl der Züge
@@ -41,6 +41,17 @@ void TapatanPlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, in
         }
 
         if (isTurnOver) {                                                                                                       // Überprüfen, ob der Zug beendet wurde
+            // Garage künstlich leeren
+            if (turnCount < 6) {
+                if (currentPlayer == Player1) {
+                    int garagePosition = findGaragestate(garageState[1], 1);                                                    // Garageposition finden
+                    garageState[1][garagePosition] = 0;                                                                         // Garage leeren                                                                         // Garage leeren
+                } else {
+                    int garagePosition = findGaragestate(garageState[0], 1);                                                    // Garageposition finden
+                    garageState[0][garagePosition] = 0;                                                                         // Garage leeren
+                }
+            }
+            
             turnCount++;
             int evaluation = evaluateBoard(Board);                                                                              // Bewerte das Spielfeld
 
@@ -57,9 +68,8 @@ void TapatanPlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, in
     }
 }
 
-
 // Funktion für den Spielmodus Tapatan Spieler gegen Computer
-void TapatanPlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[]) {
+void TapatanPlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[], int garageState[2][5], MotorController &motorController, MotorConfig config) {
     bool isInitialDisplay = true;                                                                                               // Flag für die anfängliche Anzeige des Spiels
     bool isTurnOver = false;                                                                                                    // Flag, um den Zug zu überprüfen
     int turnCount = 0;                                                                                                          // Zähler für die Anzahl der Züge
@@ -77,6 +87,7 @@ void TapatanPlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
             if (currentPlayer == Player1) {                                                                                     // Spielerzug (Platzierung)
                 // Spielerzug
                 isTurnOver = playerPlaces(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);
+
             } else if (currentPlayer == Computer) {                                                                             // Computerzug (Platzierung)
                 // Computerzug
                 int BoardDisplay[3][3];
@@ -97,11 +108,15 @@ void TapatanPlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
                         makeRandomMove(BoardDisplay);                                                                           // Zufälligen Zug für den Computer bestimmen
                         break;
                 }
-
                 delay(400);
-                displayGameScreen(lcd, gameSettings, BoardDisplay, currentPlayer);
+
+                // Stein bewegen und platzieren
+                displayGameScreen(lcd, gameSettings, BoardDisplay, currentPlayer);                                              // Spielfeld anzeigen
+                Move move = determineMoveToPlace(Board, BoardDisplay, garageState, config);                                     // Bewegung des Motors bestimmen
+                motorController.moveStone(move);                                                                                // Spielstein platzieren
+                delay(100);
                 awaitBoardIsEqual(Board, BoardDisplay, potPins);                                                                // Warten, bis der Computerzug gemacht wurde
-                isTurnOver = true;                                                                                              // Zug beenden
+                isTurnOver = true;                                                                                              // Zug beenden 
             }
         } else {                                                                                                                // Zug 7-9
             if (currentPlayer == Player1) {                                                                                     // Spielerzug
@@ -137,15 +152,25 @@ void TapatanPlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
                         TapatanMakeRandomMove(BoardDisplay);                                                                    // Zufälligen Zug für
                         break;
                 }
-
                 delay(400);
-                displayGameScreen(lcd, gameSettings, BoardDisplay, currentPlayer);
-                awaitBoardIsEqual(Board, BoardDisplay, potPins);
+
+                // Stein bewegen
+                displayGameScreen(lcd, gameSettings, BoardDisplay, currentPlayer);                                              // Spielfeld anzeigen
+                Move move = determineMoveToMove(Board, BoardDisplay, config);                                                   // Bewegung des Motors bestimmen
+                motorController.moveStone(move);                                                                                // Spielstein platzieren
+                delay(100);
+                awaitBoardIsEqual(Board, BoardDisplay, potPins);                                                                // Warten, bis der Computerzug gemacht wurde
                 isTurnOver = true;                                                                                              // Zug beenden
             }
         }
 
         if (isTurnOver) {                                                                                                       // Überprüfen, ob der Zug beendet wurde
+            // Spielergarage künstlich leeren
+            if (currentPlayer == Player1 && turnCount < 6) {
+                int garagePosition = findGaragestate(garageState[1], 1);                                                        // Garageposition finden
+                garageState[1][garagePosition] = 0;                                                                             // Garage leeren
+            }
+
             turnCount++;
 
             int evaluation = evaluateBoard(Board);                                                                              // Bewertung des Spielfelds
@@ -162,12 +187,12 @@ void TapatanPlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
 }
 
 // Funktion für das Spiel Tic Tac Toe
-void playTapatan(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[]) {
+void playTapatan(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[], int garageState[2][5], MotorController &motorController, MotorConfig config) {
     // Spiellogik für Tic Tac Toe
     if (gameSettings.mode == PlayerVsComputer) {
-        TapatanPlayerVsComputer(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);                                 // Spieler gegen Computer
+        TapatanPlayerVsComputer(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, garageState, motorController, config);           // Spieler gegen Computer
     } else if (gameSettings.mode == PlayerVsPlayer) {
-        TapatanPlayerVsPlayer(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);                                   // Spieler gegen Spieler
+        TapatanPlayerVsPlayer(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, garageState);                                      // Spieler gegen Spieler
     }
 }
 

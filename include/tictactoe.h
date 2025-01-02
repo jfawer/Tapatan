@@ -12,7 +12,7 @@
 #include "display.h"
 
 // Funktion für den Spielmodus Tic Tac Toe Spieler gegen Spieler
-void TicTacToePlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board [3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[]) {
+void TicTacToePlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board [3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[], int garageState[2][5]) {
   bool isInitialDisplay = true;                                                                                       // Variable für die erste Anzeige des Spielfelds
   bool isTurnOver = false;                                                                                            // Variable für den Spielzug
   int turnCount = 0;                                                                                                  // Zähler für die Spielzüge
@@ -27,6 +27,15 @@ void TicTacToePlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
     isTurnOver = playerPlaces(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);                         // Spielerzug
 
     if (isTurnOver) {                                                                                                 // Überprüfen, ob der Zug beendet wurde
+      // Garage künstlich leeren
+      if (currentPlayer == Player1) {
+        int garagePosition = findGaragestate(garageState[1], 1);                                                        // Garageposition finden
+        garageState[1][garagePosition] = 0;                                                                             // Garage leeren                                                                         // Garage leeren
+      } else {
+        int garagePosition = findGaragestate(garageState[0], 1);                                                        // Garageposition finden
+        garageState[0][garagePosition] = 0;                                                                             // Garage leeren
+      }
+
       turnCount++;                                                                                                    // Zähler für die Spielzüge erhöhen
 
       int evaluation = evaluateBoard(Board);                                                                          // Bewertung des Spielfelds
@@ -46,7 +55,7 @@ void TicTacToePlayerVsPlayer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, 
 }
 
 // Funktion für den Spielmodus Tic Tac Toe Spieler gegen Computer
-void TicTacToePlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board [3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[]) {
+void TicTacToePlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board [3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[], MotorController &motorController, int garageState[2][5], MotorConfig config) {
   bool isInitialDisplay = true;
   bool isTurnOver = false;
   int turnCount = 0;
@@ -59,8 +68,7 @@ void TicTacToePlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings
     }
 
     updateBoard(Board, potPins);
-    if (currentPlayer == Player1) {                                                                                   // Überprüfen, ob Spieler 1 am Zug ist
-                                                                                          
+    if (currentPlayer == Player1) {                                                                                   // Überprüfen, ob Spieler 1 am Zug ist                                                                             
       // Spielerzug
       isTurnOver = playerPlaces(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);
 
@@ -74,14 +82,24 @@ void TicTacToePlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings
       } else {
         makeBestMove(BoardDisplay);                                                                                   // Besten Zug für den Computer bestimmen
       }
-
       delay(400);
+
+      // Stein bewegen und platzieren
       displayGameScreen(lcd, gameSettings, BoardDisplay, currentPlayer);                                              // Spielfeld anzeigen
+      Move move = determineMoveToPlace(Board, BoardDisplay, garageState, config);                                     // Bewegung des Motors bestimmen
+      motorController.moveStone(move);                                                                                // Spielstein platzieren
+      delay(100);
       awaitBoardIsEqual(Board, BoardDisplay, potPins);                                                                // Warten, bis der Computerzug gemacht wurde
       isTurnOver = true;                                                                                              // Zug beenden                                                                                          // Zug beenden
     }
 
     if (isTurnOver) {                                                                                                 // Überprüfen, ob der Zug beendet wurde
+      // Spielergarage künstlich leeren
+      if (currentPlayer == Player1) {
+        int garagePosition = findGaragestate(garageState[1], 1);                                                      // Garageposition finden
+        garageState[1][garagePosition] = 0;                                                                           // Garage leeren
+      }
+      
       turnCount++;                                                                                                    // Zähler für die Spielzüge erhöhen
 
       int evaluation = evaluateBoard(Board);                                                                          // Bewertung des Spielfelds
@@ -102,12 +120,12 @@ void TicTacToePlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings
 }
 
 // Funktion für das Spiel Tic Tac Toe
-void playTicTacToe(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board [3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[]) {
+void playTicTacToe(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board [3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[], MotorController &motorController, int garageState[2][5], MotorConfig config) {
   // Spiellogik für Tic Tac Toe
   if (gameSettings.mode == PlayerVsComputer) {                                         
-    TicTacToePlayerVsComputer(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);                         // Spieler gegen Computer
+    TicTacToePlayerVsComputer(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, motorController, garageState, config); // Spieler gegen Computer
   } else if (gameSettings.mode == PlayerVsPlayer) {                                                     
-    TicTacToePlayerVsPlayer(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);                           // Spieler gegen Spieler
+    TicTacToePlayerVsPlayer(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, garageState);                                         // Spieler gegen Spieler
   }
 }
 
