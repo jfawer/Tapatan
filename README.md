@@ -38,7 +38,7 @@ Unser Ziel war es, den bestehenden Programmcode und die Mechanik grundlegend zu 
 ## Verwendung / Anleitung
 ### Spielmodis
 Folgende Spielmodis können ausgewählt werden:
-![alt text]()
+![alt text](https://github.com/jfawer/Tapatan/blob/readme/Spielmodis.png)
 
 ## Mitwirkende
 
