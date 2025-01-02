@@ -660,8 +660,8 @@ void resetGameSettings(GameSettings &gameSettings) {
 // Funktion zum Zurücksetzen des Garagenzustands
 void resetGarageState(int garageState[2][5]) {
   for (int i = 0; i < 5; i++) {
-    garageState[0][i] = 0;
-    garageState[1][i] = 0;
+    garageState[0][i] = 1;
+    garageState[1][i] = 1;
   }
 }
 

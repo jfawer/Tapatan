@@ -84,7 +84,7 @@ void displayWinner(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int curren
 void displayDraw(LiquidCrystal_I2C &lcd) {
   led.setColor("lila");                                                                                           // LED Streifen auf lila setzen
   lcd.setCursor(0, 2);
-  lcd.print("Unentschieden!");                                                                                    // Text auf dem LCD anzeigen 
+  lcd.print("Unentschieden!");                                                                                   // Text auf dem LCD anzeigen 
   lcd.setCursor(0, 3);
   lcd.print("              ");
 }
