@@ -95,7 +95,7 @@ Um zu verhindern, dass sich die Spielsteine gegenseitig anziehen oder abstoßen,
 Die Spielfiguren werden mithilfe eines Elektromagneten bewegt, der sich unterhalb der Spielplatte befindet und durch das Gantry-System positioniert wird. Die Magnete in den Spielfiguren werden vom Elektromagneten angezogen, sodass die Figuren präzise und kontrolliert über das Spielfeld verschoben werden können.
 
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Funktionsbeschreibung.png" width="600" />
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Funktionsbeschreibung.png" width="800" />
    <figurecaption><p><i>Abbildung 7: Aufbau</i></p></figurecaption>
 </figure>
 
