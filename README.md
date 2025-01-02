@@ -37,7 +37,8 @@ Unser Ziel war es, den bestehenden Programmcode und die Mechanik grundlegend zu 
 
 ## Verwendung / Anleitung
 ### Spielmodis
-Folgende Spielmodis können 
+Folgende Spielmodis können ausgewählt werden:
+![alt text]()
 
 ## Mitwirkende
 
