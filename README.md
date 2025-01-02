@@ -1,13 +1,6 @@
 # Tapatan
 
-Programmcode für den Arduino Mega des Tapatan-Spiels
-
 ## Inhaltsverzeichnis
-- [Über das Projekt](#über-das-projekt)
-- [Ziele](#ziele)
-- [Verwendung](#verwendung)
-- [Mitwirkende](#mitwirkende)
-- [Kontakt](#kontakt)
 
 ## Über das Projekt
 Im Rahmen des Projekts im 5. Semester des trinationalen Studiengangs Mechatronik bestand unsere Aufgabe darin, ein bestehendes Projekt unserer Vorgänger zu analysieren und zu verbessern. Dabei haben wir die Spiele Tapatan und Tic-Tac-Toe mechatronisch umgesetzt.
@@ -36,18 +29,28 @@ Unser Ziel war es, den bestehenden Programmcode und die Mechanik grundlegend zu 
 
 ### Spielvorbereitung
 1. Stelle die Spielfiguren auf ihre Plätze
-2. Ziehe die Schublade mit den Spielfiguren heraus um an das Rote Teil zu kommen (siehe Bild 1 / Bild 2)
-3. Spanne den Riemen in dem du am Roten Teil drehst (siehe Bild 1/Bild 2) <br>
+2. Ziehe die Schublade mit den Spielfiguren heraus um an das Rote Teil zu kommen (siehe Abbildung 1 / Abbildung 2)
+3. Spanne den Riemen in dem du am Roten Teil drehst (siehe Abbildung 1/Abbildung 2) <br>
    Hinweis: Entspanne nach dem Spielen den Riemen wieder
 5. Stecke das Netzteilkabel ein
 6. Schalte den Schalter auf der Rückseite des Spielfeldes auf ein
-<img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Riemen-Spannen.png" width="400" /> <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Riemen-Spannen2.png" width="400" />
 
+<figure>
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Riemen-Spannen.png" width="600" />
+   <figcaption><p><i>Abbildung 1: Riemenspannen Mechanismus</i></p></figcaption>
+</figure> <br>
+
+<figure>
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Riemen-Spannen2.png" width="600" />
+   <figcaption><p><i>Abbildung 2: Riemenspannen Mechanismus</i></p></figcaption>
+</figure>
 
 ### Spielmodis
 Folgende Spielmodis können ausgewählt werden:
-<img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Spielmodis.png" width="800" />
-Bild 3: Spielmodis
+<figure>
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Spielmodis.png" width="800" />
+   <figurecaption><p><i>Abbildung 3: Spielmodis</i></p></figurecaption>
+</figure>
 
 
 ### Tic-Tac-Toe
@@ -60,9 +63,20 @@ Die Spieler setzen abwechselnd ihre Figuren auf das Spielfeld, bis beide Spieler
 Sobald alle Figuren gesetzt sind, können diese bewegt werden. Die Figuren dürfen horizontal, vertikal oder diagonal verschoben werden. Hinweis: In dieser Version können die Figuren in alle diagonalen Richtungen bewegt werden, was die Komplexität des Spiels erhöht (siehe Bild 4). <br>
 Das Spiel endet, wenn ein Spieler drei Figuren in einer horizontalen, vertikalen oder diagonalen Reihe plaziert hat. <br>
 Hinweis: Das Spiel zeigt automatisch den Gewinner oder ein Unentschieden an
+<figure>
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Verfahrwege.png" width="150" />
+   <figurecaption><p><i>Abbildung 4: Spielfeld Tapatan</i></p></figurecaption>
+</figure>
 
-<img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Verfahrwege.png" width="150" />
-Bild 4: Spielfeld Tapatan
+## Technische Umsetzung
+Im flogenden Abschnitt werden die Mechanik, Elektronik, und der Programmcode beschrieben
+
+### Mechanik
+
+
+### Elektronik
+
+### Informatik
 
 ## Mitwirkende
 
