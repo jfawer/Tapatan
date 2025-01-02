@@ -68,14 +68,9 @@ void TicTacToePlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings
     }
 
     updateBoard(Board, potPins);
-    if (currentPlayer == Player1) {                                                                                   // Überprüfen, ob Spieler 1 am Zug ist
-                                                                                          
+    if (currentPlayer == Player1) {                                                                                   // Überprüfen, ob Spieler 1 am Zug ist                                                                             
       // Spielerzug
       isTurnOver = playerPlaces(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);
-      
-      // Garage künstlich leeren
-      int garagePosition = findGaragestate(garageState[1], 1);                                                        // Garageposition finden
-      garageState[1][garagePosition] = 0;                                                                             // Garage leeren
 
     } else if (currentPlayer == Computer) {
       // Computerzug
@@ -93,12 +88,18 @@ void TicTacToePlayerVsComputer(LiquidCrystal_I2C &lcd, GameSettings gameSettings
       displayGameScreen(lcd, gameSettings, BoardDisplay, currentPlayer);                                              // Spielfeld anzeigen
       Move move = determineMoveToPlace(Board, BoardDisplay, garageState, config);                                     // Bewegung des Motors bestimmen
       motorController.moveStone(move);                                                                                // Spielstein platzieren
-      delay(2000);
+      delay(100);
       awaitBoardIsEqual(Board, BoardDisplay, potPins);                                                                // Warten, bis der Computerzug gemacht wurde
       isTurnOver = true;                                                                                              // Zug beenden                                                                                          // Zug beenden
     }
 
     if (isTurnOver) {                                                                                                 // Überprüfen, ob der Zug beendet wurde
+      // Spielergarage künstlich leeren
+      if (currentPlayer == Player1) {
+        int garagePosition = findGaragestate(garageState[1], 1);                                                      // Garageposition finden
+        garageState[1][garagePosition] = 0;                                                                           // Garage leeren
+      }
+      
       turnCount++;                                                                                                    // Zähler für die Spielzüge erhöhen
 
       int evaluation = evaluateBoard(Board);                                                                          // Bewertung des Spielfelds

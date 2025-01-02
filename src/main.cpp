@@ -22,8 +22,8 @@
 bool setupvariable;                                                                                       // Variable für das Aktivieren des Encoders
 volatile int rotarySwitchValue = 0;                                                                       // Aktueller Wert des Encoders
 const int rotarySwitchPin1 = 2;                                                                           // Pin für den Rotary-Encoder (CLK)
-const int rotarySwitchPin2 = 25;                                                                           // Pin für den Rotary-Encoder (DT)
-const int gameButtonPin = 24;                                                                              // Pin für den Bestätigungsknopf (SW)
+const int rotarySwitchPin2 = 25;                                                                          // Pin für den Rotary-Encoder (DT)
+const int gameButtonPin = 24;                                                                             // Pin für den Bestätigungsknopf (SW)
 
 // Interrupt Service Routine (ISR)
 void handleEncoder() {
@@ -100,7 +100,7 @@ void setup() {
   
   // Initialisierung des LED Streifens
   led.begin();                                                                                            // LED Streifen initialisieren
-  led.setColor("Blau");                                                                                   // LED Streifen auf blau setzen
+  led.setColor("Lila");                                                                                 // LED Streifen auf orange setzen
 
   // Initialisierung des LCD-Displays
   lcd.init();                                                                                             // LCD initialisieren
@@ -129,6 +129,9 @@ void setup() {
     resetGameSettings(gameSettings);                                                                      // Spieleinstellungen zurücksetzen
     copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
   }
+
+  // Initaliserung abgeschlossen
+  led.setColor("Gruen");                                                                                  // LED Streifen auf grün setzen
 }
 
 // --------------------------------------------------------------------------------
@@ -136,31 +139,37 @@ void setup() {
 // --------------------------------------------------------------------------------
 
 void loop() {
-  /*
-  motorController.setElectromagnetPolarityNegative();                                                     // Elektromagnetpolarität auf negativ setzen
-  motorController.turnElectromagnetOn();                                                                  // Elektromagnet einschalten
-  Serial.println("Elektromagnet eingeschaltet");
-  delay(5000);
-  motorController.turnElectromagnetOff();                                                                 // Elektromagnet ausschalten
-  Serial.println("Elektromagnet ausgeschaltet");
-  delay(5000);
-  */
-  
-  /*
-  // Sensorwerte auslesen
+  // Spiellogik
   updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
-  Serial.println("Board:");
-  for (int i = 0; i < 3; i++) {
-    for (int j = 0; j < 3; j++) {
-      Serial.print(Board[i][j]);
-      Serial.print(" ");
-    }
-    Serial.println();
-  }
-  Serial.println("-----------------");
-  delay(200);
+  if (isBoardEqual(Board, ResetBoard) && gameSettings.game == 0) {                                        // Überprüfen, ob das Spielfeld in der Ausgangsposition ist und kein Spiel ausgewählt wurde
+    // Spiel auswählen
+    choseGameSettings(lcd, gameSettings, gameButtonPin, setupvariable);                                   // Spieleinstellungen auswählen
+    currentPlayer = random(1, 3);                                                                         // Zufällige Auswahl des Startspielers
+    delay(500);
 
-  */
+    // Spiel starten
+    switch (gameSettings.game) {                                                                          // Auswahl des Spiels
+      case TicTacToe:
+        led.setColor("Zyan");                                                                             // LED Streifen auf zyan setzen
+        playTicTacToe(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, motorController, garageState, config); // Spiel Tic Tac Toe starten
+        delay(5000);
+        break;
+      case Tapatan:
+        led.setColor("Weiss");                                                                            // LED Streifen auf weiss setzen
+        playTapatan(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, garageState, motorController, config); // Spiel Tapatan starten
+        delay(5000);
+        break;
+    }
+  } else {
+    led.setColor("Lila");                                                                                 // LED Streifen auf lila setzen
+    displayReset(lcd);                                                                                    // Anzeige zum Zurücksetzen des Spielfelds
+    cleanBoard(Board, potPins, motorController, garageState, config);                                     // Spielfeld reinigen
+    awaitBoardReset(Board, potPins);                                                                      // Warten auf das Zurücksetzen des Spielfeld
+    resetGameSettings(gameSettings);                                                                      // Spieleinstellungen zurücksetzen
+    resetGarageState(garageState);                                                                        // Garage zurücksetzen
+    copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
+  }
+  
   /*
   // Serielle Eingabe einer X- und Y-Position
   int x, y;
@@ -179,30 +188,4 @@ void loop() {
   motorController.moveToPosition(x, y);
   delay(2000);
   */
-
-  updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
-  if (isBoardEqual(Board, ResetBoard) && gameSettings.game == 0) {                                        // Überprüfen, ob das Spielfeld in der Ausgangsposition ist und kein Spiel ausgewählt wurde
-    // Spiel auswählen
-    choseGameSettings(lcd, gameSettings, gameButtonPin, setupvariable);                                   // Spieleinstellungen auswählen
-    currentPlayer = random(1, 3);                                                                         // Zufällige Auswahl des Startspielers
-    delay(500);
-
-    // Spiel starten
-    switch (gameSettings.game) {                                                                          // Auswahl des Spiels
-      case TicTacToe:
-        playTicTacToe(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, motorController, garageState, config); // Spiel Tic Tac Toe starten
-        delay(5000);
-        break;
-      case Tapatan:
-        playTapatan(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins);                       // Spiel Tapatan starten
-        delay(5000);
-        break;
-    }
-  } else {
-    displayReset(lcd);                                                                                    // Anzeige zum Zurücksetzen des Spielfelds
-    cleanBoard(Board, potPins, motorController, garageState, config);                                     // Spielfeld reinigen
-    awaitBoardReset(Board, potPins);                                                                      // Warten auf das Zurücksetzen des Spielfeld
-    resetGameSettings(gameSettings);                                                                      // Spieleinstellungen zurücksetzen
-    copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
-  }
 }

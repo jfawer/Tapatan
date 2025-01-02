@@ -107,14 +107,6 @@ bool isBoardEqual(int currentBoard[3][3], int savedBoard[3][3]) {
 void awaitBoardIsEqual(int currentBoard[3][3], int savedBoard[3][3], const int potPins[]) {
   while (!isBoardEqual(currentBoard, savedBoard)) {
     updateBoard(currentBoard, potPins);
-    Serial.println("Board: ");
-    for (int i = 0; i < 3; i++) {
-      for (int j = 0; j < 3; j++) {
-        Serial.print(currentBoard[i][j]);
-        Serial.print(" ");
-      }
-      Serial.println();
-    }
     delay(100);
   }
 }
@@ -663,6 +655,14 @@ void resetGameSettings(GameSettings &gameSettings) {
   gameSettings.game = 0;
   gameSettings.mode = 0;
   gameSettings.difficulty = 0;
+}
+
+// Funktion zum Zurücksetzen des Garagenzustands
+void resetGarageState(int garageState[2][5]) {
+  for (int i = 0; i < 5; i++) {
+    garageState[0][i] = 0;
+    garageState[1][i] = 0;
+  }
 }
 
 #endif

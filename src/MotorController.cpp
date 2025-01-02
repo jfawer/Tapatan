@@ -281,9 +281,9 @@ void MotorController::moveStone(Move move) {
         // Bewegung zur Startposition
         moveToPosition(move.startX, move.startY);
 
-        turnElectromagnetOn();                                                                          // Elektromagnet einschalten
         setElectromagnetPolarityNegative();                                                             // Negative Polarität einstellen
-
+        turnElectromagnetOn();                                                                          // Elektromagnet einschalten
+        
         // Geschwindigkeit und Beschleunigung einstellen
         Motor1.setMaxSpeed(speedSlow);
         Motor1.setAcceleration(accelerationSlow);
@@ -295,9 +295,14 @@ void MotorController::moveStone(Move move) {
         moveToPosition(config.horizontalLanePositions[lane], move.targetY);
         delay(delayTime);
         moveToPosition(move.targetX, move.targetY);
-        turnElectromagnetOff();                                                                         // Elektromagnet ausschalten
-        return;
 
+        // Elektromagnet ausschalten und Polarität wechseln
+        turnElectromagnetOff();                                                                         // Elektromagnet ausschalten
+        setElectromagnetPolarityPositive();                                                             // Positive Polarität einstellen
+
+        // Zur nächsten Lane bewegen
+        moveToPosition(config.horizontalLanePositions[lane], move.targetY);
+        return;
     } else {
         // Bestimmen der kürzesten Fahrbahn für Start- und Zielposition
         int startLane = determineShortestLane(move.startX, config.horizontalLanePositions);             // Startfahrbahn (Horizontale Fahrbahn)
@@ -313,9 +318,9 @@ void MotorController::moveStone(Move move) {
         // Bewegung zur Startposition
         moveToPosition(move.startX, move.startY);
 
-        turnElectromagnetOn();                                                                          // Elektromagnet einschalten
         setElectromagnetPolarityNegative();                                                             // Negative Polarität einstellen
-        
+        turnElectromagnetOn();                                                                          // Elektromagnet einschalten
+
         // Geschwindigkeit und Beschleunigung einstellen
         Motor1.setMaxSpeed(speedSlow);
         Motor1.setAcceleration(accelerationSlow);
@@ -331,7 +336,13 @@ void MotorController::moveStone(Move move) {
         moveToPosition(config.horizontalLanePositions[targetLane], move.targetY);
         delay(delayTime);
         moveToPosition(move.targetX, move.targetY);
+
+        // Elektromagnet ausschalten und Polarität wechseln
         turnElectromagnetOff();                                                                         // Elektromagnet ausschalten
+        setElectromagnetPolarityPositive();                                                             // Positive Polarität einstellen
+
+        // Zur nächsten Lane bewegen
+        moveToPosition(config.horizontalLanePositions[targetLane], move.targetY);
         return;
     }
     // Motor deaktivieren
