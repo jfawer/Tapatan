@@ -129,15 +129,15 @@ Beschreibung der Einzelnen h-Files, Funktion von main und motorcontrol
 
 ### Stückliste
 
-<a name="tapatanstk"/>
+
 
 Tapatan:
 | Teileart  | Teilename                           | Herstellung | Material | Anzahl |
 | :-------  | :---------                          | :---------- | -------: | -----: |
 | Baugruppe | [HGantry](#hgantry)                 |             |          | 1      |
 | Baugruppe | [ElectronicPlate](#electronicplate) |             |          | 1      |
-| Baugruppe | [Steineschublade](#steineschublade)  |             |          | 1      |
-| Baugruppe | [Gehäuse](#gehäuse)                  |             |          | 1      |
+| Baugruppe | [Steineschublade](#steineschublade) |             |          | 1      |
+| Baugruppe | [Gehäuse](#gehäuse)                 |             |          | 1      |
 
 <a name="hgantry"/>
 
