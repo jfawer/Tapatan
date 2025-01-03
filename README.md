@@ -136,7 +136,7 @@ Tapatan:
 | :-------  | :---------                          | :---------- | -------: | -----: |
 | Baugruppe | [HGantry](#hgantry)                 |             |          | 1      |
 | Baugruppe | [ElectronicPlate](#electronicplate) |             |          | 1      |
-| Baugruppe | [Steinehalterung](steinehalterung)  |             |          | 1      |
+| Baugruppe | [Steineschublade](steineschublade)  |             |          | 1      |
 | Baugruppe | [Gehäuse](gehäuse)                  |             |          | 1      |
 
 <a name="hgantry"/>
@@ -162,6 +162,10 @@ Tapatan:
 | Baugruppe | [MagnetAssm](#magnetassm)         |             |          | 1      |
 | Baugruppe | [Chain](#chain)                   |             |          | 1      |
 | Baugruppe | [Chain2](#chain2)                 |             |          | 1      |
+| Mechanik  | Zyl.-Schr. M3x10                  | Einkaufen   |          | 4      |
+| Mechanik  | Zyl.-Schr. M3x8                   | Einkaufen   |          | 2      |
+| Mechanik  | Nutenstein M3                     | Einkaufen   |          | 4      |
+
 
 <a name="umlenkrolle"/>
 
@@ -194,14 +198,21 @@ Tapatan:
 | Elektronik | NEMA17_Motor                | Einkaufen   |          | 2      |
 | Baugruppe  | [Umlenkrolle](#umlenkrolle) |             |          | 4      |
 | Mechanik   | Riemenzahnrad_GT2           | Einkaufen   |          | 2      |
+| Mechanik   | Zyl.-Schr. M5x8             | Einkaufen   |          | 4      |
+| Mechanik   | Nutenstein M5               | Einkaufen   |          | 4      |
+| Mechanik   | Zyl.-Schr. M3x8             | Einkaufen   |          | 8      |
 
 <a name="endstop500"/>
 
 [HGantry](#hgantry)-EndStop_500:
-| Teileart   | Teilename   | Herstellung | Material | Anzahl |
-| :-------   | :---------  | :---------- | -------: | -----: |
-| Elektronik | microswitch | Einkaufen   |          | 1      |
-| Mechanik   | EndH_500    | 3D-Druck    | PLA      | 1      |
+| Teileart   | Teilename        | Herstellung | Material | Anzahl |
+| :-------   | :---------       | :---------- | -------: | -----: |
+| Elektronik | microswitch      | Einkaufen   |          | 1      |
+| Mechanik   | EndH_500         | 3D-Druck    | PLA      | 1      |
+| Mechanik   | Zyl.-Schr. M5x8  | Einkaufen   |          | 2      |
+| Mechanik   | Nutenstein M5    | Einkaufen   |          | 2      |
+| Mechanik   | Inserts M3       | Einkaufen   |          | 2      |
+| Mechanik   | Zyl.-Schr. M3x10 | Einkaufen   |          | 2      |
 
 <a name="spanneinheit"/>
 
@@ -214,6 +225,8 @@ Tapatan:
 | Mechanik   | 6kt-Schr. M4x40             | Einkaufen   |          | 1      |
 | Mechanik   | 6kt-Mutter. M4              | Einkaufen   |          | 1      |
 | Mechanik   | Knob                        | 3D-Druck    | PLA      | 1      |
+| Mechanik   | Zyl.-Schr. M5x8             | Einkaufen   |          | 2      |
+| Mechanik   | Nutenstein M5               | Einkaufen   |          | 2      |
 
 <a name="winkelrolle"/>
 
@@ -235,6 +248,10 @@ Tapatan:
 | Mechanik   | StopHalt_400     | 3D-Druck    | PLA      | 1      |
 | Mechanik   | Stuetze          | 3D-Druck    | PLA      | 1      |
 | Mechanik   | Stuetz_Con       | 3D-Druck    | PLA      | 1      |
+| Mechanik   | Zyl.-Schr. M5x8  | Einkaufen   |          | 2      |
+| Mechanik   | Nutenstein M5    | Einkaufen   |          | 2      |
+| Mechanik   | Inserts M3       | Einkaufen   |          | 2      |
+| Mechanik   | Zyl.-Schr. M3x10 | Einkaufen   |          | 2      |
 
 <a name="magnetassm"/>
 
@@ -262,6 +279,206 @@ Tapatan:
 | Mechanik   | Link Start       | 3D-Druck    | PLA      | 1      |
 | Mechanik   | Link             | 3D-Druck    | PLA      | 35     |
 | Mechanik   | Link End         | 3D-Druck    | PLA      | 1      |
+
+<a name="electronicplate"/>
+
+[Tapatan](#tapatanstk)-ElectronicPlate
+| Teileart   | Teilename                        | Herstellung    | Material | Anzahl |
+| :-------   | :---------                       | :----------    | -------: | -----: |
+| Mechanik   | Electronic_Floor                 | Laserschneiden | Holz     | 1      |
+| Mechanik   | Backplate1                       | Laserschneiden | Holz     | 1      |
+| Mechanik   | Winkel                           | 3D-Druck       | PLA      | 2      |
+| Mechanik   | Schubladenstopper                | 3D-Druck       | PLA      | 1      |
+| Elektronik | Arduino Mega                     | Einkaufen      |          | 1      |
+| Mechanik   | StandoffM3x5                     | Einkaufen      |          | 6      |
+| Elektronik | TB6600 - Motor Driver            | Einkaufen      |          | 2      |
+| Mechanik   | Linsenkopfschr. M3x10            | Einkaufen      |          | 3      |
+| Mechanik   | Linsenkopfschr. M3x16            | Einkaufen      |          | 2      |
+| Mechanik   | Senkschr. M3x16                  | Einkaufen      |          | 2      |
+| Mechanik   | Mutter M3                        | Einkaufen      |          | 4      |
+| Elektronik | Schalter                         | Einkaufen      |          | 1      |
+| Elektronik | [Arduino_Shield](#arduinoshield) | Einkaufen      |          | 1      |
+| Mechanik   | Inserts M3                       | Einkaufen      |          | 2      |
+| Elektronik | DC-DC-Converter 12V/9V           | Einkaufen      |          | 1      |
+| Elektronik | DC-DC-Converter 12V/5V           | Einkaufen      |          | 1      |
+
+<a name="arduinoshield"/>
+
+[ElectronicPlate](#electronicplate)-Arduino_Shield
+| Teileart   | Teilename              | Herstellung    | Material | Anzahl |
+| :-------   | :---------             | :----------    | -------: | -----: |
+| Elektronik | Leiterplatte           | Einkaufen      |          | 1      |
+| Elektronik | Widerstand 680Ohm      | Einkaufen      |          | 7      |
+| Elektronik | LED_Red                | Einkaufen      |          | 4      |
+| Elektronik | Diode 1N4007           | Einkaufen      |          | 3      |
+| Elektronik | Widerstand 1kOhm       | Einkaufen      |          | 3      |
+| Elektronik | NPN Transistor BC547   | Einkaufen      |          | 3      |
+| Elektronik | Relay_SPDT             | Einkaufen      |          | 3      |
+| Elektronik | Widerstand 10kOhm      | Einkaufen      |          | 3      |
+| Elektronik | LED_Green              | Einkaufen      |          | 1      |
+| Elektronik | LED_Blue               | Einkaufen      |          | 1      |
+| Elektronik | Mosfet IRLZ24          | Einkaufen      |          | 3      |
+| Elektronik | LED_Yellow             | Einkaufen      |          | 4      |
+
+
+<a name="steineschublade"/>
+
+[Tapatan](#tapatanstk)-Steineschublade
+| Teileart | Teilename                 | Herstellung    | Material | Anzahl |
+| :------- | :---------                | :----------    | -------: | -----: |
+| Mechanik | Plate_Steinehalterung     | Laserschneiden | Holz     | 1      |
+| Mechanik | Schubladenstopper         | 3D-Druck       | PLA      | 1      |
+| Mechanik | Backplate_Steinehalterung | Laserschneiden | Holz     | 1      |
+| Mechanik | Sideplate_L_Steinehalter  | Laserschneiden | Holz     | 1      |
+| Mechanik | Sideplate_R_Steinehalter  | Laserschneiden | Holz     | 1      |
+| Mechanik | Winkel                    | 3D-Druck       | PLA      | 4      |
+| Mechanik | Front_Steinehalterung     | Laserschneiden | Holz     | 1      |
+| Mechanik | Schliessmech.1            | 3D-Druck       | PLA      | 1      |
+| Mechanik | Schliessmech.2            | 3D-Druck       | PLA      | 1      |
+| Mechanik | Schliessmech.3            | 3D-Druck       | PLA      | 1      |
+| Mechanik | Schliessmech.4            | 3D-Druck       | PLA      | 1      |
+| Mechanik | Senkschr. M3x12           | Einkaufen      |          | 4      |
+| Mechanik | Linsenkopfschr. M3x16     | Einkaufen      |          | 4      |
+| Mechanik | Linsenkopfschr. M3x10     | Einkaufen      |          | 8      |
+| Mechanik | Mutter M3                 | Einkaufen      |          | 8      |
+| Mechanik | Mutter M5                 | Einkaufen      |          | 1      |
+| Mechanik | Sechskantschr. M5x25      | Einkaufen      |          | 1      |
+| Mechanik | Drehgriff                 | 3D-Druck       | PLA      | 1      |
+| Mechanik | Schubladenteiler          | 3D-Druck       | PLA      | 1      |
+| Mechanik | Inserts M3                | Einkaufen      |          | 6      |
+
+<a name="gehäuse"/>
+
+[Tapatan](#tapatanstk)-Gehäuse
+| Teileart   | Teilename                              | Herstellung    | Material       | Anzahl |
+| :-------   | :---------                             | :----------    | -------:       | -----: |
+| Baugruppe  | [EckAssm](#eckassm)                    |                |                | 2      |
+| Baugruppe  | [EckAssm BackRight](#eckassmbackright) |                |                | 1      |
+| Baugruppe  | [EckAssm BackLeft](#eckassmbackleft)   |                |                | 1      |
+| Baugruppe  | [KantenAbdeckung_L](#kantenabdeckungl) |                |                | 2      |
+| Baugruppe  | [KantenAbdeckung_K](#kantenabdeckungk) |                |                | 2      |
+| Mechanik   | SteinHalter                            | 3D-Druck       | PLA            | 2      |
+| Mechanik   | Backpanel                              |                | PVC-Hartschaum | 1      |
+| Mechanik   | Frontpanel                             |                | Acrylglas      | 1      |
+| Mechanik   | Spielfeld                              |                | Acrylglas      | 1      |
+| Baugruppe  | [BotPart_Tap](#botparttap)             |                |                | 1      |
+| Baugruppe  | [PCB-Deckel](#pcbdeckel)               |                |                | 1      |
+| Baugruppe  | [LCDAssm](#lcdassm)                    |                |                | 1      |
+| Mechanik   | SidePanel                              |                | Acrylglas      | 4      |
+| Mechanik   | Abdeckplatte                           |                | PVC-Hartschaum | 1      |
+| Mechanik   | Drehknopf                              | 3D-Druck       | PLA            | 1      |
+| Mechanik   | Sensorplatte                           | 3D-Druck       | PLA            | 1      |
+| Baugruppe  | [ChainBig](#chainbig)                  | 3D-Druck       | PLA            | 1      |
+| Elektronik | Hallsensor  DRV5055A2QLPG              | Einkaufen      |                | 1      |
+| Elektronik | Rotary_Switch                          | Einkaufen      |                | 1      |
+| Elektronik | LED_Streifen                           | Einkaufen      |                | 1.2m   |
+| Mechanik   | Chip                                   | 3D-Druck       | PLA            | 10     |
+
+<a name="eckassm"/>
+
+[Gehäuse](#gehäuse)-EckAssm
+| Teileart   | Teilename                              | Herstellung    | Material       | Anzahl |
+| :-------   | :---------                             | :----------    | -------:       | -----: |
+| Mechanik   | Säule                                  | 3D-Druck       | PLA            | 1      |
+| Baugruppe  | [DreieckAssm](#dreieckassm)            |                |                | 1      |
+| Mechanik   | Verbinder 1                            | 3D-Druck       | PLA            | 1      |
+| Mechanik   | Verbinder 2                            | 3D-Druck       | PLA            | 2      |
+| Mechanik   | Gummifuss                              | Einkaufen      |                | 1      |
+| Mechanik   | Verbinder 3                            | 3D-Druck       | PLA            | 2      |
+
+<a name="eckassmbackright"/>
+
+[Gehäuse](#gehäuse)-EckAssm BackRight
+| Teileart   | Teilename                              | Herstellung    | Material       | Anzahl |
+| :-------   | :---------                             | :----------    | -------:       | -----: |
+| Mechanik   | Säule                                  | 3D-Druck       | PLA            | 1      |
+| Baugruppe  | [DreieckAssm](#dreieckassm)            |                |                | 1      |
+| Mechanik   | Verbinder 1                            | 3D-Druck       | PLA            | 1      |
+| Mechanik   | Verbinder 2                            | 3D-Druck       | PLA            | 2      |
+| Mechanik   | Gummifuss                              | Einkaufen      |                | 1      |
+| Mechanik   | Verbinder 3                            | 3D-Druck       | PLA            | 2      |
+
+<a name="eckassmbackleft"/>
+
+[Gehäuse](#gehäuse)-EckAssm BackLeft
+| Teileart   | Teilename                              | Herstellung    | Material       | Anzahl |
+| :-------   | :---------                             | :----------    | -------:       | -----: |
+| Mechanik   | Säule                                  | 3D-Druck       | PLA            | 1      |
+| Baugruppe  | [DreieckAssm](#dreieckassm)            |                |                | 1      |
+| Mechanik   | Verbinder 1                            | 3D-Druck       | PLA            | 1      |
+| Mechanik   | Verbinder 2                            | 3D-Druck       | PLA            | 2      |
+| Mechanik   | Gummifuss                              | Einkaufen      |                | 1      |
+| Mechanik   | Verbinder 3                            | 3D-Druck       | PLA            | 2      |
+
+<a name="dreieckassm"/>
+
+[Gehäuse](#gehäuse)-[EckAssm](#eckassm)/[EckAssm BackRight](#eckassmbackright)/[EckAssm BackLeft](#eckassmbackleft)-DreieckAssm
+| Teileart   | Teilename                              | Herstellung    | Material       | Anzahl |
+| :-------   | :---------                             | :----------    | -------:       | -----: |
+| Mechanik   | Inside                                 | 3D-Druck       | PLA            | 1      |
+| Mechanik   | Outside                                | 3D-Druck       | PLA            | 1      |
+
+<a name="kantenabdeckungl"/>
+
+[Gehäuse](#gehäuse)-KantenAbdeckung-L
+| Teileart   | Teilename        | Herstellung    | Material | Anzahl |
+| :-------   | :---------       | :----------    | -------: | -----: |
+| Mechanik   | KantenHalt       | 3D-Druck       | PLA      | 2      |
+| Mechanik   | ConnectorKanVerb | 3D-Druck       | PLA      | 1      |
+
+<a name="kantenabdeckungk"/>
+
+[Gehäuse](#gehäuse)-KantenAbdeckung-K
+| Teileart   | Teilename        | Herstellung    | Material | Anzahl |
+| :-------   | :---------       | :----------    | -------: | -----: |
+| Mechanik   | KantenHalt       | 3D-Druck       | PLA      | 2      |
+| Mechanik   | KantenAluVerb    | 3D-Druck       | PLA      | 1      |
+
+<a name="botparttap"/>
+
+[Gehäuse](#gehäuse)-BotPart-Tap
+| Teileart   | Teilename                 | Herstellung    | Material | Anzahl |
+| :-------   | :---------                | :----------    | -------: | -----: |
+| Mechanik   | KantenHalt                | 3D-Druck       | PLA      | 2      |
+| Mechanik   | ConnectorKanVerb          | 3D-Druck       | PLA      | 2      |
+| Mechanik   | AluProfil_20x20           | Einkaufen      | l=500    | 3      |
+| Mechanik   | AluProfil_20x20           | Einkaufen      | l=600    | 2      |
+| Mechanik   | AluProfil_20x20           | Einkaufen      | l=194    | 2      |
+| Mechanik   | CornerConnector (Default) | 3D-Druck       | PLA      | 4      |
+| Mechanik   | CornerConnector (Left)    | 3D-Druck       | PLA      | 2      |
+| Mechanik   | CornerConnector (Right)   | 3D-Druck       | PLA      | 2      |
+| Mechanik   | Bodenplatte (Right)       | Laserschneiden | Holz     | 1      |
+| Mechanik   | Bodenplatte (Default)     | Laserschneiden | Holz     | 1      |
+| Mechanik   | T-Halterung               | 3D-Druck       | PLA      | 2      |
+| Mechanik   | Mittelstütze              | 3D-Druck       | PLA      | 2      |
+| Mechanik   | SchubladenleisteLinks     | 3D-Druck       | PLA      | 2      |
+| Mechanik   | SchubladenleisteRechts    | 3D-Druck       | PLA      | 2      |
+
+<a name="pcbdeckel"/>
+
+[Gehäuse](#gehäuse)-PCB-Deckel
+| Teileart   | Teilename          | Herstellung    | Material | Anzahl |
+| :-------   | :---------         | :----------    | -------: | -----: |
+| Elektronik | Tapatan_Deckel_PCB |                |          | 1      |
+| Mechanik   | PCB-Haleer-Deckel  | 3D-Druck       | PLA      | 1      |
+
+<a name="lcdassm"/>
+
+[Gehäuse](#gehäuse)-LCDAssm
+| Teileart   | Teilename | Herstellung    | Material  | Anzahl |
+| :-------   | :-------- | :----------    | -------:  | -----: |
+| Elektronik | LCD 20x40 |                | Einkaufen | 1      |
+| Mechanik   | Chassis   | 3D-Druck       | PLA       | 1      |
+| Mechanik   | Cover     | 3D-Druck       | PLA       | 1      |
+
+<a name="chainbig"/>
+
+[HGantry](#hgantry)-ChainBig:
+| Teileart   | Teilename        | Herstellung | Material | Anzahl |
+| :-------   | :---------       | :---------- | -------: | -----: |
+| Mechanik   | ChainBigStart    | 3D-Druck    | PLA      | 1      |
+| Mechanik   | ChainBigLink     | 3D-Druck    | PLA      | 19     |
+| Mechanik   | ChainBigEnd      | 3D-Druck    | PLA      | 1      |
 
 ## Mitwirkende
 
