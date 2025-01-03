@@ -128,7 +128,10 @@ ERGÄNZEN!!!!!
 Beschreibung der Einzelnen h-Files, Funktion von main und motorcontrol
 
 ### Stückliste
-Gesamtbaugruppe:
+
+<a name="tapatan"/>
+
+Tapatan:
 | Teileart  | Teilename                           | Herstellung | Material | Anzahl |
 | :-------  | :---------                          | :---------- | -------: | -----: |
 | Baugruppe | [HGantry](#hgantry)                 |             |          | 1      |
@@ -138,7 +141,7 @@ Gesamtbaugruppe:
 
 <a name="hgantry"/>
 
-HGantry:
+[Tapatan](#tapatan)-HGantry:
 | Teileart  | Teilename                         | Herstellung | Material | Anzahl |
 | :-------  | :---------                        | :---------- | -------: | -----: |
 | Mechanik  | Schiene_lang                      | Einkaufen   |          | 1      |
@@ -162,63 +165,69 @@ HGantry:
 
 <a name="umlenkrolle"/>
 
-HGantry-(StepperAssm)-Umlenkrolle :
+[HGantry](#hgantry)-([StepperAssm](#stepperassm))-Umlenkrolle :
 | Teileart  | Teilename             | Herstellung | Material | Anzahl |
 | :-------  | :---------            | :---------- | -------: | -----: |
 | Mechanik  | Kugellager_Da9xDi3xh5 | Einkaufen   |          | 1      |
-| Mechanik  | Rolle                 | 3D-Druck    |          | 1      |
+| Mechanik  | Rolle                 | 3D-Druck    | d=14     | 1      |
 | Mechanik  | Unterlegscheibe       | 3D-Druck    |          | 1      |
 | Mechanik  | Zylschr. M3x12        | Einkaufen   |          | 1      |
 
 <a name="umlenkturm"/>
 
-HGantry-Umlenkturm:
+[HGantry](#hgantry)-Umlenkturm:
 | Teileart  | Teilename             | Herstellung | Material | Anzahl |
 | :-------  | :---------            | :---------- | -------: | -----: |
 | Mechanik  | Kugellager_Da9xDi3xh5 | Einkaufen   |          | 2      |
-| Mechanik  | Rolle                 | 3D-Druck    |          | 2      |
+| Mechanik  | Rolle                 | 3D-Druck    | d=14     | 2      |
 | Mechanik  | Unterlegscheibe       | 3D-Druck    |          | 1      |
 | Mechanik  | Zylschr. M3x14        | Einkaufen   |          | 1      |
 | Mechanik  | Distanzzylinder       | 3D-Druck    |          | 1      |
 
 <a name="stepperassm"/>
 
-HGantry-StepperAssm:
-| Teileart   | Teilename         | Herstellung | Material | Anzahl |
-| :-------   | :---------        | :---------- | -------: | -----: |
-| Mechanik   | StH_Left          | 3D-Druck    | PLA      | 1      |
-| Mechanik   | StH_Right         | 3D-Druck    | PLA      | 1      |
-| Elektronik | NEMA17_Motor      | Einkaufen   |          | 2      |
-| Baugruppe  | Umlenkrolle       |             |          | 4      |
-| Mechanik   | Riemenzahnrad_GT2 | Einkaufen   |          | 2      |
+[HGantry](#hgantry)-StepperAssm:
+| Teileart   | Teilename                   | Herstellung | Material | Anzahl |
+| :-------   | :---------                  | :---------- | -------: | -----: |
+| Mechanik   | StH_Left                    | 3D-Druck    | PLA      | 1      |
+| Mechanik   | StH_Right                   | 3D-Druck    | PLA      | 1      |
+| Elektronik | NEMA17_Motor                | Einkaufen   |          | 2      |
+| Baugruppe  | [Umlenkrolle](#umlenkrolle) |             |          | 4      |
+| Mechanik   | Riemenzahnrad_GT2           | Einkaufen   |          | 2      |
 
+<a name="endstop500"/>
 
-
-HGantry-EndStop_500:
+[HGantry](#hgantry)-EndStop_500:
 | Teileart   | Teilename   | Herstellung | Material | Anzahl |
 | :-------   | :---------  | :---------- | -------: | -----: |
 | Elektronik | microswitch | Einkaufen   |          | 1      |
 | Mechanik   | EndH_500    | 3D-Druck    | PLA      | 1      |
 
-HGantry-Spanneinheit:
-| Teileart   | Teilename       | Herstellung | Material | Anzahl |
-| :-------   | :---------      | :---------- | -------: | -----: |
-| Mechanik   | Spannhalterung  | 3D-Druck    | PLA      | 1      |
-| Baugruppe  | Winkelrolle     |             |          | 2      |
-| Mechanik   | Tensioner       | 3D-Druck    | PLA      | 1      |
-| Mechanik   | 6kt-Schr. M4x40 | Einkaufen   |          | 1      |
-| Mechanik   | 6kt-Mutter. M4  | Einkaufen   |          | 1      |
-| Mechanik   | Knob            | 3D-Druck    | PLA      | 1      |
+<a name="spanneinheit"/>
 
-HGantry-Spanneinheit-Winkelrolle:
+[HGantry](#hgantry)-Spanneinheit:
+| Teileart   | Teilename                   | Herstellung | Material | Anzahl |
+| :-------   | :---------                  | :---------- | -------: | -----: |
+| Mechanik   | Spannhalterung              | 3D-Druck    | PLA      | 1      |
+| Baugruppe  | [Winkelrolle](#winkelrolle) |             |          | 2      |
+| Mechanik   | Tensioner                   | 3D-Druck    | PLA      | 1      |
+| Mechanik   | 6kt-Schr. M4x40             | Einkaufen   |          | 1      |
+| Mechanik   | 6kt-Mutter. M4              | Einkaufen   |          | 1      |
+| Mechanik   | Knob                        | 3D-Druck    | PLA      | 1      |
+
+<a name="winkelrolle"/>
+
+[HGantry](#hgantry)-[Spanneinheit](#spanneinheit)-Winkelrolle:
 | Teileart  | Teilename             | Herstellung | Material | Anzahl |
 | :-------  | :---------            | :---------- | -------: | -----: |
 | Mechanik  | Kugellager_Da9xDi3xh5 | Einkaufen   |          | 1      |
-| Mechanik  | Rolle                 | 3D-Druck    |          | 1      |
+| Mechanik  | Rolle                 | 3D-Druck    | d=17.2   | 1      |
 | Mechanik  | Unterlegscheibe       | 3D-Druck    |          | 1      |
 | Mechanik  | Zylschr. M3x12        | Einkaufen   |          | 1      |
 
-HGantry-EndStop_400:
+<a name="endstop400"/>
+
+[HGantry](#hgantry)-EndStop_400:
 | Teileart   | Teilename        | Herstellung | Material | Anzahl |
 | :-------   | :---------       | :---------- | -------: | -----: |
 | Mechanik   | Alu-Profil_20x20 | Einkaufen   | l=200    | 1      |
@@ -227,52 +236,32 @@ HGantry-EndStop_400:
 | Mechanik   | Stuetze          | 3D-Druck    | PLA      | 1      |
 | Mechanik   | Stuetz_Con       | 3D-Druck    | PLA      | 1      |
 
-HGantry-MagnetAssm:
+<a name="magnetassm"/>
+
+[HGantry](#hgantry)-MagnetAssm:
 | Teileart   | Teilename        | Herstellung | Material | Anzahl |
 | :-------   | :---------       | :---------- | -------: | -----: |
 | Mechanik   | MagnetHalter     | 3D-Druck    | PLA      | 1      |
 | Mechanik   | 6kt-Schr. M3x10  |             |          | 2      |
 | Elektronik | Elektromagnet    | Einkaufen   |          | 1      |
 
-HGantry-Chain:
+<a name="chain"/>
+
+[HGantry](#hgantry)-Chain:
 | Teileart   | Teilename        | Herstellung | Material | Anzahl |
 | :-------   | :---------       | :---------- | -------: | -----: |
 | Mechanik   | ChainStart       | 3D-Druck    | PLA      | 1      |
 | Mechanik   | Link             | 3D-Druck    | PLA      | 21     |
 | Mechanik   | ChainEnd         | 3D-Druck    | PLA      | 1      |
 
-HGantry-Chain2:
+<a name="chain2"/>
+
+[HGantry](#hgantry)-Chain2:
 | Teileart   | Teilename        | Herstellung | Material | Anzahl |
 | :-------   | :---------       | :---------- | -------: | -----: |
 | Mechanik   | Link Start       | 3D-Druck    | PLA      | 1      |
 | Mechanik   | Link             | 3D-Druck    | PLA      | 35     |
 | Mechanik   | Link End         | 3D-Druck    | PLA      | 1      |
-
-# Stückliste
-
-## Übersicht
-
-| Bezeichnung    | Menge |
-|----------------|-------|
-| [Baugruppe A](#baugruppe-a) | 1     |
-| [Baugruppe B](#baugruppe-b) | 1     |
-
----
-
-## Baugruppe A
-- **Teil 1**: 2 Stück  
-- **Teil 2**: 4 Stück  
-
-[Zurück zur Übersicht](#übersicht)
-
----
-
-## Baugruppe B
-- **Teil 3**: 3 Stück  
-- **Teil 4**: 1 Stück  
-
-[Zurück zur Übersicht](#übersicht)
-
 
 ## Mitwirkende
 
