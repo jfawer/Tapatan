@@ -136,8 +136,8 @@ Tapatan:
 | :-------  | :---------                          | :---------- | -------: | -----: |
 | Baugruppe | [HGantry](#hgantry)                 |             |          | 1      |
 | Baugruppe | [ElectronicPlate](#electronicplate) |             |          | 1      |
-| Baugruppe | [Steineschublade](steineschublade)  |             |          | 1      |
-| Baugruppe | [Gehäuse](gehäuse)                  |             |          | 1      |
+| Baugruppe | [Steineschublade](#steineschublade)  |             |          | 1      |
+| Baugruppe | [Gehäuse](#gehäuse)                  |             |          | 1      |
 
 <a name="hgantry"/>
 
