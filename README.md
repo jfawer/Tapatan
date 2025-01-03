@@ -129,7 +129,7 @@ Beschreibung der Einzelnen h-Files, Funktion von main und motorcontrol
 
 ### Stückliste
 
-<a name="tapatan"/>
+<a name="tapatanstk"/>
 
 Tapatan:
 | Teileart  | Teilename                           | Herstellung | Material | Anzahl |
@@ -141,7 +141,7 @@ Tapatan:
 
 <a name="hgantry"/>
 
-[Tapatan](#tapatan)-HGantry:
+[Tapatan](#tapatanstk)-HGantry:
 | Teileart  | Teilename                         | Herstellung | Material | Anzahl |
 | :-------  | :---------                        | :---------- | -------: | -----: |
 | Mechanik  | Schiene_lang                      | Einkaufen   |          | 1      |
