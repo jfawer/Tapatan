@@ -166,6 +166,8 @@ Tapatan:
 | Mechanik  | Zyl.-Schr. M3x10                  | Einkaufen   |          | 4      |
 | Mechanik  | Zyl.-Schr. M3x8                   | Einkaufen   |          | 2      |
 | Mechanik  | Nutenstein M3                     | Einkaufen   |          | 4      |
+| Mechanik  | Zyl.-Schr. M5x8                   | Einkaufen   |          | 11     |
+| Mechanik  | Zyl.-Schr. M5x8                   | Einkaufen   |          | 11     |
 
 
 <a name="umlenkrolle"/>
@@ -386,6 +388,11 @@ Tapatan:
 | Mechanik   | Verbinder 2                            | 3D-Druck       | PLA            | 2      |
 | Mechanik   | Gummifuss                              | Einkaufen      |                | 1      |
 | Mechanik   | Verbinder 3                            | 3D-Druck       | PLA            | 2      |
+| Mechanik   | Linsenkopfschr. M3x8                   | Einkaufen      |                | 5      |
+| Mechanik   | Linsenkopfschr. M2.5x8                 | Einkaufen      |                | 2      |
+| Mechanik   | Linsenkopfschr. M5x8                   | Einkaufen      |                | 2      |
+| Mechanik   | Nutenstein M5                          | Einkaufen      |                | 2      |
+| Mechanik   | Insert M3                              | Einkaufen      |                | 5      |
 
 <a name="eckassmbackright"/>
 
@@ -398,6 +405,11 @@ Tapatan:
 | Mechanik   | Verbinder 2                            | 3D-Druck       | PLA            | 2      |
 | Mechanik   | Gummifuss                              | Einkaufen      |                | 1      |
 | Mechanik   | Verbinder 3                            | 3D-Druck       | PLA            | 2      |
+| Mechanik   | Linsenkopfschr. M3x8                   | Einkaufen      |                | 5      |
+| Mechanik   | Linsenkopfschr. M2.5x8                 | Einkaufen      |                | 2      |
+| Mechanik   | Linsenkopfschr. M5x8                   | Einkaufen      |                | 2      |
+| Mechanik   | Nutenstein M5                          | Einkaufen      |                | 2      |
+| Mechanik   | Insert M3                              | Einkaufen      |                | 5      |
 
 <a name="eckassmbackleft"/>
 
@@ -410,6 +422,11 @@ Tapatan:
 | Mechanik   | Verbinder 2                            | 3D-Druck       | PLA            | 2      |
 | Mechanik   | Gummifuss                              | Einkaufen      |                | 1      |
 | Mechanik   | Verbinder 3                            | 3D-Druck       | PLA            | 2      |
+| Mechanik   | Linsenkopfschr. M3x8                   | Einkaufen      |                | 5      |
+| Mechanik   | Linsenkopfschr. M2.5x8                 | Einkaufen      |                | 2      |
+| Mechanik   | Linsenkopfschr. M5x8                   | Einkaufen      |                | 2      |
+| Mechanik   | Nutenstein M5                          | Einkaufen      |                | 2      |
+| Mechanik   | Insert M3                              | Einkaufen      |                | 5      |
 
 <a name="dreieckassm"/>
 
@@ -418,6 +435,8 @@ Tapatan:
 | :-------   | :---------                             | :----------    | -------:       | -----: |
 | Mechanik   | Inside                                 | 3D-Druck       | PLA            | 1      |
 | Mechanik   | Outside                                | 3D-Druck       | PLA            | 1      |
+| Mechanik   | Insert M3                              | Einkaufen      |                | 3      |
+| Mechanik   | Linsenkopfschr. M3x8                   | Einkaufen      |                | 3      |
 
 <a name="kantenabdeckungl"/>
 
@@ -426,6 +445,7 @@ Tapatan:
 | :-------   | :---------       | :----------    | -------: | -----: |
 | Mechanik   | KantenHalt       | 3D-Druck       | PLA      | 2      |
 | Mechanik   | ConnectorKanVerb | 3D-Druck       | PLA      | 1      |
+| Mechanik   | Insert M2.5      | Einkaufen      |          | 4      |
 
 <a name="kantenabdeckungk"/>
 
@@ -434,6 +454,7 @@ Tapatan:
 | :-------   | :---------       | :----------    | -------: | -----: |
 | Mechanik   | KantenHalt       | 3D-Druck       | PLA      | 2      |
 | Mechanik   | KantenAluVerb    | 3D-Druck       | PLA      | 1      |
+| Mechanik   | Insert M2.5      | Einkaufen      |          | 4      |
 
 <a name="botparttap"/>
 
