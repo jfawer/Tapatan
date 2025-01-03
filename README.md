@@ -129,34 +129,38 @@ Beschreibung der Einzelnen h-Files, Funktion von main und motorcontrol
 
 ### Stückliste
 Gesamtbaugruppe:
-| Teileart  | Teilename       | Herstellung | Material | Anzahl |
-| :-------  | :---------      | :---------- | -------: | -----: |
-| Baugruppe | HGantry         |             |          | 1      |
-| Baugruppe | ElectronicPlate |             |          | 1      |
-| Baugruppe | Steinehalterung |             |          | 1      |
-| Baugruppe | Gehäuse         |             |          | 1      |
+| Teileart  | Teilename                           | Herstellung | Material | Anzahl |
+| :-------  | :---------                          | :---------- | -------: | -----: |
+| Baugruppe | [HGantry](#hgantry)                 |             |          | 1      |
+| Baugruppe | [ElectronicPlate](#electronicplate) |             |          | 1      |
+| Baugruppe | [Steinehalterung](steinehalterung)  |             |          | 1      |
+| Baugruppe | [Gehäuse](gehäuse)                  |             |          | 1      |
+
+<a name="hgantry"/>
 
 HGantry:
-| Teileart  | Teilename        | Herstellung | Material | Anzahl |
-| :-------  | :---------       | :---------- | -------: | -----: |
-| Mechanik  | Schiene_lang     | Einkaufen   |          | 1      |
-| Mechanik  | Wagen_Gross      | Einkaufen   |          | 1      |
-| Mechanik  | Schiene          | Einkaufen   |          | 1      |
-| Mechanik  | Alu-Profil_20x20 | Einkaufen   | l=600    | 1      |
-| Baugruppe | Umlenkrolle      |             |          | 2      |
-| Baugruppe | Umlenturm        |             |          | 2      |
-| Mechanik  | Standoff_M3x13   | Einkaufen   |          | 2      |
-| Baugruppe | StepperAssm      |             |          | 1      |
-| Baugruppe | EndStop_500      |             |          | 1      |
-| Mechanik  | Tail             | 3D-Druck    | PLA      | 1      |
-| Mechanik  | Verbin_Step      | 3D-Druck    | PLA      | 1      |
-| Mechanik  | RailAllign       | 3D-Druck    | PLA      | 1      |
-| Baugruppe | Spanneinheit     |             |          | 1      |
-| Mechanik  | Ecke_Profil      |             |          | 1      |
-| Baugruppe | EndStop_400      |             |          | 1      |
-| Baugruppe | MagnetAssm       |             |          | 1      |
-| Baugruppe | Chain            |             |          | 1      |
-| Baugruppe | Chain2           |             |          | 1      |
+| Teileart  | Teilename                         | Herstellung | Material | Anzahl |
+| :-------  | :---------                        | :---------- | -------: | -----: |
+| Mechanik  | Schiene_lang                      | Einkaufen   |          | 1      |
+| Mechanik  | Wagen_Gross                       | Einkaufen   |          | 1      |
+| Mechanik  | Schiene                           | Einkaufen   |          | 1      |
+| Mechanik  | Alu-Profil_20x20                  | Einkaufen   | l=600    | 1      |
+| Baugruppe | [Umlenkrolle](#umlenkrolle)       |             |          | 2      |
+| Baugruppe | [Umlenkturm](#umlenkturm)         |             |          | 2      |
+| Mechanik  | Standoff_M3x13                    | Einkaufen   |          | 2      |
+| Baugruppe | [StepperAssm](#stepperassm)       |             |          | 1      |
+| Baugruppe | [EndStop_500](#endstop500)        |             |          | 1      |
+| Mechanik  | Tail                              | 3D-Druck    | PLA      | 1      |
+| Mechanik  | Verbin_Step                       | 3D-Druck    | PLA      | 1      |
+| Mechanik  | RailAllign                        | 3D-Druck    | PLA      | 1      |
+| Baugruppe | [Spanneinheit](#spanneinheit)     |             |          | 1      |
+| Mechanik  | Ecke_Profil                       |             |          | 1      |
+| Baugruppe | [EndStop_400](#endstop400)        |             |          | 1      |
+| Baugruppe | [MagnetAssm](#magnetassm)         |             |          | 1      |
+| Baugruppe | [Chain](#chain)                   |             |          | 1      |
+| Baugruppe | [Chain2](#chain2)                 |             |          | 1      |
+
+<a name="umlenkrolle"/>
 
 HGantry-(StepperAssm)-Umlenkrolle :
 | Teileart  | Teilename             | Herstellung | Material | Anzahl |
@@ -165,6 +169,8 @@ HGantry-(StepperAssm)-Umlenkrolle :
 | Mechanik  | Rolle                 | 3D-Druck    |          | 1      |
 | Mechanik  | Unterlegscheibe       | 3D-Druck    |          | 1      |
 | Mechanik  | Zylschr. M3x12        | Einkaufen   |          | 1      |
+
+<a name="umlenkturm"/>
 
 HGantry-Umlenkturm:
 | Teileart  | Teilename             | Herstellung | Material | Anzahl |
@@ -175,6 +181,8 @@ HGantry-Umlenkturm:
 | Mechanik  | Zylschr. M3x14        | Einkaufen   |          | 1      |
 | Mechanik  | Distanzzylinder       | 3D-Druck    |          | 1      |
 
+<a name="stepperassm"/>
+
 HGantry-StepperAssm:
 | Teileart   | Teilename         | Herstellung | Material | Anzahl |
 | :-------   | :---------        | :---------- | -------: | -----: |
@@ -183,6 +191,8 @@ HGantry-StepperAssm:
 | Elektronik | NEMA17_Motor      | Einkaufen   |          | 2      |
 | Baugruppe  | Umlenkrolle       |             |          | 4      |
 | Mechanik   | Riemenzahnrad_GT2 | Einkaufen   |          | 2      |
+
+
 
 HGantry-EndStop_500:
 | Teileart   | Teilename   | Herstellung | Material | Anzahl |
@@ -237,6 +247,32 @@ HGantry-Chain2:
 | Mechanik   | Link Start       | 3D-Druck    | PLA      | 1      |
 | Mechanik   | Link             | 3D-Druck    | PLA      | 35     |
 | Mechanik   | Link End         | 3D-Druck    | PLA      | 1      |
+
+# Stückliste
+
+## Übersicht
+
+| Bezeichnung    | Menge |
+|----------------|-------|
+| [Baugruppe A](#baugruppe-a) | 1     |
+| [Baugruppe B](#baugruppe-b) | 1     |
+
+---
+
+## Baugruppe A
+- **Teil 1**: 2 Stück  
+- **Teil 2**: 4 Stück  
+
+[Zurück zur Übersicht](#übersicht)
+
+---
+
+## Baugruppe B
+- **Teil 3**: 3 Stück  
+- **Teil 4**: 1 Stück  
+
+[Zurück zur Übersicht](#übersicht)
+
 
 ## Mitwirkende
 
