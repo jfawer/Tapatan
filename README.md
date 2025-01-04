@@ -376,6 +376,7 @@ Tapatan:
 | Elektronik | Rotary_Switch                          | Einkaufen      |                | 1      |
 | Elektronik | LED_Streifen                           | Einkaufen      |                | 1.2m   |
 | Mechanik   | Chip                                   | 3D-Druck       | PLA            | 10     |
+| Mechanik   | Linsenkopfschr. M3x12                  | Einkaufen      |                | 3      |
 
 <a name="eckassm"/>
 
@@ -409,7 +410,7 @@ Tapatan:
 | Mechanik   | Linsenkopfschr. M2.5x8                 | Einkaufen      |                | 2      |
 | Mechanik   | Linsenkopfschr. M5x8                   | Einkaufen      |                | 2      |
 | Mechanik   | Nutenstein M5                          | Einkaufen      |                | 2      |
-| Mechanik   | Insert M3                              | Einkaufen      |                | 5      |
+| Mechanik   | Insert M3                              | Einkaufen      |                | 6      |
 
 <a name="eckassmbackleft"/>
 
@@ -426,7 +427,7 @@ Tapatan:
 | Mechanik   | Linsenkopfschr. M2.5x8                 | Einkaufen      |                | 2      |
 | Mechanik   | Linsenkopfschr. M5x8                   | Einkaufen      |                | 2      |
 | Mechanik   | Nutenstein M5                          | Einkaufen      |                | 2      |
-| Mechanik   | Insert M3                              | Einkaufen      |                | 5      |
+| Mechanik   | Insert M3                              | Einkaufen      |                | 6      |
 
 <a name="dreieckassm"/>
 
@@ -435,7 +436,7 @@ Tapatan:
 | :-------   | :---------                             | :----------    | -------:       | -----: |
 | Mechanik   | Inside                                 | 3D-Druck       | PLA            | 1      |
 | Mechanik   | Outside                                | 3D-Druck       | PLA            | 1      |
-| Mechanik   | Insert M3                              | Einkaufen      |                | 3      |
+| Mechanik   | Insert M3                              | Einkaufen      |                | 4      |
 | Mechanik   | Linsenkopfschr. M3x8                   | Einkaufen      |                | 3      |
 
 <a name="kantenabdeckungl"/>
@@ -475,6 +476,9 @@ Tapatan:
 | Mechanik   | Mittelstütze              | 3D-Druck       | PLA      | 2      |
 | Mechanik   | SchubladenleisteLinks     | 3D-Druck       | PLA      | 2      |
 | Mechanik   | SchubladenleisteRechts    | 3D-Druck       | PLA      | 2      |
+| Mechanik   | Linsenkopfschr. M5x8      | Einkaufen      |          | 30     |
+| Mechanik   | Nutenstein M5             | Einkaufen      |          | 30     |
+| Mechanik   | Insert M3                 | Einkaufen      |          | 3      |
 
 <a name="pcbdeckel"/>
 
