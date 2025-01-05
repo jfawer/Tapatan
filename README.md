@@ -144,13 +144,21 @@ Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übers
 * POWER LED (GREEN)
 * RX0, TX0, RX1, TX1 LEDs (YELLOW)
 * Relais Status LEDs (RED)
-[Bild der Leiterplatte 1]
+
+<figure>
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Leiterplatte 1.jpg" width="600" />
+   <figurecaption><p><i>Abbildung 8: Leiterplatte 1</i></p></figurecaption>
+</figure>
 
 **Leiterplatte 2:**
 
 * Verteilungsplatine für den Deckel
 * Anschluss für Sensoren, LEDs, LCD-Display, Rotary-Switch
-[Bild der Leiterplatte 2]
+
+<figure>
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Leiterplatte 2.jpg" width="600" />
+   <figurecaption><p><i>Abbildung 9: Leiterplatte 2</i></p></figurecaption>
+</figure>
 
 ##### Verkabelung
 
