@@ -112,17 +112,67 @@ Das Gantry-System basiert auf dem Prinzip eines H-Gantry (siehe Abbildung 6). Be
 </figure>
 
 ### Elektronik
-#### Beschreibung des Schaltplans
-ERGÄNZEN!!!!!!!!!!!!!
+
+#### Leiterplatten
+
+Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übersichtliche Verkabelung zu gewährleisten. Alle zugehörigen Dateien (z.B. Schaltpläne, Layout-Dateien) befinden sich in diesem Repository.
+
+##### Versionen
+
+**Version 1:**  Erste Version der Leiterplatten. Diese Version enthält einige Fehler, die manuell korrigiert werden konnten. **Diese Version sollte nicht mehr verwendet werden.**
+
+**Version 2:** Überarbeitete Version der Leiterplatten.  Die folgenden Fehler wurden behoben:
+
+* **Korrektur des Footprints der MOSFETs:**  Die MOSFETs, welche die LEDs ansteuern, haben nun den korrekten Footprint.
+* **Hinzufügen von Zehnerdioden:**  Um einen Rückstrom vom Elektromagneten zu verhindern, der einen Reset des Arduinos ausgelösst hat, wurden Zehnerdioden hinzugefügt.
+* **Änderung der Pinbelegung:** Die Pinbelegung wurde angepasst, um die Interrupt-Pins für den Rotary Switch nutzen zu können. 
+
+**Bei einer erneuten Bestellung der Leiterplatten bitte unbedingt die Version 2 verwenden.**
+
+**Hinweis:** Die Änderung der Pinbelegung (für die Interrupt-Pins am Rotary Switch) wurde bereits bei der Verkabelung der ersten Version manuell vorgenommen und der Code entsprechend angepasst.
+
+
+##### Beschreibung der Leiterplatten
+
+**Leiterplatte 1:** 
+
+* Shield für den Arduino MEGA
+* Ansteuerung des Elektromagneten
+* Ansteuerung der LEDs
+* Stromverteilung
+* RESET Knopf
+* POWER LED (GREEN)
+* RX0, TX0, RX1, TX1 LEDs (YELLOW)
+* Relais Status LEDs (RED)
+[Bild der Leiterplatte 1]
+
+**Leiterplatte 2:**
+
+* Verteilungsplatine für den Deckel
+* Anschluss für Sensoren, LEDs, LCD-Display, Rotary-Switch
+[Bild der Leiterplatte 2]
+
+##### Verkabelung
+
+Die Verkabelung kann in den Schaltplänen eingesehen werden.
+
+**Abweichungen von Version 1:** 
+Folgende Änderungen wurden vorgenommen aufgrund diverser Umstände
+* Endschalter_Y ist an Pin D17 angeschlossen (Pin D9 Defekt)
+* Rotary_Switch_Digital_3 ist an Pin D2 angeschlossen
+* M1_PUL ist an Pin D23 angeschlossen
+
+##### Bestellung der Leiterplatten
+
+Die Leiterplatten wurden bei JLCPCB bestellt.
 
 #### Farbcode Verkabelung
 | Farbe | Signal |
 | ----- | ------ |
-| Rot | 5V |
-| Schwarz | Ground |
-| Grün |  |
-
-ERGÄNZEN!!!!!
+| Rot | VCC |
+| Schwarz | GND |
+| Blau | Elektromagnet |
+| Weiß | Signal |
 
 ### Programmcode
 Beschreibung der Einzelnen h-Files, Funktion von main und motorcontrol
@@ -523,3 +573,7 @@ Für Fragen oder Anregungen zum Projekt können Sie sich gerne an die oben genan
 Trinationaler Studiengang Mechatronik (trinat.humboldt@outlook.com)
 
 Projekt-Link: https://github.com/jfawer/Tapatan.git
+
+## Lizenz
+
+Dieses Projekt ist unter ... Lizenz lizenziert.
