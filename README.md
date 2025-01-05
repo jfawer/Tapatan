@@ -113,9 +113,7 @@ Das Gantry-System basiert auf dem Prinzip eines H-Gantry (siehe Abbildung 6). Be
 
 ### Elektronik
 
-#### Leiterplatten
-
-Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übersichtliche Verkabelung zu gewährleisten. Alle zugehörigen Dateien (z.B. Schaltpläne, Layout-Dateien) befinden sich in diesem Repository.
+Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übersichtliche Verkabelung zu gewährleisten. Alle zugehörigen Dateien (z.B. Schaltpläne, Layout-Dateien) befinden sich in diesem Repository unter dem Ordner Schaltpläne. Hierfür wurde KiCad 8.0 verwendet mit dem Plugin "Interactive Html Bom" und der Bibliothek  "KiCad Library for Arduino Modules"
 
 ##### Versionen
 
@@ -146,7 +144,7 @@ Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übers
 * Relais Status LEDs (RED)
 
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Leiterplatte 1.jpg" width="600" />
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Leiterplatte 1.png" width="600" />
    <figurecaption><p><i>Abbildung 8: Leiterplatte 1</i></p></figurecaption>
 </figure>
 
@@ -156,17 +154,18 @@ Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übers
 * Anschluss für Sensoren, LEDs, LCD-Display, Rotary-Switch
 
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Leiterplatte 2.jpg" width="600" />
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Leiterplatte 2.png" width="600" />
    <figurecaption><p><i>Abbildung 9: Leiterplatte 2</i></p></figurecaption>
 </figure>
 
 ##### Verkabelung
 
 Die Verkabelung kann in den Schaltplänen eingesehen werden.
+Die Stromversorgung erfolgt überdas Netzteil und die Buchse. Vcc wird über den Kippschalter(an/aus) geführt und im Anschluss auf die DC-DC Converter und auch direkt an der 1 Leiterplatte angeschlossen. Somit wird die 5V, 9V und 12V Spannungsversorgung sichergestellt.
 
-**Abweichungen von Version 1:** 
+**Abweichungen von Version 1 zur Abgabe:** 
 Folgende Änderungen wurden vorgenommen aufgrund diverser Umstände
-* Endschalter_Y ist an Pin D17 angeschlossen (Pin D9 Defekt)
+* Endschalter_Y ist an Pin D17 angeschlossen (Pin D9 defekt)
 * Rotary_Switch_Digital_3 ist an Pin D2 angeschlossen
 * M1_PUL ist an Pin D23 angeschlossen
 
