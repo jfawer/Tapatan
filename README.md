@@ -50,7 +50,7 @@ Unser Ziel war es, den bestehenden Programmcode und die Mechanik grundlegend zu 
 3. Spanne den Riemen in dem du am roten Teil drehst (siehe Abbildung 1/Abbildung 2). <br>
    Hinweis: Entspanne nach dem Spielen den Riemen wieder, um die Lebensdauer des Mechanismus zu verlängern und Schäden durch anhaltende Spannung zu vermeiden.
 5. Stecke das Netzteilkabel ein.
-6. Schalte den Schalter auf der Rückseite des Spieles ein.
+6. Schalte den Schalter auf der Rückseite des Spiels ein.
 
 <figure>
    <img src="Bilder/Riemen-Spannen.png" width="600" />
@@ -94,7 +94,7 @@ Hinweis: Das Spiel zeigt automatisch den Gewinner oder ein Unentschieden an.<br>
 #### Erkennen der Spielfiguren
 Um auszuwerten, welche Spielfiguren auf welchem Feld stehen, wurde in jede Spielfigur ein Magnet integriert. Die beiden unterschiedlichen Farben (Rot und Blau) besitzen jeweils entgegengesetzt ausgerichtete Magnete. Dadurch erzeugen die verschiedenen Spielsteine unterschiedliche Magnetfelder an ihrer Unterseite. Mithilfe bipolarer Hallsensoren können diese Magnetfelder erkannt werden. Die Hallsensoren sind direkt unter der Spielplatte angebracht, sodass für jedes Feld ermittelt werden kann, ob es leer ist oder ein blauer bzw. roter Spielstein darauf platziert wurde. <br>
 
-Um zu verhindern, dass sich die Spielsteine gegenseitig anziehen oder abstoßen, wurde zusätzlich ein Stahlring um den Magneten in den Figuren integriert. Dieser beeinflusst das Magnetfeld so, dass es in radialer Richtung abgeschirmt wird und hauptsächlich in axialer Richtung wirkt.<br>
+Um zu verhindern, dass sich die Spielsteine gegenseitig anziehen oder abstossen, wurde zusätzlich ein Stahlring um den Magneten in den Figuren integriert. Dieser beeinflusst das Magnetfeld so, dass es in radialer Richtung abgeschirmt wird und hauptsächlich in axialer Richtung wirkt.<br>
 
 #### Verschieben der Spielfiguren
 Die Spielfiguren werden mithilfe eines Elektromagneten bewegt, der sich unterhalb der Spielplatte befindet und durch das Gantry-System positioniert wird. Die Magnete in den Spielfiguren werden vom Elektromagneten angezogen, sodass die Figuren präzise und kontrolliert über das Spielfeld verschoben werden können.
@@ -184,10 +184,31 @@ Die Leiterplatten wurden bei JLCPCB bestellt.
 | Rot | VCC |
 | Schwarz | GND |
 | Blau | Elektromagnet |
-| Weiß | Signal |
+| Weiss | Signal |
 
 ### Programmcode
 Beschreibung der Einzelnen h-Files, Funktion von main und motorcontrol
+
+## Beispielcode
+```c++
+// Spiel starten
+    switch (gameSettings.game) {                                                                          // Auswahl des Spiels
+      case TicTacToe:
+        led.setColor("Zyan");                                                                             // LED Streifen auf zyan setzen
+        playTicTacToe(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, motorController, garageState, config); // Spiel Tic Tac Toe starten
+        delay(5000);
+        break;
+      case Tapatan:
+        led.setColor("Weiss");                                                                            // LED Streifen auf weiss setzen
+        playTapatan(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, garageState, motorController, config); // Spiel Tapatan starten
+        delay(5000);
+        break;
+    }
+
+
+
+
+
 
 ### Stückliste
 
@@ -590,7 +611,3 @@ Für Fragen oder Anregungen zum Projekt können Sie sich gerne an die oben genan
 Trinationaler Studiengang Mechatronik (trinat.humboldt@outlook.com)
 
 Projekt-Link: https://github.com/jfawer/Tapatan.git
-
-## Lizenz
-
-Dieses Projekt ist unter ... Lizenz lizenziert.
