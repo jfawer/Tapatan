@@ -1,5 +1,10 @@
 # Tapatan
 
+<figure>
+   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Tapatan.png" width="800" />
+</figure>
+
+
 ## Inhaltsverzeichnis
 - [Über das Projekt](#über-das-projekt)
 - [Ziele](#ziele)
