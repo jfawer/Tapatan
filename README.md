@@ -160,8 +160,8 @@ Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übers
 
 ##### Verkabelung
 
-Die Verkabelung kann in den Schaltplänen eingesehen werden.
-Die Stromversorgung erfolgt überdas Netzteil und die Buchse. Vcc wird über den Kippschalter(an/aus) geführt und im Anschluss auf die DC-DC Converter und auch direkt an der 1 Leiterplatte angeschlossen. Somit wird die 5V, 9V und 12V Spannungsversorgung sichergestellt.
+Die Verkabelung kann in den Schaltplänen eingesehen werden. Jede Version besitzt 3 Schaltpläne. Einen für das Gesammte Projekt und jeweils einen pro Leiterplatte.
+Die Stromversorgung erfolgt über das Netzteil und die Buchse. Vcc wird über den Kippschalter(an/aus) geführt und im Anschluss auf die DC-DC Converter und direkt an der 1 Leiterplatte angeschlossen. Somit wird die 5V, 9V und 12V Spannungsversorgung sichergestellt.
 
 **Abweichungen von Version 1 zur Abgabe:** 
 Folgende Änderungen wurden vorgenommen aufgrund diverser Umstände
