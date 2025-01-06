@@ -356,11 +356,13 @@ Tapatan:
 | Mechanik   | Linsenkopfschr. M3x16            | Einkaufen      |          | 2      |
 | Mechanik   | Senkschr. M3x16                  | Einkaufen      |          | 2      |
 | Mechanik   | Mutter M3                        | Einkaufen      |          | 4      |
-| Elektronik | Schalter                         | Einkaufen      |          | 1      |
+| Elektronik | Kippschalter                     | Einkaufen      |          | 1      |
 | Elektronik | [Arduino_Shield](#arduinoshield) | Einkaufen      |          | 1      |
 | Mechanik   | Inserts M3                       | Einkaufen      |          | 2      |
 | Elektronik | DC-DC-Converter 12V/9V           | Einkaufen      |          | 1      |
 | Elektronik | DC-DC-Converter 12V/5V           | Einkaufen      |          | 1      |
+| Elektronik | Netzteil 12V 10A                 | Einkaufen      |          | 1      |
+| Elektronik | Buchse (18awg)                   | Einkaufen      |          | 1      |
 
 <a name="arduinoshield"/>
 
@@ -368,17 +370,19 @@ Tapatan:
 | Teileart   | Teilename              | Herstellung    | Material | Anzahl |
 | :-------   | :---------             | :----------    | -------: | -----: |
 | Elektronik | Leiterplatte           | Einkaufen      |          | 1      |
-| Elektronik | Widerstand 680Ohm      | Einkaufen      |          | 7      |
-| Elektronik | LED_Red                | Einkaufen      |          | 4      |
+| Elektronik | Widerstand 680Ohm      | Einkaufen      |          | 8      |
+| Elektronik | LED_Red                | Einkaufen      |          | 3      |
 | Elektronik | Diode 1N4007           | Einkaufen      |          | 3      |
 | Elektronik | Widerstand 1kOhm       | Einkaufen      |          | 3      |
 | Elektronik | NPN Transistor BC547   | Einkaufen      |          | 3      |
 | Elektronik | Relay_SPDT             | Einkaufen      |          | 3      |
 | Elektronik | Widerstand 10kOhm      | Einkaufen      |          | 3      |
 | Elektronik | LED_Green              | Einkaufen      |          | 1      |
-| Elektronik | LED_Blue               | Einkaufen      |          | 1      |
+| Elektronik | SW_Push_Dual           | Einkaufen      |          | 1      |
 | Elektronik | Mosfet IRLZ24          | Einkaufen      |          | 3      |
 | Elektronik | LED_Yellow             | Einkaufen      |          | 4      |
+| Elektronik | Leiterplattenklemmen |              |          | siehe PCB1 |
+| Elektronik V2 | Zenerdiode 12V 0.5W             | Einkaufen      |          | 2      |
 
 
 <a name="steineschublade"/>
@@ -429,9 +433,9 @@ Tapatan:
 | Mechanik   | Drehknopf                              | 3D-Druck       | PLA            | 1      |
 | Mechanik   | Sensorplatte                           | 3D-Druck       | PLA            | 1      |
 | Baugruppe  | [ChainBig](#chainbig)                  | 3D-Druck       | PLA            | 1      |
-| Elektronik | Hallsensor  DRV5055A2QLPG              | Einkaufen      |                | 1      |
-| Elektronik | Rotary_Switch                          | Einkaufen      |                | 1      |
-| Elektronik | LED_Streifen                           | Einkaufen      |                | 1.2m   |
+| Elektronik | Hallsensor  (DRV5055A2QLPG)            | Einkaufen      |                | 1      |
+| Elektronik | Rotary_Switch  (KY-040)                | Einkaufen      |                | 1      |
+| Elektronik | LED_Streifen (GS5050-30RD5V)           | Einkaufen      |                | 1.2m   |
 | Mechanik   | Chip                                   | 3D-Druck       | PLA            | 10     |
 | Mechanik   | Linsenkopfschr. M3x12                  | Einkaufen      |                | 3      |
 
@@ -543,14 +547,15 @@ Tapatan:
 | Teileart   | Teilename          | Herstellung    | Material | Anzahl |
 | :-------   | :---------         | :----------    | -------: | -----: |
 | Elektronik | Tapatan_Deckel_PCB |                |          | 1      |
-| Mechanik   | PCB-Haleer-Deckel  | 3D-Druck       | PLA      | 1      |
+| Elektronik | Leiterplattenklemmen |              |          | siehe PCB2 |
+| Mechanik   | PCB-Halter-Deckel  | 3D-Druck       | PLA      | 1      |
 
 <a name="lcdassm"/>
 
 [Gehäuse](#gehäuse)-LCDAssm
 | Teileart   | Teilename | Herstellung    | Material  | Anzahl |
 | :-------   | :-------- | :----------    | -------:  | -----: |
-| Elektronik | LCD 20x40 |                | Einkaufen | 1      |
+| Elektronik | LCD 4x20  |                | Einkaufen | 1      |
 | Mechanik   | Chassis   | 3D-Druck       | PLA       | 1      |
 | Mechanik   | Cover     | 3D-Druck       | PLA       | 1      |
 
