@@ -1,7 +1,7 @@
 # Tapatan
 
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Tapatan.png" width="800" />
+   <img src="Bilder/Tapatan.png" width="800" />
 </figure>
 
 
@@ -53,19 +53,19 @@ Unser Ziel war es, den bestehenden Programmcode und die Mechanik grundlegend zu 
 6. Schalte den Schalter auf der Rückseite des Spieles ein.
 
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Riemen-Spannen.png" width="600" />
+   <img src="Bilder/Riemen-Spannen.png" width="600" />
    <figcaption><p><i>Abbildung 1: Riemenspannen Mechanismus</i></p></figcaption>
 </figure> <br>
 
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Riemen-Spannen2.png" width="600" />
+   <img src="Bilder/Riemen-Spannen2.png" width="600" />
    <figcaption><p><i>Abbildung 2: Riemenspannen Mechanismus</i></p></figcaption>
 </figure>
 
 ### Spielmodis
 Folgende Spielmodis können ausgewählt werden:
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Spielmodis.png" width="800" />
+   <img src="Bilder/Spielmodis.png" width="800" />
    <figurecaption><p><i>Abbildung 3: Spielmodis</i></p></figurecaption>
 </figure>
 
@@ -81,7 +81,7 @@ Sobald alle Figuren gesetzt sind, können diese bewegt werden. Die Figuren dürf
 Das Spiel endet, wenn ein Spieler drei Figuren in einer horizontalen, vertikalen oder diagonalen Reihe platziert hat. <br>
 Hinweis: Das Spiel zeigt automatisch den Gewinner oder ein Unentschieden an.<br>
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Verfahrwege.png" width="150" />
+   <img src="Bilder/Verfahrwege.png" width="150" />
    <figurecaption><p><i>Abbildung 4: Spielfeld Tapatan</i></p></figurecaption>
 </figure>
 
@@ -100,7 +100,7 @@ Um zu verhindern, dass sich die Spielsteine gegenseitig anziehen oder abstoßen,
 Die Spielfiguren werden mithilfe eines Elektromagneten bewegt, der sich unterhalb der Spielplatte befindet und durch das Gantry-System positioniert wird. Die Magnete in den Spielfiguren werden vom Elektromagneten angezogen, sodass die Figuren präzise und kontrolliert über das Spielfeld verschoben werden können.
 
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Funktionsbeschreibung.png" width="800" />
+   <img src="Bilder/Funktionsbeschreibung.png" width="800" />
    <figurecaption><p><i>Abbildung 7: Aufbau</i></p></figurecaption>
 </figure>
 
@@ -112,7 +112,7 @@ Das Gantry-System basiert auf dem Prinzip eines H-Gantry (siehe Abbildung 6). Be
 </figure>
 
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Gantry.jpg" width="600" />
+   <img src="Bilder/Gantry.jpg" width="600" />
    <figurecaption><p><i>Abbildung 7: H-Gantry Tapatan</i></p></figurecaption>
 </figure>
 
@@ -149,7 +149,7 @@ Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übers
 * Relais Status LEDs (RED)
 
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Leiterplatte 1.png" width="600" />
+   <img src="Bilder/Leiterplatte 1.png" width="600" />
    <figurecaption><p><i>Abbildung 8: Leiterplatte 1</i></p></figurecaption>
 </figure>
 
@@ -159,7 +159,7 @@ Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übers
 * Anschluss für Sensoren, LEDs, LCD-Display, Rotary-Switch
 
 <figure>
-   <img src="https://github.com/jfawer/Tapatan/blob/readme/Bilder/Leiterplatte 2.png" width="600" />
+   <img src="Bilder/Leiterplatte 2.png" width="600" />
    <figurecaption><p><i>Abbildung 9: Leiterplatte 2</i></p></figurecaption>
 </figure>
 
