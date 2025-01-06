@@ -192,21 +192,19 @@ Beschreibung der Einzelnen h-Files, Funktion von main und motorcontrol
 ## Beispielcode
 ```c++
 // Spiel starten
-    switch (gameSettings.game) {                                                                          // Auswahl des Spiels
-      case TicTacToe:
-        led.setColor("Zyan");                                                                             // LED Streifen auf zyan setzen
-        playTicTacToe(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, motorController, garageState, config); // Spiel Tic Tac Toe starten
-        delay(5000);
-        break;
-      case Tapatan:
-        led.setColor("Weiss");                                                                            // LED Streifen auf weiss setzen
-        playTapatan(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, garageState, motorController, config); // Spiel Tapatan starten
-        delay(5000);
-        break;
-    }
-
-
-
+switch (gameSettings.game) {                                                                          // Auswahl des Spiels
+case TicTacToe:
+   led.setColor("Zyan");                                                                             // LED Streifen auf zyan setzen
+   playTicTacToe(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, motorController, garageState, config); // Spiel Tic Tac Toe starten
+   delay(5000);
+   break;
+case Tapatan:
+   led.setColor("Weiss");                                                                            // LED Streifen auf weiss setzen
+   playTapatan(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, garageState, motorController, config); // Spiel Tapatan starten
+   delay(5000);
+   break;
+}
+```
 
 
 
