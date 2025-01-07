@@ -233,7 +233,7 @@ Die Angaben für die Spielsteinpositionierung der Steine können im strcut.h Fil
 <figurecaption><p><i>Abbildung 10: Spielfeld</i></p></figurecaption>
 
 #### Spieler- / Computer-Zug
-Der Code ist folgendermassen aufgebaut. Nachdem der Spieler ein Spielmodus inkl. Swiergikeit ausgewählt hat, fängt im Modus PvC zufällig entweder der Computer oder der Spieler an. Das Spiel ist Zugbasiert und entprechend gibt es einen Spieler und einen Computerzug. Beim TicatacToe ist das für das Setzen und beim Tapatan für das Setzen und anschliessende Verschieben.
+Der Code ist folgendermassen aufgebaut. Nachdem der Spieler ein Spielmodus inkl. Schwiergikeit ausgewählt hat, fängt im Modus PvC zufällig entweder der Computer oder der Spieler an. Das Spiel ist Zugbasiert und entprechend gibt es einen Spieler und einen Computerzug. Beim TicatacToe ist das für das Setzen und beim Tapatan für das Setzen und anschliessende Verschieben.
 
 ##### Spielerzug
 Sobald eine Änderung auf dem Spielfeld registriert wurde, wird überprüft, ob dieser Zug eine gültige Bewegung darstellt. Ist dies nicht der Fall, wird in der Funktion `handleIllegalMove` so lange gewartet, bis das ursprüngliche Spielfeld wiederhergestellt ist. Diese Logik entspricht der Funktion für den Spielzug beim Verschieben, mit dem Unterschied, dass hier andere Regeln gelten.
