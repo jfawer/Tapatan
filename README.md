@@ -51,6 +51,7 @@ Unser Ziel war es, den bestehenden Programmcode und die Mechanik grundlegend zu 
    Hinweis: Entspanne nach dem Spielen den Riemen wieder, um die Lebensdauer des Mechanismus zu verlängern und Schäden durch anhaltende Spannung zu vermeiden.
 5. Stecke das Netzteilkabel ein.
 6. Schalte den Schalter auf der Rückseite des Spiels ein.
+7. Reinigung der Spieloberfläche
 
 <figure>
    <img src="Bilder/Riemen-Spannen.png" width="600" />

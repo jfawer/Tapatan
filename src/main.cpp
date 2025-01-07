@@ -139,6 +139,26 @@ void setup() {
 // --------------------------------------------------------------------------------
 
 void loop() {
+  led.setColor("Gruen");                                                                                  // LED Streifen auf grün setzen
+  delay(1000);
+  led.setColor("Blau");                                                                                   // LED Streifen auf blau setzen
+  delay(1000);
+  led.setColor("Rot");                                                                                    // LED Streifen auf rot setzen
+  delay(1000);
+  led.setColor("Gelb");                                                                                   // LED Streifen auf gelb setzen
+  delay(1000);
+  led.setColor("Orange");                                                                                 // LED Streifen auf orange setzen
+  delay(1000);
+  led.setColor("Zyan");                                                                                   // LED Streifen auf zyan setzen
+  delay(1000);
+  led.setColor("Weiss");                                                                                  // LED Streifen auf weiss setzen
+  delay(1000);
+  led.setColor("Lila");                                                                                   // LED Streifen auf lila setzen
+  delay(1000);
+  led.setColor("Aus");                                                                                    // LED Streifen ausschalten
+
+
+  /*
   // Spiellogik
   updateBoard(Board, potPins);                                                                            // Sensorwerte auslesen
   if (isBoardEqual(Board, ResetBoard) && gameSettings.game == 0) {                                        // Überprüfen, ob das Spielfeld in der Ausgangsposition ist und kein Spiel ausgewählt wurde
@@ -169,4 +189,5 @@ void loop() {
     resetGarageState(garageState);                                                                        // Garage zurücksetzen
     copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
   }
+  */
 }
