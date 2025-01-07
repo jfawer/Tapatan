@@ -370,39 +370,39 @@ bool handlePlayerMovement(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int
 
 // Funktion zur Generierung aller möglichen nächsten Zustände durch Verschieben der Spielsteine
 void TapatangetChildren(int Board[3][3], int children[9][3][3], BoardField moves[9], int &numChildren, int currentPlayer) {
-    numChildren = 0;
-    
-    // Durchlaufe alle Felder des Boards
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            // Wenn das Feld dem aktuellen Spieler gehört
-            if (Board[i][j] == currentPlayer) {
-                
-                // Prüfe die möglichen Bewegungen (oben, unten, links, rechts, und diagonal)
-                int directions[8][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
+  numChildren = 0;
+  
+  // Durchlaufe alle Felder des Boards
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      // Wenn das Feld dem aktuellen Spieler gehört
+      if (Board[i][j] == currentPlayer) {
+          
+        // Prüfe die möglichen Bewegungen (oben, unten, links, rechts, und diagonal)
+        int directions[8][2] = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}, {-1, -1}, {-1, 1}, {1, -1}, {1, 1}};
 
-                // Durchlaufe alle Richtungen
-                for (int d = 0; d < 8; d++) {
-                    int newRow = i + directions[d][0];
-                    int newCol = j + directions[d][1];
-                    
-                    // Stelle sicher, dass der neue Standort innerhalb des Spielfelds liegt
-                    if (newRow >= 0 && newRow < 3 && newCol >= 0 && newCol < 3 && Board[newRow][newCol] == 0) {
-                        
-                        // Kopiere das aktuelle Board und verschiebe den Spielstein
-                        copyBoard(Board, children[numChildren]);
-                        children[numChildren][i][j] = 0;                        // Leere das Ursprungsfeld
-                        children[numChildren][newRow][newCol] = currentPlayer;  // Setze den Spielstein auf das neue Feld
-                        
-                        // Speichere den Zug (ursprüngliche und neue Position)
-                        moves[numChildren].row = newRow;
-                        moves[numChildren].col = newCol;
-                        numChildren++;
-                    }
-                }
-            }
+        // Durchlaufe alle Richtungen
+        for (int d = 0; d < 8; d++) {
+          int newRow = i + directions[d][0];
+          int newCol = j + directions[d][1];
+          
+          // Stelle sicher, dass der neue Standort innerhalb des Spielfelds liegt
+          if (newRow >= 0 && newRow < 3 && newCol >= 0 && newCol < 3 && Board[newRow][newCol] == 0) {
+            
+            // Kopiere das aktuelle Board und verschiebe den Spielstein
+            copyBoard(Board, children[numChildren]);
+            children[numChildren][i][j] = 0;                        // Leere das Ursprungsfeld
+            children[numChildren][newRow][newCol] = currentPlayer;  // Setze den Spielstein auf das neue Feld
+            
+            // Speichere den Zug (ursprüngliche und neue Position)
+            moves[numChildren].row = newRow;
+            moves[numChildren].col = newCol;
+            numChildren++;
+          }
         }
+      }
     }
+  }
 }
 
 // Minimax-Algorithmus mit Alpha-Beta-Pruning für das Tapatan-Spiel

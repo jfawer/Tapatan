@@ -100,7 +100,7 @@ void setup() {
   
   // Initialisierung des LED Streifens
   led.begin();                                                                                            // LED Streifen initialisieren
-  led.setColor("Lila");                                                                                 // LED Streifen auf orange setzen
+  led.setColor("Lila");                                                                                   // LED Streifen auf orange setzen
 
   // Initialisierung des LCD-Displays
   lcd.init();                                                                                             // LCD initialisieren
@@ -169,23 +169,4 @@ void loop() {
     resetGarageState(garageState);                                                                        // Garage zurücksetzen
     copyBoard(ResetBoard, BoardMemory);                                                                   // Spielfeldspeicher zurücksetzen
   }
-  
-  /*
-  // Serielle Eingabe einer X- und Y-Position
-  int x, y;
-  Serial.println("X-Position:");
-  while (Serial.available() == 0) {}
-  x = Serial.parseInt();
-  Serial.println("Y-Position:");
-  while (Serial.available() == 0) {}
-  y = Serial.parseInt();
-  Serial.print("X: ");
-  Serial.print(x);
-  Serial.print(" Y: ");
-  Serial.println(y);
-
-  // Motorsteuerung
-  motorController.moveToPosition(x, y);
-  delay(2000);
-  */
 }
