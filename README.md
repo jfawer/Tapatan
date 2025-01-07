@@ -187,6 +187,47 @@ Die Leiterplatten wurden bei JLCPCB bestellt.
 | Weiss | Signal |
 
 ### Programmcode
+
+#### Code Aufbau
+Der Programmcode für den Arduino Mega wurde in Visual Studio Code mithilfe der PlatformIO IDE Extension entwickelt.
+
+Für eine bessere Übersicht wurde der Code modularisiert und in mehrere Header-Dateien aufgeteilt, die sich im Ordner `include` befinden:
+- `display.h`
+- `game_logic.h`
+- `input.h`
+- `struct.h`
+- `tapatan.h`
+- `tictactoe.h`
+- `MotorController.h`
+- `led.h`
+
+Die Hauptprogrammlogik sowie die Implementierung der `MotorController`- und `LED`-Klassen befinden sich im Ordner `src`:
+- `main.cpp`
+- `MotorController.cpp`
+- `led.cpp`
+
+#### Code-Inhalt der verschiedenen Dateien  
+Die verschiedenen Dateien haben jeweils folgende Funktionen:  
+
+| **Dateiname**         | **Funktion**                                                                                       |  
+|-----------------------|---------------------------------------------------------------------------------------------------|  
+| `display.h`          | Funktionen zur Anzeige von Texten und Spielfeldern auf dem LCD-Display.                            |  
+| `game_logic.h`       | Funktionen für die Spiellogik beider Spiele (TicTacToe und Tapatan).                                |  
+| `input.h`            | Funktionen zum Auslesen der Sensoren (z. B. Hallsensoren und Rotary Encoder).                       |  
+| `struct.h`           | Definition von Konstanten, Datenstrukturen und Spielparametern.                                     |  
+| `tapatan.h`          | Funktionen für das Spiel Tapatan, einschließlich Spiellogik, Spielerinteraktion und Steuerung (LED, LCD, Motoren). |  
+| `tictactoe.h`        | Funktionen für das Spiel TicTacToe, einschließlich Spiellogik, Spielerinteraktion und Steuerung (LED, LCD, Motoren). |  
+| `MotorController.h`  | Deklaration der `MotorController`-Klasse zur Steuerung der Motoren.                                 |  
+| `led.h`              | Deklaration der `LED`-Klasse zur Steuerung der LEDs.                                               |  
+| `main.cpp`           | Funktionen für die Spielauswahl sowie die Initialisierung und das Zurücksetzen des Spielfelds.      |  
+| `MotorController.cpp`| Implementierung der Methoden der `MotorController`-Klasse.                                         |  
+| `led.cpp`            | Implementierung der Methoden der `LED`-Klasse.                                                     |  
+
+
+
+
+
+
 Beschreibung der Einzelnen h-Files, Funktion von main und motorcontrol
 
 ## Beispielcode
