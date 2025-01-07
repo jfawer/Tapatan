@@ -231,12 +231,12 @@ Die verschiedenen Dateien haben jeweils folgende Funktionen:
 
 Das Spielfeld ist gemäss der folgenden Abbildung aufgebaut:
 
-<img src="Bilder/Spielfeld.png" width="600" />
-   <figurecaption><p><i>Abbildung 10: Spielfeld</i></p></figurecaption>
+<img src="Bilder/Spielfeld.png"/>
+<figurecaption><p><i>Abbildung 10: Spielfeld</i></p></figurecaption>
 
 Die Angaben für die Spielsteinpositionierung der Steine können im strcut.h File angepasst werden.
 
-#### 
+#### Spieler- / Computer-Zug
 
 Der Code ist folgendermassen aufgebaut. Nachdem der Spieler ein Spielmodus inkl. Swiergikeit ausgewählt hat, fängt im Modus PvC zufällig entweder der Computer oder der Spieler an. Das Spiel ist Zugbasiert und entprechend gibt es einen Spieler und einen Computerzug. Beim TicatacToe ist das für das Setzen und beim Tapatan für das Setzen und anschliessende Verschieben.
 
