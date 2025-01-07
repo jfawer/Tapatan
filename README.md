@@ -104,7 +104,7 @@ Die Spielfiguren werden mithilfe eines Elektromagneten bewegt, der sich unterhal
 
 <figure>
    <img src="Bilder/Funktionsbeschreibung.png" width="800" />
-   <figurecaption><p><i>Abbildung 7: Aufbau</i></p></figurecaption>
+   <figurecaption><p><i>Abbildung 5: Aufbau</i></p></figurecaption>
 </figure>
 
 #### Gantry
