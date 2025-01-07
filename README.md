@@ -129,7 +129,7 @@ Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übers
 **Version 2:** Überarbeitete Version der Leiterplatten.  Die folgenden Fehler wurden behoben:
 
 * **Korrektur des Footprints der MOSFETs:**  Die MOSFETs, welche die LEDs ansteuern, haben nun den korrekten Footprint.
-* **Hinzufügen von Zehnerdioden:**  Um einen Rückstrom vom Elektromagneten zu verhindern, der einen Reset des Arduinos ausgelösst hat, wurden Zehnerdioden hinzugefügt.
+* **Hinzufügen von Zehnerdioden:**  Um einen Rückstrom vom Elektromagneten zu verhindern, der einen Reset des Arduinos ausgelösst hat, wurden zwei Zehnerdioden parallel hinzugefügt.
 * **Änderung der Pinbelegung:** Die Pinbelegung wurde angepasst, um die Interrupt-Pins für den Rotary Switch nutzen zu können. 
 
 **Bei einer erneuten Bestellung der Leiterplatten bitte unbedingt die Version 2 verwenden.**
@@ -233,7 +233,7 @@ Die Angaben für die Spielsteinpositionierung der Steine können im strcut.h Fil
 <figurecaption><p><i>Abbildung 10: Spielfeld</i></p></figurecaption>
 
 #### Spieler- / Computer-Zug
-Der Code ist folgendermassen aufgebaut. Nachdem der Spieler ein Spielmodus inkl. Schwiergikeit ausgewählt hat, fängt im Modus PvC zufällig entweder der Computer oder der Spieler an. Das Spiel ist Zugbasiert und entprechend gibt es einen Spieler und einen Computerzug. Beim TicatacToe ist das für das Setzen und beim Tapatan für das Setzen und anschliessende Verschieben.
+Der Code ist folgendermassen aufgebaut. Nachdem der Spieler ein Spielmodus inkl. Schwiergikeit ausgewählt hat, fängt im Modus PvC zufällig entweder der Computer oder der Spieler an. Das Spiel ist Zugbasiert und entprechend gibt es einen Spieler und einen Computerzug. Beim TicaTacToe ist das für das Setzen und beim Tapatan für das Setzen und anschliessende Verschieben.
 
 ##### Spielerzug
 Sobald eine Änderung auf dem Spielfeld registriert wurde, wird überprüft, ob dieser Zug eine gültige Bewegung darstellt. Ist dies nicht der Fall, wird in der Funktion `handleIllegalMove` so lange gewartet, bis das ursprüngliche Spielfeld wiederhergestellt ist. Diese Logik entspricht der Funktion für den Spielzug beim Verschieben, mit dem Unterschied, dass hier andere Regeln gelten.
