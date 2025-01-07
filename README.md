@@ -229,12 +229,11 @@ Die verschiedenen Dateien haben jeweils folgende Funktionen:
 
 #### Spielfeld
 
-Das Spielfeld ist gemäss der folgenden Abbildung aufgebaut:
+Das Spielfeld ist gemäss der folgenden Abbildung aufgebaut.
+Die Angaben für die Spielsteinpositionierung der Steine können im strcut.h File angepasst werden.
 
 <img src="Bilder/Spielfeld.png"/>
 <figurecaption><p><i>Abbildung 10: Spielfeld</i></p></figurecaption>
-
-Die Angaben für die Spielsteinpositionierung der Steine können im strcut.h File angepasst werden.
 
 #### Spieler- / Computer-Zug
 
@@ -265,26 +264,26 @@ bool playerPlaces(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3
 Der Zug des Computers hängt vom gewählten Schwierigkeitsgrad ab. Im Schwierigkeitsmodus "Einfach" wird beim TicTacToe zufällig ein Stein auf eine leere Stelle platziert. Im Schwierigkeitsmodus "Mittel" wird ab dem dritten Zug der bestmögliche Zug ermittelt, bis dahin werden weiterhin zufällige Züge gemacht. Im Schwierigkeitsmodus "Schwer" werden nur die bestmöglichen Züge vom Computer gemacht (ein Sieg gegen den Computer ist unmöglich). Die Schwierigkeitsgrade im Spiel Tapatan sind ähnlich aufgebaut, mit dem einzigen Unterschied, dass im Modus "Mittel" beim Verschieben der Steine abwechselnd ein zufälliger und dann der bestmögliche Zug gemacht wird. Der bestmögliche Zug wird über den Minimax-Algorithmus mit Alpha-Beta Pruning ermittelt. 
 
 ```cpp
-switch (gameSettings.difficulty) {                                                                              // Schwierigkeitsgrad des Computers
+switch (gameSettings.difficulty) {              // Schwierigkeitsgrad des Computers
    case Schwer:
-      makeBestMove(BoardDisplay);                                                                             // Besten Zug für den Computer bestimmen
+      makeBestMove(BoardDisplay);               // Besten Zug für den Computer bestimmen
       break;
    case Mittel:
       if (turnCount >= 3) {
-            makeBestMove(BoardDisplay);                                                                         // Besten Zug für den Computer bestimmen
+            makeBestMove(BoardDisplay);         // Besten Zug für den Computer bestimmen
       } else {
-            makeRandomMove(BoardDisplay);                                                                       // Zufälligen Zug für den Computer bestimmen
+            makeRandomMove(BoardDisplay);       // Zufälligen Zug für den Computer bestimmen
       }
       break;
    default:
-      makeRandomMove(BoardDisplay);                                                                           // Zufälligen Zug für den Computer bestimmen
+      makeRandomMove(BoardDisplay);             // Zufälligen Zug für den Computer bestimmen
       break;
 }
 ```
 
 #### Minimax-Algorithmus mit Alpha-Beta Pruning
 
-Der **Minimax-Algorithmus** ist ein rekursiver Entscheidungsalgorithmus, der in Zwei-Spieler-Spielen wie Tic-Tac-Toe verwendet wird, um den optimalen Zug zu finden. Der Algorithmus geht davon aus, dass beide Spieler optimal spielen. Er untersucht alle möglichen Züge und bewertet sie, indem er den besten Zug für den Spieler maximiert und gleichzeitig den besten Zug des Gegners minimiert.
+Der **Minimax-Algorithmus** ist ein rekursiver Entscheidungsalgorithmus, der in Zwei-Spieler-Spielen wie Tic-Tac-Toe verwendet wird, um den optimalen Zug zu finden. Der Algorithmus geht davon aus, dass beide Spieler optimal spielen. Er untersucht alle möglichen Züge und bewertet sie, indem er den besten Zug für den Computer maximiert und gleichzeitig den besten Zug des Spielers minimiert.
 
 ##### Alpha-Beta-Pruning
 
@@ -336,7 +335,7 @@ int minimax(int Board[3][3], int depth, int alpha, int beta, bool maximizingPlay
       int eval = minimax(children[i], depth - 1, alpha, beta, false, currentMove);
       if (eval > maxEval) {
         maxEval = eval;
-        bestMove = moves[i]; // Speichere die tatsächliche Position
+        bestMove = moves[i];           // Speichere die tatsächliche Position
       }
       alpha = max(alpha, eval);
       if (beta <= alpha) {
@@ -355,7 +354,7 @@ int minimax(int Board[3][3], int depth, int alpha, int beta, bool maximizingPlay
       int eval = minimax(children[i], depth - 1, alpha, beta, true, currentMove);
       if (eval < minEval) {
         minEval = eval;
-        bestMove = moves[i]; // Speichere die tatsächliche Position
+        bestMove = moves[i];           // Speichere die tatsächliche Position
       }
       beta = min(beta, eval);
       if (beta <= alpha) {
@@ -375,11 +374,9 @@ Der Minimax-Algorithmus bewertet rekursiv alle möglichen Züge. Alpha-Beta-Prun
 
 ##### Visualisierung des Entscheidungsbaums:
 Der Entscheidungsbaum für das Spiel könnte wie folgt aussehen:
-          Maximizer (X)
-           /      |      \
-      Min (O)   Min (O)   Min (O)
-       /  |  \      |       |
-   Max (X) Max (X) Max (X) Max (X)
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/AB_pruning.svg/2880px-AB_pruning.svg.png" width="600" />
+<figurecaption><p><i>Abbildung 11: Visualisierung Entscheidungsbaum</i></p></figurecaption>
 
 In diesem Beispiel stellt jeder Knoten einen möglichen Spielzustand dar, und die Kanten zwischen den Knoten repräsentieren mögliche Züge. Durch Alpha-Beta-Pruning wird ein Teil des Baums abgeschnitten, wenn ein besserer Wert bereits gefunden wurde.
 
