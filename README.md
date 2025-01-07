@@ -261,7 +261,7 @@ bool playerPlaces(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3
 ```
 
 ##### Computerzug:
-Der Zug des Computers hängt vom gewählten Schwierigkeitsgrad ab. Im Schwierigkeitsmodus "Einfach" wird beim TicTacToe zufällig ein Stein auf eine leere Stelle platziert. Im Schwierigkeitsmodus "Mittel" wird ab dem dritten Zug der bestmögliche Zug ermittelt, bis dahin werden weiterhin zufällige Züge gemacht. Im Schwierigkeitsmodus "Schwer" werden nur die bestmöglichen Züge vom Computer gemacht (ein Sieg gegen den Computer ist unmöglich). Die Schwierigkeitsgrade im Spiel Tapatan sind ähnlich aufgebaut, mit dem einzigen Unterschied, dass im Modus "Mittel" beim Verschieben der Steine abwechselnd ein zufälliger und dann der bestmögliche Zug gemacht wird. Der bestmögliche Zug wird über den Minimax-Algorithmus mit Alpha-Beta Pruning ermittelt. 
+Der Zug des Computers hängt vom gewählten Schwierigkeitsgrad ab. Im Schwierigkeitsmodus "Einfach" wird beim TicTacToe zufällig ein Stein auf eine leere Stelle platziert. Im Schwierigkeitsmodus "Mittel" wird ab dem dritten Zug der bestmögliche Zug ermittelt, bis dahin werden weiterhin zufällige Züge gemacht. Im Schwierigkeitsmodus "Schwer" werden nur die bestmöglichen Züge vom Computer gemacht (ein Sieg gegen den Computer ist unmöglich). Die Schwierigkeitsgrade im Spiel Tapatan sind ähnlich aufgebaut, mit dem einzigen Unterschied, dass im Modus "Mittel" beim Verschieben der Steine abwechselnd ein zufälliger und dann der bestmögliche Zug gemacht wird. Der bestmögliche Zug wird über den Minimax-Algorithmus mit Alpha-Beta Pruning ermittelt. Für das Platzieren und das Verschieben wurde jeweils eine Funktion für die Züge und den Minimax-Algorithmus geschrieben. 
 
 ```cpp
 switch (gameSettings.difficulty) {              // Schwierigkeitsgrad des Computers
@@ -380,6 +380,31 @@ Der Entscheidungsbaum für das Spiel könnte wie folgt aussehen:
 
 In diesem Beispiel stellt jeder Knoten einen möglichen Spielzustand dar, und die Kanten zwischen den Knoten repräsentieren mögliche Züge. Durch Alpha-Beta-Pruning wird ein Teil des Baums abgeschnitten, wenn ein besserer Wert bereits gefunden wurde.
 
+#### Bewegung des Steins:
+Nach der Berechnung des Computerzugs wird das Spielfeld gespeichert und mit dem aktuellen Spielfeld verglichen. Der Unterschied zwischen den beiden Spielfeldern entscheidet über die Start- und Zielposition der Verschiebung. Die Bewegung von Punkt A zu Punkt B erfolgt hierbei ausschließlich entlang der horizontalen und vertikalen Bahnen. Dasselbe erfolgt nach dem Spiel, beim Aufräumen des Spielfelds.
+
+Der folgende Code zeigt, wie die Start- und Zielposition beim Platzieren eines neuen Steins ermittelt wird. Die Koordinaten werden anschliessend an die Bewegungsfunktion `moveStone` weitergegeben, die zudem den Elektromagneten steuert.
+
+```cpp
+// Funktion für das Ermitteln der Start und Zielposition der Motorbewegung (Platzierung der Spielsteine)
+Move determineMoveToPlace(int Board[3][3], int BoardMemory[3][3], int garageState[2][5], MotorConfig config) {
+  Move move;
+
+  // Ermitteln der Startposition / Besetzer Stein in der Garage
+  int garagePosition = findGaragestate(garageState[0], 1);
+  move.startX = config.computerGaragePosition[garagePosition][0];
+  move.startY = config.computerGaragePosition[garagePosition][1];
+
+  // Leeren der Garage
+  garageState[0][garagePosition] = 0;
+  
+  // Ermitteln der Zielposition
+  BoardField targetField = getChangedField(Board, BoardMemory);
+  move.targetX = config.boardPosition[targetField.row][targetField.col][0];
+  move.targetY = config.boardPosition[targetField.row][targetField.col][1];
+  return move;
+}
+```
 
 ### Stückliste
 
