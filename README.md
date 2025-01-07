@@ -122,8 +122,7 @@ Das Gantry-System basiert auf dem Prinzip eines H-Gantry (siehe Abbildung 6). Be
 
 Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übersichtliche Verkabelung zu gewährleisten. Alle zugehörigen Dateien (z.B. Schaltpläne, Layout-Dateien) befinden sich in diesem Repository unter dem Ordner Schaltpläne. Hierfür wurde KiCad 8.0 verwendet mit dem Plugin "Interactive Html Bom" und der Bibliothek  "KiCad Library for Arduino Modules"
 
-##### Versionen
-
+#### Versionen
 **Version 1:**  Erste Version der Leiterplatten. Diese Version enthält einige Fehler, die manuell korrigiert werden konnten. **Diese Version sollte nicht mehr verwendet werden.**
 
 **Version 2:** Überarbeitete Version der Leiterplatten.  Die folgenden Fehler wurden behoben:
@@ -137,7 +136,7 @@ Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übers
 **Hinweis:** Die Änderung der Pinbelegung (für die Interrupt-Pins am Rotary Switch) wurde bereits bei der Verkabelung der ersten Version manuell vorgenommen und der Code entsprechend angepasst.
 
 
-##### Beschreibung der Leiterplatten
+#### Beschreibung der Leiterplatten
 
 **Leiterplatte 1:** 
 
@@ -165,8 +164,7 @@ Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übers
    <figurecaption><p><i>Abbildung 9: Leiterplatte 2</i></p></figurecaption>
 </figure>
 
-##### Verkabelung
-
+#### Verkabelung
 Die Verkabelung kann in den Schaltplänen eingesehen werden. Jede Version besitzt 3 Schaltpläne. Einen für das Gesammte Projekt und jeweils einen pro Leiterplatte.
 Die Stromversorgung erfolgt über das Netzteil und die Buchse. Vcc wird über den Kippschalter(an/aus) geführt und im Anschluss auf die DC-DC Converter und direkt an der 1 Leiterplatte angeschlossen. Somit wird die 5V, 9V und 12V Spannungsversorgung sichergestellt.
 
@@ -176,8 +174,7 @@ Folgende Änderungen wurden vorgenommen aufgrund diverser Umstände
 * Rotary_Switch_Digital_3 ist an Pin D2 angeschlossen
 * M1_PUL ist an Pin D23 angeschlossen
 
-##### Bestellung der Leiterplatten
-
+#### Bestellung der Leiterplatten
 Die Leiterplatten wurden bei JLCPCB bestellt.
 
 #### Farbcode Verkabelung
@@ -228,7 +225,6 @@ Die verschiedenen Dateien haben jeweils folgende Funktionen:
 
 
 #### Spielfeld
-
 Das Spielfeld ist gemäss der folgenden Abbildung aufgebaut.
 Die Angaben für die Spielsteinpositionierung der Steine können im strcut.h File angepasst werden.
 
@@ -236,11 +232,9 @@ Die Angaben für die Spielsteinpositionierung der Steine können im strcut.h Fil
 <figurecaption><p><i>Abbildung 10: Spielfeld</i></p></figurecaption>
 
 #### Spieler- / Computer-Zug
-
 Der Code ist folgendermassen aufgebaut. Nachdem der Spieler ein Spielmodus inkl. Swiergikeit ausgewählt hat, fängt im Modus PvC zufällig entweder der Computer oder der Spieler an. Das Spiel ist Zugbasiert und entprechend gibt es einen Spieler und einen Computerzug. Beim TicatacToe ist das für das Setzen und beim Tapatan für das Setzen und anschliessende Verschieben.
 
 ##### Spielerzug
-
 Sobald eine Änderung auf dem Spielfeld registriert wurde, wird überprüft, ob dieser Zug eine gültige Bewegung darstellt. Ist dies nicht der Fall, wird in der Funktion `handleIllegalMove` so lange gewartet, bis das ursprüngliche Spielfeld wiederhergestellt ist. Diese Logik entspricht der Funktion für den Spielzug beim Verschieben, mit dem Unterschied, dass hier andere Regeln gelten.
 
 ```cpp
@@ -405,6 +399,7 @@ Move determineMoveToPlace(int Board[3][3], int BoardMemory[3][3], int garageStat
   return move;
 }
 ```
+
 
 ### Stückliste
 
