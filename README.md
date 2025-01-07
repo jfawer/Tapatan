@@ -72,11 +72,13 @@ Folgende Spielmodis können ausgewählt werden:
 
 ### Tic-Tac-Toe
 Die Spieler setzen abwechselnd ihre Figuren auf das Spielfeld (es wird jeweils angezeigt, wer am Zug ist). <br>
+Die einzige Voraussetzung hierbei ist, dass der Spieler die Steine in vertikaler Richtung (von oben nach unten) ausspielt.
 Das Spiel endet, wenn ein Spieler drei Figuren in einer horizontalen, vertikalen oder diagonalen Reihe platziert hat. Ebenso endet das Spiel, wenn alle Felder belegt sind (Unentschieden). <br>
 Hinweis: Das Spiel zeigt automatisch den Gewinner oder ein Unentschieden an. <br>
 
 ### Tapatan
 Die Spieler setzen abwechselnd ihre Figuren auf das Spielfeld, bis beide Spieler jeweils drei Figuren platziert haben (es wird angezeigt, welcher Spieler am Zug ist). <br>
+Die einzige Voraussetzung hierbei ist, dass der Spieler die Steine in vertikaler Richtung (von oben nach unten) ausspielt.
 Sobald alle Figuren gesetzt sind, können diese bewegt werden. Die Figuren dürfen horizontal, vertikal oder diagonal verschoben werden. Hinweis: In dieser Version können die Figuren in alle diagonalen Richtungen bewegt werden, was die Komplexität des Spiels erhöht (siehe Abbildung 4). <br>
 Das Spiel endet, wenn ein Spieler drei Figuren in einer horizontalen, vertikalen oder diagonalen Reihe platziert hat. <br>
 Hinweis: Das Spiel zeigt automatisch den Gewinner oder ein Unentschieden an.<br>
@@ -201,7 +203,8 @@ Für eine bessere Übersicht wurde der Code modularisiert und in mehrere Header-
 - `MotorController.h`
 - `led.h`
 
-Die Hauptprogrammlogik sowie die Implementierung der `MotorController`- und `LED`-Klassen befinden sich im Ordner `src`:
+Die Hauptprogrammlogik sowie die Implementierung der `MotorController`- und `LED`-Klassen befinden sich im Ordner `src`. Für die Steuerung der Motoren und des LED-Streifens wurde jeweils eine eigene Klasse definiert. Diese Struktur vereinfacht die Handhabung im Programmcode, da keine unnötige Weitergabe oder Definition globaler Variablen erforderlich ist.
+
 - `main.cpp`
 - `MotorController.cpp`
 - `led.cpp`
@@ -224,29 +227,161 @@ Die verschiedenen Dateien haben jeweils folgende Funktionen:
 | `led.cpp`            | Implementierung der Methoden der `LED`-Klasse.                                                     |  
 
 
+#### Spielfeld
 
+Das Spielfeld ist gemäss der folgenden Abbildung aufgebaut:
 
+<img src="Bilder/Spielfeld.png" width="600" />
+   <figurecaption><p><i>Abbildung 10: Spielfeld</i></p></figurecaption>
 
+Die Angaben für die Spielsteinpositionierung der Steine können im strcut.h File angepasst werden.
 
-Beschreibung der Einzelnen h-Files, Funktion von main und motorcontrol
+#### 
 
-## Beispielcode
-```c++
-// Spiel starten
-switch (gameSettings.game) {                                                                          // Auswahl des Spiels
-case TicTacToe:
-   led.setColor("Zyan");                                                                             // LED Streifen auf zyan setzen
-   playTicTacToe(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, motorController, garageState, config); // Spiel Tic Tac Toe starten
-   delay(5000);
-   break;
-case Tapatan:
-   led.setColor("Weiss");                                                                            // LED Streifen auf weiss setzen
-   playTapatan(lcd, gameSettings, Board, BoardMemory, currentPlayer, potPins, garageState, motorController, config); // Spiel Tapatan starten
-   delay(5000);
-   break;
+Der Code ist folgendermassen aufgebaut. Nachdem der Spieler ein Spielmodus inkl. Swiergikeit ausgewählt hat, fängt im Modus PvC zufällig entweder der Computer oder der Spieler an. Das Spiel ist Zugbasiert und entprechend gibt es einen Spieler und einen Computerzug. Beim TicatacToe ist das für das Setzen und beim Tapatan für das Setzen und anschliessende Verschieben.
+
+##### Spielerzug
+
+Sobald eine Änderung auf dem Spielfeld registriert wurde, wird überprüft, ob dieser Zug eine gültige Bewegung darstellt. Ist dies nicht der Fall, wird in der Funktion `handleIllegalMove` so lange gewartet, bis das ursprüngliche Spielfeld wiederhergestellt ist. Diese Logik entspricht der Funktion für den Spielzug beim Verschieben, mit dem Unterschied, dass hier andere Regeln gelten.
+
+```cpp
+// Funktion für das Platzieren eines Spielsteins durch den Spieler
+bool playerPlaces(LiquidCrystal_I2C &lcd, GameSettings gameSettings, int Board[3][3], int BoardMemory[3][3], int currentPlayer, const int potPins[]) {
+  bool turnOver = false;
+    
+  if (hasBoardChanged(Board, BoardMemory)) {
+    if (isValidMove(Board, BoardMemory, currentPlayer)) {
+      displayBoard(lcd, Board);
+      turnOver = true;
+    } else {
+      handleIllegalMove(lcd, Board, BoardMemory, potPins, gameSettings, currentPlayer);
+    }
+  }
+  return turnOver;
 }
 ```
 
+##### Computerzug:
+Der Zug des Computers hängt vom gewählten Schwierigkeitsgrad ab. Im Schwierigkeitsmodus "Einfach" wird beim TicTacToe zufällig ein Stein auf eine leere Stelle platziert. Im Schwierigkeitsmodus "Mittel" wird ab dem dritten Zug der bestmögliche Zug ermittelt, bis dahin werden weiterhin zufällige Züge gemacht. Im Schwierigkeitsmodus "Schwer" werden nur die bestmöglichen Züge vom Computer gemacht (ein Sieg gegen den Computer ist unmöglich). Die Schwierigkeitsgrade im Spiel Tapatan sind ähnlich aufgebaut, mit dem einzigen Unterschied, dass im Modus "Mittel" beim Verschieben der Steine abwechselnd ein zufälliger und dann der bestmögliche Zug gemacht wird. Der bestmögliche Zug wird über den Minimax-Algorithmus mit Alpha-Beta Pruning ermittelt. 
+
+```cpp
+switch (gameSettings.difficulty) {                                                                              // Schwierigkeitsgrad des Computers
+   case Schwer:
+      makeBestMove(BoardDisplay);                                                                             // Besten Zug für den Computer bestimmen
+      break;
+   case Mittel:
+      if (turnCount >= 3) {
+            makeBestMove(BoardDisplay);                                                                         // Besten Zug für den Computer bestimmen
+      } else {
+            makeRandomMove(BoardDisplay);                                                                       // Zufälligen Zug für den Computer bestimmen
+      }
+      break;
+   default:
+      makeRandomMove(BoardDisplay);                                                                           // Zufälligen Zug für den Computer bestimmen
+      break;
+}
+```
+
+#### Minimax-Algorithmus mit Alpha-Beta Pruning
+
+Der **Minimax-Algorithmus** ist ein rekursiver Entscheidungsalgorithmus, der in Zwei-Spieler-Spielen wie Tic-Tac-Toe verwendet wird, um den optimalen Zug zu finden. Der Algorithmus geht davon aus, dass beide Spieler optimal spielen. Er untersucht alle möglichen Züge und bewertet sie, indem er den besten Zug für den Spieler maximiert und gleichzeitig den besten Zug des Gegners minimiert.
+
+##### Alpha-Beta-Pruning
+
+**Alpha-Beta-Pruning** ist eine Optimierung des Minimax-Algorithmus, die dazu beiträgt, unnötige Berechnungen zu vermeiden. Der Algorithmus schneidet Teile des Entscheidungsbaums ab, wenn er bereits einen besseren Zug gefunden hat. Dadurch wird die Effizienz des Algorithmus erheblich verbessert, da nicht jeder mögliche Zug vollständig untersucht werden muss.
+
+- **Alpha**: Der beste Wert, den der maximierende Spieler finden kann.
+- **Beta**: Der beste Wert, den der minimierende Spieler finden kann.
+
+Wenn der Wert von **Beta** kleiner oder gleich **Alpha** wird, wird der aktuelle Zweig des Entscheidungsbaums abgeschnitten, da der Gegner bereits einen besseren Zug hat.
+
+##### Code-Implementierung
+
+Der folgende Code zeigt, wie der Minimax-Algorithmus mit Alpha-Beta-Pruning für ein Tic-Tac-Toe-Spiel implementiert wird:
+
+```cpp
+// Funktion zur Generierung aller möglichen nächsten Zustände
+void getChildren(int Board[3][3], int children[9][3][3], BoardField moves[9], int &numChildren, bool maximizingPlayer) {
+  numChildren = 0;
+  for (int i = 0; i < 3; i++) {
+    for (int j = 0; j < 3; j++) {
+      if (Board[i][j] == 0) {
+        // Kopiere das aktuelle Board
+        copyBoard(Board, children[numChildren]);
+        // Setze den Zug
+        children[numChildren][i][j] = maximizingPlayer ? 1 : 2;
+        // Speichere den Zug
+        moves[numChildren].row = i;
+        moves[numChildren].col = j;
+        numChildren++;
+      }
+    }
+  }
+}
+
+// Minimax-Algorithmus mit Alpha-Beta-Pruning
+int minimax(int Board[3][3], int depth, int alpha, int beta, bool maximizingPlayer, BoardField &bestMove) {
+  if (depth == 0 || isGameOver(Board)) {
+    return evaluateBoard(Board);
+  }
+
+  if (maximizingPlayer) {
+    int maxEval = INT_MIN;
+    BoardField currentMove;
+    int children[9][3][3];
+    BoardField moves[9];
+    int numChildren;
+    getChildren(Board, children, moves, numChildren, true);
+    for (int i = 0; i < numChildren; i++) {
+      int eval = minimax(children[i], depth - 1, alpha, beta, false, currentMove);
+      if (eval > maxEval) {
+        maxEval = eval;
+        bestMove = moves[i]; // Speichere die tatsächliche Position
+      }
+      alpha = max(alpha, eval);
+      if (beta <= alpha) {
+        break;
+      }
+    }
+    return maxEval;
+  } else {
+    int minEval = INT_MAX;
+    BoardField currentMove;
+    int children[9][3][3];
+    BoardField moves[9];
+    int numChildren;
+    getChildren(Board, children, moves, numChildren, false);
+    for (int i = 0; i < numChildren; i++) {
+      int eval = minimax(children[i], depth - 1, alpha, beta, true, currentMove);
+      if (eval < minEval) {
+        minEval = eval;
+        bestMove = moves[i]; // Speichere die tatsächliche Position
+      }
+      beta = min(beta, eval);
+      if (beta <= alpha) {
+        break;
+      }
+    }
+    return minEval;
+  }
+}
+```
+
+##### `getChildren`:
+Diese Funktion generiert alle möglichen Züge basierend auf dem aktuellen Spielzustand. Es wird überprüft, welche Felder leer sind, und die möglichen Züge für den maximierenden oder minimierenden Spieler werden hinzugefügt.
+
+##### `minimax`:
+Der Minimax-Algorithmus bewertet rekursiv alle möglichen Züge. Alpha-Beta-Pruning wird verwendet, um nicht notwendige Züge zu ignorieren, wenn bereits ein besserer Zug gefunden wurde. Die Funktion gibt den besten Zug für den aktuellen Spieler zurück.
+
+##### Visualisierung des Entscheidungsbaums:
+Der Entscheidungsbaum für das Spiel könnte wie folgt aussehen:
+          Maximizer (X)
+           /      |      \
+      Min (O)   Min (O)   Min (O)
+       /  |  \      |       |
+   Max (X) Max (X) Max (X) Max (X)
+
+In diesem Beispiel stellt jeder Knoten einen möglichen Spielzustand dar, und die Kanten zwischen den Knoten repräsentieren mögliche Züge. Durch Alpha-Beta-Pruning wird ein Teil des Baums abgeschnitten, wenn ein besserer Wert bereits gefunden wurde.
 
 
 ### Stückliste
