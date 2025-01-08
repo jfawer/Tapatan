@@ -50,8 +50,8 @@ Unser Ziel war es, den bestehenden Programmcode und die Mechanik grundlegend zu 
 3. Spanne den Riemen in dem du am roten Teil drehst (siehe Abbildung 1/Abbildung 2). <br>
    Hinweis: Entspanne nach dem Spielen den Riemen wieder, um die Lebensdauer des Mechanismus zu verlängern und Schäden durch anhaltende Spannung zu vermeiden.
 5. Stecke das Netzteilkabel ein.
-6. Schalte den Schalter auf der Rückseite des Spiels ein.
-7. Reinigung der Spieloberfläche
+6. Reinige die Spieloberfläche
+7. Schalte den Schalter auf der Rückseite des Spiels ein.
 
 <figure>
    <img src="Bilder/Riemen-Spannen.png" width="600" />
@@ -104,7 +104,7 @@ Die Spielfiguren werden mithilfe eines Elektromagneten bewegt, der sich unterhal
 
 <figure>
    <img src="Bilder/Funktionsbeschreibung.png" width="800" />
-   <figurecaption><p><i>Abbildung 7: Aufbau</i></p></figurecaption>
+   <figurecaption><p><i>Abbildung 5: Aufbau</i></p></figurecaption>
 </figure>
 
 #### Gantry
@@ -129,7 +129,7 @@ Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übers
 **Version 2:** Überarbeitete Version der Leiterplatten.  Die folgenden Fehler wurden behoben:
 
 * **Korrektur des Footprints der MOSFETs:**  Die MOSFETs, welche die LEDs ansteuern, haben nun den korrekten Footprint.
-* **Hinzufügen von Zehnerdioden:**  Um einen Rückstrom vom Elektromagneten zu verhindern, der einen Reset des Arduinos ausgelösst hat, wurden Zehnerdioden hinzugefügt.
+* **Hinzufügen von Zehnerdioden:**  Um einen Rückstrom vom Elektromagneten zu verhindern, der einen Reset des Arduinos ausgelösst hat, wurden zwei Zehnerdioden parallel hinzugefügt.
 * **Änderung der Pinbelegung:** Die Pinbelegung wurde angepasst, um die Interrupt-Pins für den Rotary Switch nutzen zu können. 
 
 **Bei einer erneuten Bestellung der Leiterplatten bitte unbedingt die Version 2 verwenden.**
@@ -216,8 +216,8 @@ Die verschiedenen Dateien haben jeweils folgende Funktionen:
 | `game_logic.h`       | Funktionen für die Spiellogik beider Spiele (TicTacToe und Tapatan).                                |  
 | `input.h`            | Funktionen zum Auslesen der Sensoren (z. B. Hallsensoren und Rotary Encoder).                       |  
 | `struct.h`           | Definition von Konstanten, Datenstrukturen und Spielparametern.                                     |  
-| `tapatan.h`          | Funktionen für das Spiel Tapatan, einschließlich Spiellogik, Spielerinteraktion und Steuerung (LED, LCD, Motoren). |  
-| `tictactoe.h`        | Funktionen für das Spiel TicTacToe, einschließlich Spiellogik, Spielerinteraktion und Steuerung (LED, LCD, Motoren). |  
+| `tapatan.h`          | Funktionen für das Spiel Tapatan, einschliesslich Spiellogik, Spielerinteraktion und Steuerung (LED, LCD, Motoren). |  
+| `tictactoe.h`        | Funktionen für das Spiel TicTacToe, einschliesslich Spiellogik, Spielerinteraktion und Steuerung (LED, LCD, Motoren). |  
 | `MotorController.h`  | Deklaration der `MotorController`-Klasse zur Steuerung der Motoren.                                 |  
 | `led.h`              | Deklaration der `LED`-Klasse zur Steuerung der LEDs.                                               |  
 | `main.cpp`           | Funktionen für die Spielauswahl sowie die Initialisierung und das Zurücksetzen des Spielfelds.      |  
@@ -227,13 +227,13 @@ Die verschiedenen Dateien haben jeweils folgende Funktionen:
 
 #### Spielfeld
 Das Spielfeld ist gemäss der folgenden Abbildung aufgebaut.
-Die Angaben für die Spielsteinpositionierung der Steine können im strcut.h File angepasst werden.
+Die Angaben für die Spielsteinpositionierung der Steine können im `struct.h` File angepasst werden.
 
 <img src="Bilder/Spielfeld.png"/>
 <figurecaption><p><i>Abbildung 10: Spielfeld</i></p></figurecaption>
 
 #### Spieler- / Computer-Zug
-Der Code ist folgendermassen aufgebaut. Nachdem der Spieler ein Spielmodus inkl. Swiergikeit ausgewählt hat, fängt im Modus PvC zufällig entweder der Computer oder der Spieler an. Das Spiel ist Zugbasiert und entprechend gibt es einen Spieler und einen Computerzug. Beim TicatacToe ist das für das Setzen und beim Tapatan für das Setzen und anschliessende Verschieben.
+Der Code ist folgendermassen aufgebaut. Nachdem der Spieler ein Spielmodus inkl. Schwiergikeit ausgewählt hat, fängt im Modus PvC zufällig entweder der Computer oder der Spieler an. Das Spiel ist zugbasiert und entprechend gibt es einen Spieler und einen Computerzug. Beim TicaTacToe ist das für das Setzen und beim Tapatan für das Setzen und anschliessende Verschieben.
 
 ##### Spielerzug
 Sobald eine Änderung auf dem Spielfeld registriert wurde, wird überprüft, ob dieser Zug eine gültige Bewegung darstellt. Ist dies nicht der Fall, wird in der Funktion `handleIllegalMove` so lange gewartet, bis das ursprüngliche Spielfeld wiederhergestellt ist. Diese Logik entspricht der Funktion für den Spielzug beim Verschieben, mit dem Unterschied, dass hier andere Regeln gelten.
@@ -376,7 +376,7 @@ Der Entscheidungsbaum für das Spiel könnte wie folgt aussehen:
 In diesem Beispiel stellt jeder Knoten einen möglichen Spielzustand dar, und die Kanten zwischen den Knoten repräsentieren mögliche Züge. Durch Alpha-Beta-Pruning wird ein Teil des Baums abgeschnitten, wenn ein besserer Wert bereits gefunden wurde.
 
 #### Bewegung des Steins:
-Nach der Berechnung des Computerzugs wird das Spielfeld gespeichert und mit dem aktuellen Spielfeld verglichen. Der Unterschied zwischen den beiden Spielfeldern entscheidet über die Start- und Zielposition der Verschiebung. Die Bewegung von Punkt A zu Punkt B erfolgt hierbei ausschließlich entlang der horizontalen und vertikalen Bahnen. Dasselbe erfolgt nach dem Spiel, beim Aufräumen des Spielfelds.
+Nach der Berechnung des Computerzugs wird das Spielfeld gespeichert und mit dem aktuellen Spielfeld verglichen. Der Unterschied zwischen den beiden Spielfeldern entscheidet über die Start- und Zielposition der Verschiebung. Die Bewegung von Punkt A zu Punkt B erfolgt hierbei ausschliesslich entlang der horizontalen und vertikalen Bahnen. Dasselbe erfolgt nach dem Spiel, beim Aufräumen des Spielfelds.
 
 Der folgende Code zeigt, wie die Start- und Zielposition beim Platzieren eines neuen Steins ermittelt wird. Die Koordinaten werden anschliessend an die Bewegungsfunktion `moveStone` weitergegeben, die zudem den Elektromagneten steuert.
 
