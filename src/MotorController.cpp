@@ -159,7 +159,7 @@ void MotorController::moveStone(Move move) {
     // Konstanten für die Bewegung
     int delayTime = 100;
     float speedSlow = 1000.0;
-    float speedFast = 2000.0;
+    float speedFast = 6000.0;
     float accelerationSlow = 500.0;
     float accelerationFast = 2000.0;
 
