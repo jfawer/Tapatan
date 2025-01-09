@@ -121,7 +121,11 @@ Das Gantry-System basiert auf dem Prinzip eines H-Gantry (siehe Abbildung 6). Be
 
 ### Elektronik
 
-Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übersichtliche Verkabelung zu gewährleisten. Alle zugehörigen Dateien (z.B. Schaltpläne, Layout-Dateien) befinden sich in diesem Repository unter dem Ordner Schaltpläne. Hierfür wurde KiCad 8.0 verwendet mit dem Plugin "Interactive Html Bom" und der Bibliothek  "KiCad Library for Arduino Modules"
+Die Elektrik widmet sich der präzisen Steuerung des Spielfelds,  wobei die  Verbindung von Sensoren und Aktoren mit einem Mikrocontroller im Mittelpunkt steht.
+
+Um die Position der Spielsteine exakt zu erfassen, kommen Hallsensoren zum Einsatz. Ein Rotary Switch ermöglicht die manuelle Bedienung. Die Bewegung der Spielsteine wird durch einen Elektromagneten und präzise Steppermotoren realisiert, die das Gantry-System ansteuern. Zusätzlich sorgen LEDs und ein LCD-Display für eine benutzerfreundliche Visualisierung und Rückmeldung.
+
+Besonderes Augenmerk wurde auf eine übersichtliche Verkabelung gelegt.  Zwei speziell entwickelte Leiterplatten bilden das Herzstück des Systems und vereinfachen die Integration der Komponenten. Alle relevanten Designdaten,  einschließlich Schaltpläne und Layout-Dateien,  finden Sie im Ordner "Schaltpläne" dieses Repositorys.  Die Entwicklung erfolgte mit KiCad 8.0 unter Verwendung des Plugins "Interactive Html Bom" und der Bibliothek "KiCad Library for Arduino Modules".
 
 #### Versionen
 **Version 1:**  Erste Version der Leiterplatten. Diese Version enthält einige Fehler, die manuell korrigiert werden konnten. **Diese Version sollte nicht mehr verwendet werden.**
@@ -132,7 +136,7 @@ Dieses Projekt verwendet zwei speziell entwickelte Leiterplatten, um eine übers
 * **Hinzufügen von Zehnerdioden:**  Um einen Rückstrom vom Elektromagneten zu verhindern, der einen Reset des Arduinos ausgelösst hat, wurden zwei Zehnerdioden parallel hinzugefügt.
 * **Änderung der Pinbelegung:** Die Pinbelegung wurde angepasst, um die Interrupt-Pins für den Rotary Switch nutzen zu können. 
 
-**Bei einer erneuten Bestellung der Leiterplatten bitte unbedingt die Version 2 verwenden.**
+**Wichtig:** Bei einer erneuten Bestellung der Leiterplatten bitte unbedingt die Version 2 verwenden.
 
 **Hinweis:** Die Änderung der Pinbelegung (für die Interrupt-Pins am Rotary Switch) wurde bereits bei der Verkabelung der ersten Version manuell vorgenommen und der Code entsprechend angepasst.
 
@@ -176,7 +180,7 @@ Folgende Änderungen wurden vorgenommen aufgrund diverser Umstände
 * M1_PUL ist an Pin D23 angeschlossen
 
 #### Bestellung der Leiterplatten
-Die Leiterplatten wurden bei JLCPCB bestellt.
+Die Leiterplatten wurden bei **JLCPCB** bestellt.
 
 #### Farbcode Verkabelung
 | Farbe | Signal |
