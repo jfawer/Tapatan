@@ -795,7 +795,6 @@ Tapatan:
 <a name="video"/>
 
 ## Projektvideo
-<video src="Video/Projektvideo.mp4" controls width="600"></video>
 [Projektvideo ansehen](Video/Projektvideo.mp4)
 
 Song: Endless Lights
@@ -808,7 +807,7 @@ Music by: BreakingCopyright: https://bit.ly/b-army-minotaur
 
 ## Nützliche Links
 
-Link zu den CAD-Dateien in OnShape: [OnShape öffnen] https://cad.onshape.com/documents/6ab09d85f45f1e43996bdb86/w/3f86e456fa647604f88123ba/e/3d3123f6cfd545d86dafebdd 
+Link zu den CAD-Dateien in OnShape: [OnShape öffnen](https://cad.onshape.com/documents/6ab09d85f45f1e43996bdb86/w/3f86e456fa647604f88123ba/e/3d3123f6cfd545d86dafebdd) 
 
 
 <a name="mitwirkende"/>
