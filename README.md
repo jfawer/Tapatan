@@ -797,10 +797,10 @@ Tapatan:
 ## Projektvideo
 [Projektvideo ansehen](Video/Projektvideo.mp4)
 
-Song: Endless Lights
-Music by: CreatorMix.com
-Song: "Makai Symphony - The Army of Minotaur" is under a Creative Commons music (CC BY-SA 3.0).
-Music by: BreakingCopyright: https://bit.ly/b-army-minotaur 
+Song: Endless Lights<br>
+Music by: CreatorMix.com<br><br>
+Song: "Makai Symphony - The Army of Minotaur" is under a Creative Commons music (CC BY-SA 3.0).<br>
+Music by: BreakingCopyright: https://bit.ly/b-army-minotaur<br>
 
 
 <a name="links"/>
