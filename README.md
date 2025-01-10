@@ -10,6 +10,8 @@
 - [Ziele](#ziele)
 - [Verwendung / Anleitung](#verwendung-anleitung)
 - [Technische Umsetzung](#technische-umsetzung)
+- [Projektvideo](#video)
+- [Nützliche Links](#links)
 - [Mitwirkende](#mitwirkende)
 - [Kontakt](#kontakt)
 
@@ -405,7 +407,6 @@ Move determineMoveToPlace(int Board[3][3], int BoardMemory[3][3], int garageStat
 }
 ```
 
-
 ### Stückliste
 
 <a name="tapatanstk"/>
@@ -790,6 +791,27 @@ Tapatan:
 | Mechanik   | ChainBigLink     | 3D-Druck    | PLA      | 19     |
 | Mechanik   | ChainBigEnd      | 3D-Druck    | PLA      | 1      |
 
+
+<a name="video"/>
+
+## Projektvideo
+[Projektvideo ansehen](Video/Projektvideo.mp4)
+
+Song: Endless Lights
+Music by: CreatorMix.com
+Song: "Makai Symphony - The Army of Minotaur" is under a Creative Commons music (CC BY-SA 3.0).
+Music by: BreakingCopyright: https://bit.ly/b-army-minotaur 
+
+
+<a name="links"/>
+
+## Nützliche Links
+
+Link zu den CAD-Dateien in OnShape: [OnShape öffnen](https://cad.onshape.com/documents/6ab09d85f45f1e43996bdb86/w/3f86e456fa647604f88123ba/e/3d3123f6cfd545d86dafebdd) 
+
+
+<a name="mitwirkende"/>
+
 ## Mitwirkende
 
 1. Eliane Hess  
@@ -805,5 +827,3 @@ Tapatan:
 Für Fragen oder Anregungen zum Projekt können Sie sich gerne an die oben genannten Mitwirkenden wenden.
 
 Trinationaler Studiengang Mechatronik (trinat.humboldt@outlook.com)
-
-Projekt-Link: https://github.com/jfawer/Tapatan.git
