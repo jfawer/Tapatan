@@ -4,7 +4,7 @@
    <img src="Bilder/Tapatan.png" width="800" />
 </figure>
 
-[![Projekt Video](YouTube-Thumbnail-URL)](https://www.youtube.com/watch?v=7GWfmVlrdMo)
+[![Projekt Video](https://github.com/jfawer/Tapatan/blob/Video-Update/Video/Video_Deckblatt.JPG?raw=true)](https://www.youtube.com/watch?v=7GWfmVlrdMo)
 
 ## Inhaltsverzeichnis
 - [Über das Projekt](#über-das-projekt)
