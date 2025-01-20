@@ -4,7 +4,6 @@
    <img src="Bilder/Tapatan.png" width="800" />
 </figure>
 
-
 ## Inhaltsverzeichnis
 - [Über das Projekt](#über-das-projekt)
 - [Ziele](#ziele)
@@ -791,16 +790,11 @@ Tapatan:
 | Mechanik   | ChainBigLink     | 3D-Druck    | PLA      | 19     |
 | Mechanik   | ChainBigEnd      | 3D-Druck    | PLA      | 1      |
 
-
 <a name="video"/>
 
-## Projektvideo
-[Projektvideo ansehen](Video/Projektvideo.mp4)
+## Projekt Video
 
-Song: Endless Lights<br>
-Music by: CreatorMix.com<br><br>
-Song: "Makai Symphony - The Army of Minotaur" is under a Creative Commons music (CC BY-SA 3.0).<br>
-Music by: BreakingCopyright: https://bit.ly/b-army-minotaur<br>
+[![Projekt Video](https://img.youtube.com/vi/7GWfmVlrdMo/0.jpg)](https://www.youtube.com/watch?v=7GWfmVlrdMo)
 
 
 <a name="links"/>
